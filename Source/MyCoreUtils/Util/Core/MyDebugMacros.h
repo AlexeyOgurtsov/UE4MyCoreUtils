@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Logging/LogMacros.h"
+#include "Log/MyLoggingTypes.h"
 
 /**
 * General log: Use this category when you do NOT know what category to use;
@@ -17,21 +18,80 @@ DECLARE_LOG_CATEGORY_EXTERN(MyLog, Log, All);
 	UE_LOG(LogCategory, LogLevel, TEXT("%s: "),  *M_DEBUG_LOGFUNC_PREFIX, *FString::Printf(FormatString, ##__VA_ARGS__));\
 }
 
+#define M_LOG_CUSTOM_TO_IF(ShouldLog, LogCategory, LogLevel, FormatString, ...)\
+{\
+	if(ShouldLog)\
+	{\
+		M_LOG_CUSTOM_TO(LogCategory, LogLevel, FormatString, ##__VA_ARGS__);\
+	}\
+}
+
+#define M_LOG_CUSTOM_TO_IF_FLAGS(LogFlags, LogCategory, LogLevel, FormatString, ...)\
+{\
+	if(UMyLoggingTypes::ShouldLog(LogFlags, LogLevel))\
+	{\
+		M_LOG_CUSTOM_TO(LogCategory, LogLevel, FormatString, ##__VA_ARGS__);\
+	}\
+}
+
 #define M_LOG_TO(LogCategory, FormatString, ...)\
 {\
-	M_LOG_CUSTOM_TO(LogCategory, Log, FormatString);\
+	M_LOG_CUSTOM_TO(LogCategory, Log, FormatString, ##__VA_ARGS__);\
 }
+
+#define M_LOG_TO_IF(ShouldLog, LogCategory, FormatString, ...)\
+{\
+	M_LOG_CUSTOM_TO_IF(ShouldLog, LogCategory, Log, FormatString, ##__VA_ARGS__);\
+}
+
+#define M_LOG_TO_IF_FLAGS(LogFlags, LogCategory, FormatString, ...)\
+{\
+	M_LOG_CUSTOM_TO_IF_FLAGS(LogFlags, LogCategory, Log, FormatString, ##__VA_ARGS__);\
+}
+
 #define M_LOG_WARN_TO(LogCategory, FormatString, ...)\
 {\
-	M_LOG_CUSTOM_TO(LogCategory, Warning, FormatString);\
+	M_LOG_CUSTOM_TO(LogCategory, Warning, FormatString, ##__VA_ARGS__);\
 }
+
+#define M_LOG_WARN_TO_IF(ShouldLog, LogCategory, FormatString, ...)\
+{\
+	M_LOG_CUSTOM_TO_IF(ShouldLog, LogCategory, Warning, FormatString, ##__VA_ARGS__);\
+}
+
+#define M_LOG_WARN_TO_IF_FLAGS(LogFlags, LogCategory, FormatString, ...)\
+{\
+	M_LOG_CUSTOM_TO_IF_FLAGS(LogFlags, LogCategory, Warning, FormatString, ##__VA_ARGS__);\
+}
+
 #define M_LOG_ERROR_TO(LogCategory, FormatString, ...)\
 {\
-	M_LOG_CUSTOM_TO(LogCategory, Error, FormatString);\
+	M_LOG_CUSTOM_TO(LogCategory, Error, FormatString, ##__VA_ARGS__);\
 }
+
+#define M_LOG_ERROR_TO_IF(ShouldLog, LogCategory, FormatString, ...)\
+{\
+	M_LOG_CUSTOM_TO_IF(ShouldLog, LogCategory, Error, FormatString, ##__VA_ARGS__);\
+}
+
+#define M_LOG_ERROR_TO_IF_FLAGS(LogFlags, LogCategory, FormatString, ...)\
+{\
+	M_LOG_CUSTOM_TO_IF_FLAGS(LogFlags, LogCategory, Error, FormatString, ##__VA_ARGS__);\
+}
+
 #define M_LOG_FATAL_ERROR_TO(LogCategory, FormatString, ...)\
 {\
-	M_LOG_CUSTOM_TO(LogCategory, FatalError, FormatString);\
+	M_LOG_CUSTOM_TO(LogCategory, Fatal, FormatString, ##__VA_ARGS__);\
+}
+
+#define M_LOG_FATAL_ERROR_TO_IF(ShouldLog, LogCategory, FormatString, ...)\
+{\
+	M_LOG_CUSTOM_TO_IF(ShouldLog, LogCategory, Fatal, FormatString, ##__VA_ARGS__);\
+}
+
+#define M_LOG_FATAL_ERROR_TO_IF_FLAGS(LogFlags, LogCategory, FormatString, ...)\
+{\
+	M_LOG_CUSTOM_TO_IF_FLAGS(LogFlags, LogCategory, Fatal, FormatString, ##__VA_ARGS__);\
 }
 
 /**
@@ -91,13 +151,39 @@ DECLARE_LOG_CATEGORY_EXTERN(MyLog, Log, All);
 {\
 	M_LOG_WARN_TO(MyLog, FormatString, ##__VA_ARGS__);\
 }
+#define M_LOG_WARN_IF(ShouldLog, FormatString, ...)\
+{\
+	M_LOG_WARN_TO_IF(ShouldLog, MyLog, FormatString, ##__VA_ARGS__);\
+}
+#define M_LOG_WARN_IF_FLAGS(LogFlags, FormatString, ...)\
+{\
+	M_LOG_WARN_TO_IF_FLAGS(LogFlags, MyLog, FormatString, ##__VA_ARGS__);\
+}
+
 #define M_LOG_ERROR(FormatString, ...)\
 {\
 	M_LOG_ERROR_TO(MyLog, FormatString, ##__VA_ARGS__);\
 }
+#define M_LOG_ERROR_IF(ShouldLog, FormatString, ...)\
+{\
+	M_LOG_ERROR_TO_IF(ShouldLog, MyLog, FormatString, ##__VA_ARGS__);\
+}
+#define M_LOG_ERROR_IF_FLAGS(LogFlags, FormatString, ...)\
+{\
+	M_LOG_ERROR_TO_IF_FLAGS(LogFlags, MyLog, FormatString, ##__VA_ARGS__);\
+}
+
 #define M_LOG_FATAL_ERROR(FormatString, ...)\
 {\
 	M_LOG_FATAL_ERROR_TO(MyLog, FormatString, ##__VA_ARGS__);\
+}
+#define M_LOG_FATAL_ERROR_IF(ShouldLog, FormatString, ...)\
+{\
+	M_LOG_FATAL_ERROR_TO_IF(ShouldLog, MyLog, FormatString, ##__VA_ARGS__);\
+}
+#define M_LOG_FATAL_ERROR_IF_FLAGS(LogFlags, FormatString, ...)\
+{\
+	M_LOG_FATAL_ERROR_TO_IF_FLAGS(LogFlags, MyLog, FormatString, ##__VA_ARGS__);\
 }
 
 #define M_NOT_IMPL(FormatString, ...)\
