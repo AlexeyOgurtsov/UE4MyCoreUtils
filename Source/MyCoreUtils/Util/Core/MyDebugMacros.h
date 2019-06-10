@@ -7,26 +7,6 @@
 */
 DECLARE_LOG_CATEGORY_EXTERN(MyLog, Log, All);
 
-/**
-* Helper class for logging enter/exit of the C++ block.
-*/
-class FScopedLogHelper
-{
-public:
-	FScopedLogHelper(const FString& InPrefixString) 
-	:	PrefixString(InPrefixString)
-	{
-		UE_LOG(MyLog, Log, TEXT("%s : Block entered"), *PrefixString);
-	}
-	~FScopedLogHelper()
-	{
-		UE_LOG(MyLog, Log, TEXT("%s : Exiting block"), *PrefixString);
-	}
-
-private:
-	FString PrefixString;
-};
-
 // ~String debug macros Begin
 #define M_DEBUG_LOGFUNC_PREFIX (FString(__FUNCTION__) + FString(TEXT(":")) + FString::FromInt(__LINE__))
 // ~String debug macros End
@@ -152,8 +132,41 @@ private:
 #define M_EMPTY_MSG(FormatString, ...) { M_EMPTY_MSG_TO(MyLog, FormatString, ##__VA_ARGS__); }
 
 // ~Scoped helpres Begin (@warning: NEVER include implementation in brackets, because it will limit the scope)
-#define M_LOGFUNC() FScopedLogHelper FuncLogHelper {M_DEBUG_LOGFUNC_PREFIX};
-#define M_LOGFUNC_MSG(FormatString, ...) FScopedLogHelper FuncLogHelper{M_DEBUG_LOGFUNC_PREFIX + FString(TEXT(": ")) + FString::Printf(FormatString, ##__VA_ARGS__)};
+
+#define M_CUSTOM_SCOPED_LOG_HELPER_CLASS_NAME(ClassNamePrefix) F##ClassNamePrefix##_ScopedLogHelper
+
+/**
+* Declares scoped helper class.
+*/
+#define M_DECLARE_CUSTOM_SCOPED_LOG_HELPER_CLASS(ClassNamePrefix, LogCategory, LogLevel)\
+	class M_CUSTOM_SCOPED_LOG_HELPER_CLASS_NAME(ClassNamePrefix)\
+	{\
+	public:\
+		M_CUSTOM_SCOPED_LOG_HELPER_CLASS_NAME(ClassNamePrefix)(const FString& InPrefixString)\
+	:		PrefixString(InPrefixString)\
+		{\
+			M_LOG_CUSTOM_TO(MyLog, Log, TEXT("%s : Block entered"), *PrefixString);\
+		}\
+		~M_CUSTOM_SCOPED_LOG_HELPER_CLASS_NAME(ClassNamePrefix)()\
+		{\
+			M_LOG_CUSTOM_TO(MyLog, Log, TEXT("%s : Exiting block"), *PrefixString);\
+		}\
+	private:\
+		FString PrefixString;\
+	};
+
+/**
+* Helper class for logging enter/exit of the C++ block.
+*/
+#define M_SCOPED_LOG_HELPER_CLASS_TO(ClassNamePrefix, LogCategory) M_DECLARE_CUSTOM_SCOPED_LOG_HELPER_CLASS(ClassNamePrefix, LogCategory, Log);
+
+#define M_LOGFUNC_TO(LogCategory) M_SCOPED_LOG_HELPER_CLASS_TO(Default, LogCategory); M_CUSTOM_SCOPED_LOG_HELPER_CLASS_NAME(Default) FuncLogHelper {TEXT("")};
+#define M_LOGFUNC_MSG_TO(LogCategory, FormatString, ...) M_SCOPED_LOG_HELPER_CLASS_TO(Default, LogCategory); M_CUSTOM_SCOPED_LOG_HELPER_CLASS_NAME(Default) FuncLogHelper {FString::Printf(FormatString, ##__VA_ARGS__)};
+#define M_LOGBLOCK_TO(LogCategory, FormatString, ...) M_LOGFUNC_MSG_TO(LogCategory, FormatString, ##__VA_ARGS__);
+
+
 // ~Scoped helpres End
 
-#define M_LOGBLOCK(FormatString, ...) M_LOGFUNC_MSG(FormatString, ##__VA_ARGS__)
+#define M_LOGFUNC() M_LOGFUNC_TO(MyLog);
+#define M_LOGFUNC_MSG(FormatString, ...) M_LOGFUNC_MSG_TO(MyLog, FormatString, ##__VA_ARGS__);
+#define M_LOGBLOCK(FormatString, ...) M_LOGBLOCK_TO(MyLog, FormatString, ##__VA_ARGS__);
