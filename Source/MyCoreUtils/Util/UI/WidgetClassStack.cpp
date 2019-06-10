@@ -86,7 +86,7 @@ UWidgetClassStack* UWidgetClassStack::CreateInitializedDefaultSubobject(APlayerC
 	check(InPC);
 	check(InOwner);
 
-	UWidgetClassStack* S = InOwner->CreateDefaultSubobject<UWidgetClassStack>(InName, UWidgetClassStack::StaticClass());
+	UWidgetClassStack* S = InOwner->CreateDefaultSubobject<UWidgetClassStack>(InName);
 	check(S);
 	S->PC = InPC;
 	return S;
