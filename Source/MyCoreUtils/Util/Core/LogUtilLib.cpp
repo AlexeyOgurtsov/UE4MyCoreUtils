@@ -8,11 +8,20 @@ ULogUtilLib::ULogUtilLib()
 
 FString ULogUtilLib::GetNameAndClass(UObject* InObject)
 {
-	check(InObject);
+	checkf(InObject, TEXT("nullptr is invalid when using  %s, use Safe version instead"), __FUNCTION__);
 	TArray<FStringFormatArg> FormatArgs;
 	FormatArgs.Add(InObject->GetName());
 	FormatArgs.Add(InObject->GetClass()->GetName());
 	return FString::Format(TEXT("name=\"{0}\" class=\"{1}\""), FormatArgs);
+}
+
+FString ULogUtilLib::GetNameAndClassSafe(UObject* InObject)
+{
+	if(nullptr == InObject)
+	{
+		return FString(TEXT("nullptr"));
+	}
+	return GetNameAndClass(InObject);
 }
 
 FString ULogUtilLib::GetNameAndClassScoped(UObject* InObject)

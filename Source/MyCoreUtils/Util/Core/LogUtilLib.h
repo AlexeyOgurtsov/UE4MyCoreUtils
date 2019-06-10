@@ -11,12 +11,20 @@ class ULogUtilLib : public UBlueprintFunctionLibrary
 public:
 	ULogUtilLib();
 
+
 	/**
 	* Returns name and class of the object.
-	* WARNING: Object may NOT be nullptr
+	* WARNING: nullptr object is invalid.
 	*/
 	UFUNCTION(BlueprintPure, Category = Log)
 	static FString GetNameAndClass(UObject* InObject);
+
+	/**
+	* Returns name and class of the object.
+	* WARNING: nullptr object is valid.
+	*/
+	UFUNCTION(BlueprintPure, Category = Log)
+	static FString GetNameAndClassSafe(UObject* InObject);
 
 	/**
 	* Returns name and class of the object, enclosed in brackets.
