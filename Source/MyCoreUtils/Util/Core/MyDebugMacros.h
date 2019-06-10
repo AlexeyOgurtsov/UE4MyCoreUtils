@@ -28,7 +28,7 @@ DECLARE_LOG_CATEGORY_EXTERN(MyLog, Log, All);
 
 #define M_LOG_CUSTOM_TO_IF_FLAGS(LogFlags, LogCategory, LogLevel, FormatString, ...)\
 {\
-	if(UMyLoggingTypes::ShouldLog(LogFlags, LogLevel))\
+	if(UMyLoggingTypes::ShouldLogVerbosity(LogFlags, ELogVerbosity::Type::LogLevel))\
 	{\
 		M_LOG_CUSTOM_TO(LogCategory, LogLevel, FormatString, ##__VA_ARGS__);\
 	}\
