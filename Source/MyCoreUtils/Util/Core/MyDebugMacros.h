@@ -182,6 +182,17 @@ DECLARE_LOG_CATEGORY_EXTERN(MyLog, Log, All);
 {\
 	M_LOG_TO(MyLog, FormatString, ##__VA_ARGS__);\
 }
+
+#define M_LOG_IF(ShouldLog, FormatString, ...)\
+{\
+	M_LOG_TO_IF(ShouldLog, MyLog, FormatString, ##__VA_ARGS__);\
+}
+
+#define M_LOG_IF_FLAGS(LogFlags, FormatString, ...)\
+{\
+	M_LOG_TO_IF_FLAGS(LogFlags, MyLog, FormatString, ##__VA_ARGS__);\
+}
+
 #define M_LOG_WARN(FormatString, ...)\
 {\
 	M_LOG_WARN_TO(MyLog, FormatString, ##__VA_ARGS__);\
