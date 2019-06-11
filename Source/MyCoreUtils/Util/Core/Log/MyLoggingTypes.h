@@ -7,8 +7,8 @@ UENUM(BlueprintType, Meta=(Bitflags))
 enum class ELogFlags : uint8
 {
 	None              = 0          UMETA(Name="None"),
-	LogEverSuccess    = 1 << 1     UMETA(Name="LogEverSuccess", Description="Should we log even successful operations"),
-	DisableLog        = 1 << 2     UMETA(Name="DisableLog", Description="Should we disabled ever logging of fails")
+	LogEverSuccess    = 1 << 0     UMETA(Name="LogEverSuccess", Description="Should we log even successful operations"),
+	DisableLog        = 1 << 1     UMETA(Name="DisableLog", Description="Should we disabled ever logging of fails")
 };
 ENUM_CLASS_FLAGS(ELogFlags);
 
