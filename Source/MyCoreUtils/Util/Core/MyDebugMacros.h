@@ -141,6 +141,41 @@ DECLARE_LOG_CATEGORY_EXTERN(MyLog, Log, All);
 	M_LOG_CUSTOM_TO(LogCategory, Warning, TEXT("TO BE IMPL: %s"), *FString::Printf(FormatString, ##__VA_ARGS__));\
 }
 
+/**
+* Verifies the return value with CheckExpression and returns the value.
+*/
+#define M_RETURN_VERIFY(ReturnValue, CheckExpression)\
+{\
+	verify(CheckExpression);\
+	return ReturnValue;\
+}
+
+/**
+* Verifies the return value with CheckExpression and returns the value.
+*/
+#define M_RETURN_VERIFY_MSG(ReturnValue, CheckExpression, FormatString, ...)\
+{\
+	verifyf(CheckExpression, FormatString, ##__VA_ARGS__);\
+	return ReturnValue;\
+}
+
+/**
+* Checks the return value with CheckExpression and returns the value.
+*/
+#define M_RETURN_CHECK(ReturnValue, CheckExpression)\
+{\
+	check(CheckExpression);\
+	return ReturnValue;\
+}
+
+/**
+* Checks the return value with CheckExpression and returns the value.
+*/
+#define M_RETURN_CHECK_MSG(ReturnValue, CheckExpression, FormatString, ...)\
+{\
+	checkf(CheckExpression, FormatString, ##__VA_ARGS__);\
+	return ReturnValue;\
+}
 
 
 #define M_LOG(FormatString, ...)\
