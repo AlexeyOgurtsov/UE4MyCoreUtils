@@ -1,4 +1,5 @@
 #include "TypeUtilLib.h"
+#include "UObject/Package.h"
 #include "LogUtilLib.h"
 
 int32 UTypeUtilLib::FindEnumIndexByName(const FString& InEnumName, const FString& InString)

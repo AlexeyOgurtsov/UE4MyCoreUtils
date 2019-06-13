@@ -1,4 +1,5 @@
 #include "ShowMouseStack.h"
+#include "GameFramework/PlayerController.h"
 #include "../Core/LogUtilLib.h"
 
 UShowMouseStack::UShowMouseStack()

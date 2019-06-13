@@ -3,9 +3,9 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class MyCoreUtilsEditorTarget_NoPrecomp : MyCoreUtilsEditorTarget
+public class MyCoreUtilsEditor_NoPrecompTarget : MyCoreUtilsEditorTarget
 {
-	public MyCoreUtilsEditorTarget_NoPrecomp(TargetInfo Target) : base(Target)
+	public MyCoreUtilsEditor_NoPrecompTarget(TargetInfo Target) : base(Target)
 	{
 		bUseUnityBuild = false;
 		bUsePCHFiles = false;
