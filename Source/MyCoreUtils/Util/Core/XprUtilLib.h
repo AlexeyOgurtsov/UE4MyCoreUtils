@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Logging/LogMacros.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
 #include "XprUtilLib.generated.h"
 
 UCLASS()

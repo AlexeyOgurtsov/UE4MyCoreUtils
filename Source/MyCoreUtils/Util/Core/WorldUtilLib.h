@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Log/MyLoggingTypes.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
 #include "WorldUtilLib.generated.h"
 
 UCLASS()

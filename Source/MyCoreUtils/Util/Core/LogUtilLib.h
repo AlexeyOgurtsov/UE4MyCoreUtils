@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MyDebugMacros.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
 #include "LogUtilLib.generated.h"
 
 UCLASS()

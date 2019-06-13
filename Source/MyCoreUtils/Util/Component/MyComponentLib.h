@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Kismet/BlueprintFunctionLibrary.h"
 #include "MyComponentLib.generated.h"
 
 class AActor;

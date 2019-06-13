@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameFramework/PlayerController.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
 #include "InputModeLib.generated.h"
 
 class UUserWidget;

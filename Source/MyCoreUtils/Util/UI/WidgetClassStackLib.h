@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Kismet/BlueprintFunctionLibrary.h"
 #include "WidgetClassStackLib.generated.h"
 
 class UUserWidget;

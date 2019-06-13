@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Misc/Optional.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
 #include "TypeUtilLib.generated.h"
 
 UCLASS()
