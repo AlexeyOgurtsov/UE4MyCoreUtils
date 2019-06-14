@@ -107,15 +107,15 @@ DECLARE_LOG_CATEGORY_EXTERN(MyLog, Log, All);
 /**
 * Fatal non-implemented marking macro.
 */
-#define M_NOT_IMPL_TO(LogCategory, FormatString, ...)\
+#define M_NOT_IMPL_MSG_TO(LogCategory, FormatString, ...)\
 {\
 	M_LOG_CUSTOM_TO(LogCategory, Error, TEXT("NOT YET IMPL: %s"), *FString::Printf(FormatString, ##__VA_ARGS__));\
 	unimplemented();\
 }
 
-#define M_NOT_IMPL_RET_TO(ReturnValue, LogCategory, FormatString, ...)\
+#define M_NOT_IMPL_MSG_RET_TO(ReturnValue, LogCategory, FormatString, ...)\
 {\
-	M_NOT_IMPL_TO(LogCategory, FormatString, ##__VA_ARGS__);\
+	M_NOT_IMPL_MSG_TO(LogCategory, FormatString, ##__VA_ARGS__);\
 	return ReturnValue; \
 }
 
@@ -232,9 +232,14 @@ DECLARE_LOG_CATEGORY_EXTERN(MyLog, Log, All);
 	M_LOG_FATAL_ERROR_TO_IF_FLAGS(LogFlags, MyLog, FormatString, ##__VA_ARGS__);\
 }
 
-#define M_NOT_IMPL(FormatString, ...)\
+#define M_NOT_IMPL_MSG(FormatString, ...)\
 {\
-	M_NOT_IMPL_TO(MyLog, FormatString, ##__VA_ARGS__);\
+	M_NOT_IMPL_MSG_TO(MyLog, FormatString, ##__VA_ARGS__);\
+}
+
+#define M_NOT_IMPL()\
+{\
+	unimplemented();\
 }
 
 #define M_TO_BE_IMPL(FormatString, ...)\
@@ -247,9 +252,15 @@ DECLARE_LOG_CATEGORY_EXTERN(MyLog, Log, All);
 	M_IMPL_NOTE_TO(MyLog, FormatString, ##__VA_ARGS__);\
 }
 
-#define M_NOT_IMPL_RET(ReturnValue, FormatString, ...)\
+#define M_NOT_IMPL_MSG_RET(ReturnValue, FormatString, ...)\
 {\
-	M_NOT_IMPL_RET_TO(ReturnValue, MyLog, FormatString, ##__VA_ARGS__);\
+	M_NOT_IMPL_MSG_RET_TO(ReturnValue, MyLog, FormatString, ##__VA_ARGS__);\
+}
+
+#define M_NOT_IMPL_RET(ReturnValue)\
+{\
+	unimplemented();\
+	return ReturnValue;\
 }
 
 #define M_TO_BE_IMPL_RET(ReturnValue, FormatString, ...)\
