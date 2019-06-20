@@ -18,20 +18,20 @@ public:
 	* WARNING: nullptr object is invalid.
 	*/
 	UFUNCTION(BlueprintPure, Category = Log)
-	static FString GetNameAndClass(UObject* InObject);
+	static FString GetNameAndClass(const UObject* InObject);
 
 	/**
 	* Returns name and class of the object.
 	* WARNING: nullptr object is valid.
 	*/
 	UFUNCTION(BlueprintPure, Category = Log)
-	static FString GetNameAndClassSafe(UObject* InObject);
+	static FString GetNameAndClassSafe(const UObject* InObject);
 
 	/**
 	* Returns name and class of the object, enclosed in brackets.
 	*/
 	UFUNCTION(BlueprintPure, Category = Log)
-	static FString GetNameAndClassScoped(UObject* InObject);
+	static FString GetNameAndClassScoped(const UObject* InObject);
 
 	UFUNCTION(BlueprintPure, Category = Log)
 	static FString GetYesNo(bool bYes);

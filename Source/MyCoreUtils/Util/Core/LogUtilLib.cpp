@@ -6,7 +6,7 @@ ULogUtilLib::ULogUtilLib()
 {
 }
 
-FString ULogUtilLib::GetNameAndClass(UObject* InObject)
+FString ULogUtilLib::GetNameAndClass(const UObject* const InObject)
 {
 	checkf(InObject, TEXT("nullptr is invalid when using  %s, use Safe version instead"), __FUNCTION__);
 	TArray<FStringFormatArg> FormatArgs;
@@ -15,7 +15,7 @@ FString ULogUtilLib::GetNameAndClass(UObject* InObject)
 	return FString::Format(TEXT("name=\"{0}\" class=\"{1}\""), FormatArgs);
 }
 
-FString ULogUtilLib::GetNameAndClassSafe(UObject* InObject)
+FString ULogUtilLib::GetNameAndClassSafe(const UObject* const InObject)
 {
 	if(nullptr == InObject)
 	{
@@ -24,7 +24,7 @@ FString ULogUtilLib::GetNameAndClassSafe(UObject* InObject)
 	return GetNameAndClass(InObject);
 }
 
-FString ULogUtilLib::GetNameAndClassScoped(UObject* InObject)
+FString ULogUtilLib::GetNameAndClassScoped(const UObject* const InObject)
 {
 	check(InObject);
 	FString Result;
@@ -34,7 +34,7 @@ FString ULogUtilLib::GetNameAndClassScoped(UObject* InObject)
 	return Result;
 }
 
-FString ULogUtilLib::GetYesNo(bool bYes)
+FString ULogUtilLib::GetYesNo(bool const bYes)
 {
 	return bYes ? FString(TEXT("YES")) : FString(TEXT("no"));
 }

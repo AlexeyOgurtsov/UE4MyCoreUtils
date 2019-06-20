@@ -16,7 +16,7 @@ bool UMyLoggingTypes::ShouldLogVerbosity(ELogFlags InFlags, ELogVerbosity::Type 
 
 bool UMyLoggingTypes::AreFlagsValid(ELogFlags InFlags)
 {
-	ELogFlags constexpr MASK = ELogFlags::LogEverSuccess & ELogFlags::DisableLog;
+	ELogFlags constexpr MASK = ELogFlags::LogEverSuccess | ELogFlags::DisableLog;
 	if(MASK == (InFlags & MASK))
 	{		
 		// Setting up both "log ever success" and "disable log" flags is prohibited
