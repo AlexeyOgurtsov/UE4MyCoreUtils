@@ -1,5 +1,4 @@
 #include "PropertyLogLib.h"
-#include "UObject/TextProperty.h"
 
 FString UPropertyLogLib::GetFieldString(const UField* const InField, EFieldStringFlags const InFlags)
 {
