@@ -9,8 +9,8 @@
 DECLARE_LOG_CATEGORY_EXTERN(MyLog, Log, All);
 
 // ~String debug macros Begin
-#define M_DEBUG_LOG_POSTFIX (FString(TEXT(" (line: ")) + FString::FromInt(__LINE__) + FString(TEXT(" : ")) + FString(__FILE__) + FString(TEXT(" )")))
-#define M_DEBUG_LOG_PREFIX (FString(__FUNCTION__) + FString(TEXT(": "))) 
+#define M_DEBUG_LOG_POSTFIX (FString(TEXT(" (line: ")) + FString::FromInt(__LINE__) + FString(TEXT(" : ") + FString(__FILE__) + FString(TEXT(" )")))
+#define M_DEBUG_LOG_PREFIX (FString(__FUNCTION__) + FString(TEXT(":"))) 
 // ~String debug macros End
 
 // ~Logging macros Begin
