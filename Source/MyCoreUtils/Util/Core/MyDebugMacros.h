@@ -338,9 +338,9 @@ DECLARE_LOG_CATEGORY_EXTERN(MyLog, Log, All);
 #define M_LOGBLOCK_TO(LogCategory, FormatString, ...) M_LOGBLOCK_IF_TO(true, LogCategory, FormatString, ##__VA_ARGS__);
 
 #define M_LOGFUNC_STRING_IF(ShouldLog, InString) M_LOGFUNC_STRING_IF_TO(ShouldLog, MyLog, InString);
-#define M_LOGFUNC_IF(ShouldLog, LogCategory, FormatString, ...) M_LOGFUNC_IF_TO(ShouldLog, MyLog, FormatString, ...);
-#define M_LOGFUNC_MSG_IF(ShouldLog, FormatString, ...) M_LOGFUNC_MSG_IF_TO(ShouldLog, MyLog, FormatString, ...);
-#define M_LOGBLOCK_IF(ShouldLog, FormatString, ...) M_LOGBLOCK_IF_TO(ShouldLog, MyLog, FormatString, ...);
+#define M_LOGFUNC_IF(ShouldLog) M_LOGFUNC_IF_TO(ShouldLog, MyLog);
+#define M_LOGFUNC_MSG_IF(ShouldLog, FormatString, ...) M_LOGFUNC_MSG_IF_TO(ShouldLog, MyLog, FormatString, ##__VA_ARGS__);
+#define M_LOGBLOCK_IF(ShouldLog, FormatString, ...) M_LOGBLOCK_IF_TO(ShouldLog, MyLog, FormatString, ##__VA_ARGS__);
 
 #define M_LOGFUNC_STRING_IF_FLAGS(LogFlags, InString) M_LOGFUNC_STRING_IF_FLAGS_TO(LogFlags, MyLog, InString);
 #define M_LOGFUNC_IF_FLAGS(LogFlags) M_LOGFUNC_IF_FLAGS_TO(LogFlags, MyLog);

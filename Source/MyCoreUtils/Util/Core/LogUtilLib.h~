@@ -59,6 +59,7 @@ public:
 	// ~Value logging Begin
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogNameClassSafe(const UObject* InObject);
+	static void LogNameClassSafeC(const UObject* InObject);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogKeyedNameClassSafe(const FString& InKey, const UObject* InObject);
