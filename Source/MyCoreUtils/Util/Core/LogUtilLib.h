@@ -10,17 +10,17 @@ enum class EMyLogObjectFlags : uint8
 {
 	None UMETA(DisplayName="None"),
 
-	SuppressNameAndClass         = 1 << 0 UMETA(DisplayName="Suppress name and class"),
+	SuppressNameAndClass         = 1 << 0    UMETA(DisplayName="Suppress name and class"),
 
-	InternalObjectFlags          = 1 << 1 UMETA(DisplayName="Internal object flags"),
-	ObjectFlags                  = 1 << 2 UMETA(DisplayName="Object flags"),
+	InternalObjectFlags          = 1 << 1    UMETA(DisplayName="Internal object flags"),
+	ObjectFlags                  = 1 << 2    UMETA(DisplayName="Object flags"),
 
-	FullGroupName = 1 << 3 UMETA(DisplayName="Full group name"),
-	Outer = 1 << 4 UMETA(DisplayName="Outer"),
+	FullGroupName                = 1 << 3    UMETA(DisplayName="Full group name"),
+	Outer                        = 1 << 4    UMETA(DisplayName="Outer"),
 
-	Full = InternalObjectFlags | ObjectFlags | Outer | FullGroupName UMETA(DisplayName="Full"), // Provide maximal info when logging
+	Full                         = InternalObjectFlags | ObjectFlags | Outer | FullGroupName UMETA(DisplayName="Full"), // Provide maximal info when logging
 
-	Default = ObjectFlags | Outer UMETA(DisplayName="Default")
+	Default                      = ObjectFlags | Outer UMETA(DisplayName="Default")
 };
 ENUM_CLASS_FLAGS(EMyLogObjectFlags);
 

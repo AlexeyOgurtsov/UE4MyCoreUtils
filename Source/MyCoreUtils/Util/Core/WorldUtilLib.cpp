@@ -86,13 +86,26 @@ UWorld* UWorldUtilLib::NewWorldAndContext
 			W->BeginPlay();
 
 		}
-		ULogUtilLib::LogYesNoIfFlagsC(InLogFlags, TEXT("HasBegunPlay of world is "), W->HasBegunPlay());
+
+		// WARNING! We should NOT log HasBegunPlay here, because the BeginPlay call will be delayed by several frames,
+		// so logging may only confuse (it will always be false).
+		//ULogUtilLib::LogYesNoIfFlagsC(InLogFlags, TEXT("HasBegunPlay of world is "), W->HasBegunPlay());
 	}
 	
 	return W;
 }	
 
-FString UWorldUtilLib::GetWorldTypeString(EWorldType::Type InType)
+UWorld* UWorldUtilLib::NewGameWorldAndContext
+(
+	ENewWorldFlags const InFlags,
+	FName const InWorldName,
+	ELogFlags const InLogFlags
+)
+{
+	return NewWorldAndContext(EWorldType::Type::Game, InFlags, InWorldName, InLogFlags);
+}
+
+FString UWorldUtilLib::GetWorldTypeString(EWorldType::Type const InType)
 {
 	switch(InType)
 	{
@@ -118,7 +131,88 @@ FString UWorldUtilLib::GetWorldTypeString(EWorldType::Type InType)
 	return FString(TEXT("{Unknown world type}"));
 }
 
-FString UWorldUtilLib::GetMapName_NoStreamingPrefix(UWorld* const InWorld, ELogFlags InLogFlags)
+AActor* UWorldUtilLib::SpawnActor
+(
+	UWorld* const InWorld, UClass* const InClass, const FTransform& InTransform,
+	EMySpawnActorFlags const InFlags,
+       	const FActorSpawnParameters& InSpawnParameters,
+       	ELogFlags const InLogFlags
+)
+{
+	M_LOGFUNC_IF_FLAGS(InLogFlags);
+	checkf(InWorld, TEXT("UWorld must be valid when calling %s"), TEXT(__FUNCTION__));
+	checkf(InClass, TEXT("Class must be valid when calling %s"), TEXT(__FUNCTION__));
+
+	{ // Logging actor info
+		bool const bFullActorLog = (InFlags & EMySpawnActorFlags::FullActorLog) != EMySpawnActorFlags::None;
+
+		ULogUtilLib::LogNameIfFlagsC(InLogFlags, TEXT("Name"), InSpawnParameters.Name);
+
+		ULogUtilLib::LogStringIfFlagsC(InLogFlags, TEXT("Class"), InClass->GetName());
+		ULogUtilLib::LogStringIfFlagsC(InLogFlags, TEXT("Location"), InTransform.GetLocation().ToString());
+		ULogUtilLib::LogStringIfFlagsC(InLogFlags, TEXT("Rotation"), InTransform.GetRotation().ToString());
+
+		ULogUtilLib::LogStringIfFlagsC(InLogFlags, TEXT("ObjectFlags"), ULogUtilLib::GetObjectFlagsStringScoped(InSpawnParameters.ObjectFlags));
+		ULogUtilLib::LogYesNoIfFlagsC(InLogFlags, TEXT("bNoFail"), InSpawnParameters.bNoFail);
+
+		if(bFullActorLog)
+		{
+			ULogUtilLib::LogKeyedNameClassSafeC(TEXT("Template"), InSpawnParameters.Template);
+			ULogUtilLib::LogKeyedNameClassSafeC(TEXT("Owner"), InSpawnParameters.Owner);
+			ULogUtilLib::LogKeyedNameClassSafeC(TEXT("Instigator"), InSpawnParameters.Instigator);
+		}
+	} // Logging actor info
+
+	AActor* const A = InWorld->SpawnActor(InClass, &InTransform, InSpawnParameters);
+
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("SpawnActor returned"));
+	ULogUtilLib::LogObjectSafeIfFlags(InLogFlags, A);
+
+	bool const bAssertIfFail = (InFlags & EMySpawnActorFlags::AllowFail) == EMySpawnActorFlags::None;
+	if(bAssertIfFail)
+	{
+		checkf(A, TEXT("UWorld::SpawnActor must succeed (due to flags)"));
+	}
+
+	return A;
+}
+
+AActor* UWorldUtilLib::SpawnActor
+( 
+	UWorld* const InWorld, UClass* const InClass, const FVector& InLocation, const FRotator& InRotation, 
+	EMySpawnActorFlags const InFlags,
+	const FActorSpawnParameters& InSpawnParameters, ELogFlags const InLogFlags
+)
+{
+	checkNoRecursion();
+	return SpawnActor(InWorld, InClass, FTransform{InRotation, InLocation, FVector{1.F,1.F,1.F}}, InFlags, InSpawnParameters, InLogFlags);
+}
+
+AActor* UWorldUtilLib::K2SpawnActorByTransform
+( 
+	UObject* const InWorldContextObject, UClass* const InClass, const FTransform& InTransform,
+	EMySpawnActorFlags const InFlags,
+       	ELogFlags const InLogFlags
+)
+{
+	checkf(GEngine, TEXT("GEngine must be valid when calling %s"), TEXT(__FUNCTION__));
+	UWorld* const W = GEngine->GetWorldFromContextObject(InWorldContextObject, EGetWorldErrorMode::Assert);
+	return SpawnActor(W, InClass, InTransform, InFlags, FActorSpawnParameters{}, InLogFlags);
+}
+
+AActor* UWorldUtilLib::K2SpawnActor
+(
+	UObject* const InWorldContextObject, UClass* const InClass, const FVector& InLocation, const FRotator& InRotation,
+	EMySpawnActorFlags const InFlags,
+       	ELogFlags const InLogFlags
+)
+{
+	checkf(GEngine, TEXT("GEngine must be valid when calling %s"), TEXT(__FUNCTION__));
+	UWorld* const W = GEngine->GetWorldFromContextObject(InWorldContextObject, EGetWorldErrorMode::Assert);
+	return SpawnActor(W, InClass, InLocation, InRotation, InFlags, FActorSpawnParameters{}, InLogFlags);
+}
+
+FString UWorldUtilLib::GetMapName_NoStreamingPrefix(UWorld* const InWorld, ELogFlags const InLogFlags)
 {
 	check(InWorld);
 
