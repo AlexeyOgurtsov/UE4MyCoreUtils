@@ -7,6 +7,11 @@
 
 // FActorSpawnParameters (without this include compilation error on FActorSpawnParameters default initializer)
 #include "Engine/World.h" 
+#include "EngineUtils.h"
+
+#include "GameFramework/GameModeBase.h"
+#include "GameFramework/GameStateBase.h"
+#include "GameFramework/Controller.h"
 
 #include "WorldUtilLib.generated.h"
 
@@ -41,6 +46,13 @@ enum class ENewWorldFlags : uint8
 	Default                          = None          UMETA(DisplayName="Default")
 };
 ENUM_CLASS_FLAGS(ENewWorldFlags);
+
+UENUM()
+enum class EMyActorSelectionFlags : uint8
+{
+	None                             = 0             UMETA(DisplayName="None"),
+};
+ENUM_CLASS_FLAGS(EMyActorSelectionFlags);
 
 UENUM()
 enum class EMySpawnFlags : uint8
@@ -117,8 +129,55 @@ public:
 	UFUNCTION(BlueprintCallable, Category = WorldUtil, Meta=(DisplayName="DestroyWorldSafe"))
 	static void K2DestroyWorldSafe(UWorld* InWorld, bool bInformEngineOrWorld = true, UWorld* InNewWorld = nullptr, ELogFlags InLogFlags = ELogFlags::LogEverSuccess);
 
+	// ~Actor selection Begin
+	static TSet<AActor*> GetActorsByPredicate(UWorld* InWorld, TFunction<bool(const AActor*)> InPredicate, EActorIteratorFlags InFlags);
+	// ~Actor selection End
+
+	// ~Actor destruction Begin
+	/**
+	* Destroys all actors from the given set.
+	*
+	* @param pOutErrorActors: if non-NULL, actors for which AActor::Destroy() returns false are added to it.
+	*
+	* @returns: true if no error occured during destruction (AActor::Destroy() returned true for all actors).
+	*/
+	static bool DestroyActors(const TSet<AActor*>& InActors, TSet<AActor*>* pOutErrorActors = nullptr, ELogFlags InLogFlags = ELogFlags::None);
+
+	/**
+	* Destroy actors from world according to flags and exclude set.
+	*
+	* @param ExcludeSet: Contains actors that are to be excluded from purge 
+	*                    (if nullptr is passed, default exclude set is to be used).
+	*
+	* @see: DestroyActors, GetPurgeDefaultExcludeSet
+	*/
+	static bool PurgeWorld
+	(
+	 	UWorld* InWorld, 
+		TSet<const UClass*>* pInExcludeSet = nullptr,
+		TSet<AActor*>* pOutErrorActors = nullptr, 
+		EMyActorSelectionFlags InFlags = EMyActorSelectionFlags::None, 
+		ELogFlags InLogFlags = ELogFlags::None
+	);
+
+	/**
+	* Set of actors that should not be purged by default.
+	*/
+	static TSet<const UClass*>* GetPurgeDefaultExcludeSet()
+	{
+		static TSet<const UClass*> S
+		{
+		       	AGameModeBase::StaticClass(),
+			AGameStateBase::StaticClass(),
+			AController::StaticClass()	
+		};
+		return &S;
+	}
+	// ~Actor destruction End
+
 	// ~Spawn Begin
-	template<class T> T* Spawn
+	template<class T>
+	static T* Spawn
 	(
 		UWorld* const InWorld,
 		const FTransform& InTransform,

@@ -2,7 +2,7 @@
 #include "LogUtilLib.h"
 
 #include "Engine/World.h"
-#include "Engine/Engine.h"
+#include "Engine/Engine.h"	
 
 UWorld* UWorldUtilLib::NewWorldAndContext
 (
@@ -165,6 +165,103 @@ FString UWorldUtilLib::GetWorldTypeString(EWorldType::Type const InType)
 		break;
 	}
 	return FString(TEXT("{Unknown world type}"));
+}
+	
+TSet<AActor*> UWorldUtilLib::GetActorsByPredicate(UWorld* const InWorld, TFunction<bool(const AActor*)> const InPredicate, EActorIteratorFlags const InFlags)
+{
+	checkf(InWorld, TEXT("When calling %s World must be non-NULL pointer"), TEXT(__FUNCTION__));
+
+	TSet<AActor*> S;
+	for(AActor* A : TActorRange<AActor>(InWorld, AActor::StaticClass(), InFlags))
+	{
+		if(InPredicate(A))
+		{
+			S.Add(A);
+		}
+	}
+	
+	return S;
+}
+
+bool UWorldUtilLib::DestroyActors(const TSet<AActor*>& InActors, TSet<AActor*>* const pOutErrorActors, ELogFlags const InLogFlags)
+{
+	M_LOGFUNC_IF_FLAGS(InLogFlags);
+
+	int32 const TotalActors = InActors.Num();
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("Total %d actors to process"), TotalActors);
+
+	int32 NumFailedActors = 0;
+	for(AActor* A : InActors)
+	{
+		if( ! A->Destroy() )
+		{
+			NumFailedActors++;
+			if(pOutErrorActors)
+			{
+				pOutErrorActors->Add(A);
+			}
+			M_LOG_ERROR_IF_FLAGS(InLogFlags, TEXT("Actor {%s}: AActor::Destroy returned false"), *ULogUtilLib::GetNameAndClassSafe(A));
+		}
+	}	
+
+	int32 const CountDestroyed = TotalActors - NumFailedActors;
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("Summary: %d actors destroyed, %d actors failed (total %d actors)"), CountDestroyed, NumFailedActors, TotalActors);
+	return (NumFailedActors == 0);
+}
+
+bool UWorldUtilLib::PurgeWorld
+(
+	UWorld* const InWorld, 
+	TSet<const UClass*>* pInExcludeSet,
+	TSet<AActor*>* const pOutErrorActors,
+	EActorIteratorFlags InActorIteratorFlags,
+	EMyActorSelectionFlags const InFlags,
+	ELogFlags const InLogFlags
+)
+{
+	M_LOGFUNC_IF_FLAGS(InLogFlags);
+
+	if(pInExcludeSet == nullptr)
+	{
+		pInExcludeSet = GetPurgeDefaultExcludeSet();
+	}	
+
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("%d classes in exclude set"), pInExcludeSet->Num());
+	for(const UClass* ExcludeClass : *pInExcludeSet)
+	{
+		checkf(ExcludeClass, TEXT("Exclude set must contain only non-NULL pointers"));
+		M_LOG_IF_FLAGS(InLogFlags, TEXT("ExcludeClass: %s"), *ExcludeClass->GetName());
+	}
+
+	TSet<AActor*> Actors = GetActorsByPredicate
+	(
+		InWorld, 
+		[pInExcludeSet, InFlags, InLogFlags](const AActor* InActor) -> bool
+		{
+			if(nullptr == InActor)
+			{
+				return false;
+			}	
+			bool bInExcludeSet = false;
+			for(const UClass* ExcludeClass : *pInExcludeSet)
+			{
+				checkf(ExcludeClass, TEXT("Exclude set must contain only non-NULL pointers"));
+				if(InActor->GetClass()->IsChildOf(ExcludeClass))
+				{
+					bInExcludeSet = true;
+					break;
+				}
+			}
+			if(bInExcludeSet)
+			{
+				M_LOG_ERROR_IF_FLAGS(InLogFlags, TEXT("Actor {%s}: skipping - class in exclude set"), *ULogUtilLib::GetNameAndClassSafe(InActor));
+				return false;
+			}
+			return true;
+		},
+		InActorIteratorFlags
+	);
+	return DestroyActors(Actors, pOutErrorActors, InLogFlags);
 }
 
 AActor* UWorldUtilLib::Spawn
