@@ -43,13 +43,13 @@ enum class ENewWorldFlags : uint8
 ENUM_CLASS_FLAGS(ENewWorldFlags);
 
 UENUM()
-enum class EMySpawnActorFlags : uint8
+enum class EMySpawnFlags : uint8
 {
 	None                             = 0             UMETA(DisplayName="None"),
 
 	/**
 	* If specified, the spawn actor utility function returns nullptr when fails,
-	* otherwise, function asserts that UWorld::SpawnActor does NOT fail.
+	* otherwise, function asserts that UWorld::Spawn does NOT fail.
 	*
 	* @note: We need this flag, ever if there's bNoFail, because FActorSpawnParameters are not available in blueprints.
 	*/
@@ -60,9 +60,20 @@ enum class EMySpawnActorFlags : uint8
 	*/
 	FullActorLog                     = 1 << 1        UMETA(DisplayName="Full actor log"),
 
-	Default                          = None
+	MaximalLogging                   = FullActorLog  UMETA(DisplayName="Maximal logging"),
+
+	Default                          = None          UMETA(DisplayName="Default")
 };
-ENUM_CLASS_FLAGS(EMySpawnActorFlags);
+ENUM_CLASS_FLAGS(EMySpawnFlags);
+
+UENUM()
+enum class EWorldStringFlags : uint8
+{
+	None                             = 0             UMETA(DisplayName="None"),
+
+	Default                          = None          UMETA(DisplayName="Default")
+};
+ENUM_CLASS_FLAGS(EWorldStringFlags);
 
 UCLASS()
 class UWorldUtilLib : public UBlueprintFunctionLibrary
@@ -74,7 +85,8 @@ public:
 	* Function for creating a functional UWorld,
 	* typically to be used within the automation tests.
 	*
-	* @note: DestroyWorld is to be used to destroy the world after creation!
+	* @note: DestroyWorld (or DestroyWorldSafe) is to be used to destroy the world after creation!
+	* @see DestroyWorldSafe
 	*/
 	static UWorld* NewWorldAndContext
 	(
@@ -84,6 +96,9 @@ public:
 		ELogFlags InLogFlags = ELogFlags::LogEverSuccess
 	);
 
+	/**
+	* @see: NewWorldAndContext
+	*/
 	UFUNCTION(BlueprintCallable, Category = WorldUtil)
 	static UWorld* NewGameWorldAndContext
 	(
@@ -92,75 +107,89 @@ public:
 		ELogFlags InLogFlags = ELogFlags::LogEverSuccess
 	);
 
-	// ~SpawnActor Begin
-	template<class T> T* SpawnActor
+	/**
+	* Destroy the given world.
+	* Automatically nullifies the given pointer to world.
+	* @note: works correctly ever if world is nullptr.
+	*/
+	static void DestroyWorldSafe(UWorld** const ppInWorld, bool bInformEngineOrWorld = true, UWorld* InNewWorld = nullptr, ELogFlags InLogFlags = ELogFlags::LogEverSuccess);
+
+	UFUNCTION(BlueprintCallable, Category = WorldUtil, Meta=(DisplayName="DestroyWorldSafe"))
+	static void K2DestroyWorldSafe(UWorld* InWorld, bool bInformEngineOrWorld = true, UWorld* InNewWorld = nullptr, ELogFlags InLogFlags = ELogFlags::LogEverSuccess);
+
+	// ~Spawn Begin
+	template<class T>
+	static T* Spawn
 	(
 		UWorld* const InWorld,
 		const FTransform& InTransform,
-		EMySpawnActorFlags const InFlags = EMySpawnActorFlags::Default,
+		EMySpawnFlags const InFlags = EMySpawnFlags::Default,
 		const FActorSpawnParameters& InSpawnParameters = FActorSpawnParameters{},
 	       	ELogFlags const InLogFlags = ELogFlags::None
 	)
 	{
-		return Cast<T>(SpawnActor(InWorld, T::StaticClass(), InTransform, InFlags, InSpawnParameters, InLogFlags));
+		return Cast<T>(Spawn(InWorld, T::StaticClass(), InTransform, InFlags, InSpawnParameters, InLogFlags));
 	}
 
 	template<class T>
-	T* SpawnActor
+	static T* Spawn
 	(
 		UWorld* const InWorld,
 		const FVector& InLocation, const FRotator& InRotation = FRotator{0, 0, 0}, 
-		EMySpawnActorFlags const InFlags = EMySpawnActorFlags::Default,
+		EMySpawnFlags const InFlags = EMySpawnFlags::Default,
 		const FActorSpawnParameters& InSpawnParameters = FActorSpawnParameters{}, 
 		ELogFlags const InLogFlags = ELogFlags::None
 	)
 	{
-		return Cast<T>(SpawnActor(InWorld, T::StaticClass(), InLocation, InRotation, InFlags, InSpawnParameters, InLogFlags));
+		return Cast<T>(Spawn(InWorld, T::StaticClass(), InLocation, InRotation, InFlags, InSpawnParameters, InLogFlags));
 	}
 
-	AActor* SpawnActor
+	static AActor* Spawn
 	(
 	 	UWorld* InWorld,
 	 	UClass* InClass,
 	       	const FTransform& InTransform, 
-		EMySpawnActorFlags InFlags = EMySpawnActorFlags::Default,
+		EMySpawnFlags InFlags = EMySpawnFlags::Default,
 		const FActorSpawnParameters& InSpawnParameters = FActorSpawnParameters{},
 	       	ELogFlags InLogFlags = ELogFlags::None
 	);
 
-	AActor* SpawnActor
+	static AActor* Spawn
 	(
 		UWorld* InWorld,
 	 	UClass* InClass, 
 		const FVector& InLocation, const FRotator& InRotation = FRotator{0, 0, 0}, 
-		EMySpawnActorFlags InFlags = EMySpawnActorFlags::Default,
+		EMySpawnFlags InFlags = EMySpawnFlags::Default,
 		const FActorSpawnParameters& InSpawnParameters = FActorSpawnParameters{}, 
 		ELogFlags InLogFlags = ELogFlags::None
 	);
 
-	UFUNCTION(BlueprintCallable, Category = WorldUtil, Meta=(DisplayName="SpawnActorByTransform", WorldContext="InWorldContextObject"))
-	AActor* K2SpawnActorByTransform
+	UFUNCTION(BlueprintCallable, Category = WorldUtil, Meta=(DisplayName="SpawnByTransform", WorldContext="InWorldContextObject"))
+	static AActor* K2SpawnByTransform
 	(
 	 	UObject* InWorldContextObject,
 	 	UClass* InClass,
 	       	const FTransform& InTransform, 
-		EMySpawnActorFlags InFlags = EMySpawnActorFlags::Default,
+		EMySpawnFlags InFlags = EMySpawnFlags::Default,
 	       	ELogFlags InLogFlags = ELogFlags::None
 	);
 
-	UFUNCTION(BlueprintCallable, Category = WorldUtil, Meta=(DisplayName="SpawnActor", AutoCreateRefParam="InRotation", WorldContext="InWorldContextObject"))
-	AActor* K2SpawnActor
+	UFUNCTION(BlueprintCallable, Category = WorldUtil, Meta=(DisplayName="Spawn", AutoCreateRefParam="InRotation", WorldContext="InWorldContextObject"))
+	static AActor* K2Spawn
 	(
 	 	UObject* InWorldContextObject,
 	 	UClass* InClass, 
 		const FVector& InLocation, const FRotator& InRotation,
-		EMySpawnActorFlags InFlags = EMySpawnActorFlags::Default,
+		EMySpawnFlags InFlags = EMySpawnFlags::Default,
 		ELogFlags InLogFlags = ELogFlags::None
 	);
-	// ~SpawnActor End
+	// ~Spawn End
 
 	//UFUNCTION(BlueprintCallable, Category = WorldUtil)
 	static FString GetWorldTypeString(EWorldType::Type InType);
+
+	UFUNCTION(BlueprintPure, Category = WorldUtil)
+	static FString GetWorldStringSafe(const UWorld* InWorld, EWorldStringFlags InFlags = EWorldStringFlags::Default);
 
 	/**
 	* Returns name of the map from the given world without streaming levels prefix.
