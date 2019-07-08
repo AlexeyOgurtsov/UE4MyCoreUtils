@@ -78,7 +78,13 @@ void ATUActor::SetTUFlags(ETUFlags InTUFlags)
 	M_LOG(TEXT("New flags:"));
 	LogTUFlags();
 }
-
+void ATUActor::UnsetTUFlags(ETUFlags InFlagMask)
+{
+	LogTUFlags();
+	TUFlags &= ~InFlagMask;
+	M_LOG(TEXT("New flags:"));
+	LogTUFlags();
+}
 bool ATUActor::HasAnyTUFlags(ETUFlags InFlagMask) const
 {
 	return ((TUFlags & InFlagMask) != ETUFlags::None);

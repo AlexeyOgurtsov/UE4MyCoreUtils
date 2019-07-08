@@ -38,17 +38,8 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Config")
 	ETUFlags GetTUFlags() const { return TUFlags; }
 
-	/**
-	* Sets flags (and KEEPS old!)
-	*/
 	UFUNCTION(BlueprintCallable, Category = "Config")
 	void SetTUFlags(ETUFlags InFlagMask);
-
-	/**
-	* Unsets the given set of flags.
-	*/
-	UFUNCTION(BlueprintCallable, Category = "Config")
-	void UnsetTUFlags(ETUFlags InFlagMask);
 
 	UFUNCTION(BlueprintPure, Category = "Config")
 	bool HasAnyTUFlags(ETUFlags InFlagMask) const;
