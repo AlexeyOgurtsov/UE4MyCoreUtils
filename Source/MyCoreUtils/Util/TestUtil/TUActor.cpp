@@ -74,7 +74,9 @@ void ATUActor::OnConstruction(const FTransform& Transform)
 void ATUActor::SetTUFlags(ETUFlags InTUFlags)
 {
 	LogTUFlags();
-	TUFlags = InTUFlags;
+	TUFlags |= InTUFlags;
+	M_LOG(TEXT("New flags:"));
+	LogTUFlags();
 }
 
 bool ATUActor::HasAnyTUFlags(ETUFlags InFlagMask) const
