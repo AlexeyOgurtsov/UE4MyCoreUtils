@@ -28,7 +28,7 @@ public:
 	template<class RangeT>
 	static typename const RangeT::ElementType* FindChildOf(const RangeT& InRange, const UClass* InClass)
 	{
-		return FindChildOfImpl<const RangeT::ElementType, RangeT>(InRange, InClass, TEXT(__FUNCTION__));
+		return FindChildOfImpl<const RangeT::ElementType, const RangeT>(InRange, InClass, TEXT(__FUNCTION__));
 	}
 
 	template<class RangeT>
@@ -67,7 +67,7 @@ public:
 	template<class RangeT>
 	static typename const RangeT::ElementType* FindSubclassOf(const RangeT& InRange, const UClass* const InClass)
 	{
-		return FindSubclassOfImpl<const RangeT, const RangeT::ElementType>(InRange, InClass, TEXT(__FUNCTION__));
+		return FindSubclassOfImpl<const RangeT::ElementType, const RangeT>(InRange, InClass, TEXT(__FUNCTION__));
 	}
 
 	/**
@@ -76,11 +76,11 @@ public:
 	template<class RangeT>
 	static typename RangeT::ElementType* FindSubclassOf(RangeT& InRange, const UClass* const InClass)
 	{
-		return FindSubclassOfImpl<RangeT, RangeT::ElementType>(InRange, InClass, TEXT(__FUNCTION__));
+		return FindSubclassOfImpl<RangeT::ElementType, RangeT>(InRange, InClass, TEXT(__FUNCTION__));
 	}
 
 private:
-	template<class RangeT, class ElementT>
+	template<class ElementT, class RangeT>
 	static typename ElementT* FindSubclassOfImpl(RangeT& InRange, const UClass* const InClass, const TCHAR* InFunctionName)
 	{
 		checkf(InClass, TEXT("when calling %s class to search must be valid pointer"), InFunctionName);
@@ -111,7 +111,7 @@ private:
 				continue;
 			}
 
-			if(pCurrObject->IsChildOf(InClass))
+			if(pCurrObject->GetClass()->IsChildOf(InClass))
 			{
 				return &pCurrObject;
 			}
