@@ -193,6 +193,10 @@ bool UWorldUtilLib::DestroyActors(const TSet<AActor*>& InActors, TSet<AActor*>* 
 	int32 NumFailedActors = 0;
 	for(AActor* A : InActors)
 	{
+		if( A == nullptr )
+		{
+			continue;
+		}
 		if( ! A->Destroy() )
 		{
 			NumFailedActors++;

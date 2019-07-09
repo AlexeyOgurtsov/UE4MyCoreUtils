@@ -43,6 +43,11 @@ enum class ELogRangeFlags : uint8
 	*/
 	ExtObjectLog               = 1 << 2       UMETA(DisplayName="Ext object log"),
 
+	/**
+	* If possible, all elements of the range and summary is to be logged on the same line
+	*/
+	OneLine                    = 1 << 3       UMETA(DisplayName="One line"),
+
 	Default                    = LogSummary | LogIndex            UMETA(DisplayName="Default")
 };
 ENUM_CLASS_FLAGS(ELogRangeFlags);
@@ -161,7 +166,7 @@ public:
 	/**
 	* Logs all objects from the given range.
 	*
-	* @param: TRange: container of const UObject*
+	* @param: TRange: container of const UObject-derived pointers*
 	* @returns: count of objects in the range.
 	*/
 	template<class TRange>
@@ -178,7 +183,7 @@ public:
 		bool const bLogIndex = (InFlags & ELogRangeFlags::LogIndex) != ELogRangeFlags::None;
 		bool const bExtObjectLog = (InFlags & ELogRangeFlags::ExtObjectLog) != ELogRangeFlags::None;
 
-		for(const UObject* Obj : InRange)
+		for(TRange::ElementType Obj : InRange)
 		{
 			if(Obj == nullptr)
 			{
@@ -190,21 +195,23 @@ public:
 				{
 					M_LOG(TEXT("nullptr"));
 				}
-				continue;
-			}
-			if(bExtObjectLog)
-			{
-				LogObjectSafe(Obj, InLogObjectFlags);
 			}
 			else
 			{
-				if(bLogIndex)
+				if(bExtObjectLog)
 				{
-					M_LOG(TEXT("%d: {%s}"), Index, *GetNameAndClassSafe(Obj));
+					LogObjectSafe(Obj, InLogObjectFlags);
 				}
 				else
 				{
-					M_LOG(TEXT("{%s}"), Index, *GetNameAndClassSafe(Obj));
+					if(bLogIndex)
+					{
+						M_LOG(TEXT("%d: {%s}"), Index, *GetNameAndClassSafe(Obj));
+					}
+					else
+					{
+						M_LOG(TEXT("{%s}"), Index, *GetNameAndClassSafe(Obj));
+					}
 				}
 			}
 			Index++;
