@@ -19,7 +19,7 @@ public:
 	static bool ContainsChildOf(const TSet<T*>& InRange, const UClass* InClass);
 
 	template<class T>
-	static T* FindChildOf(const TSet<T*>& InRange, const UClass* InClass)
+	static T** FindChildOf(const TSet<T*>& InRange, const UClass* InClass)
 	{
 		M_NOT_IMPL_RET(nullptr);
 	}

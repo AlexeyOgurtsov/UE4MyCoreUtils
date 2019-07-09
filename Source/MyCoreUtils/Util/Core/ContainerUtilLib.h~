@@ -38,8 +38,8 @@ public:
 	static bool ContainsSubclassOf(const TSet<const UClass*>& InSet, const UClass* InClass);
 	static bool ContainsSubclassOf(const TSet<UClass*>& InSet, const UClass* InClass);
 
-	static T** FindSubclassOf(const TSet<const UClass*>& InSet, const UClass* InClass);
-	static T** FindSubclassOf(const TSet<UClass*>& InSet, const UClass* InClass);
+	static const UClass** FindSubclassOf(const TSet<const UClass*>& InSet, const UClass* InClass);
+	static UClass** FindSubclassOf(const TSet<UClass*>& InSet, const UClass* InClass);
 
 	/**
 	* @param: InRange: range of UClass* or const UClass*

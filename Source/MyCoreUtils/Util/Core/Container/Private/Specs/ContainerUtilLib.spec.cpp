@@ -131,10 +131,10 @@ void ContainerUtilLib_ObjectOfClassSpec::Define()
 			{
 				const UClass* const ClassToSearch = UPrimitiveComponent::StaticClass();
 
-				const UObject* const FoundObj = UContainerUtilLib::FindChildOf(ObjSet, ClassToSearch);
-				TestNotNull(TEXT("Object must be found"), FoundObj);
+				UObject** const ppFoundObj = UContainerUtilLib::FindChildOf(ObjSet, ClassToSearch);
+				TestNotNull(TEXT("Object must be found"), ppFoundObj);
 
-				bool const bSuclass = FoundObj->GetClass()->IsChildOf(ClassToSearch);
+				bool const bSuclass = (*ppFoundObj)->GetClass()->IsChildOf(ClassToSearch);
 				TestTrue(TEXT("Found object must be subclass of the demanded class"), bSuclass);
 			});
 
@@ -142,8 +142,8 @@ void ContainerUtilLib_ObjectOfClassSpec::Define()
 			{
 				const UClass* const ClassToSearch = AGameMode::StaticClass();
 
-				const UObject* const FoundObj = UContainerUtilLib::FindChildOf(ObjSet, ClassToSearch);
-				TestNull(TEXT("Must return nullptr"), FoundObj);
+				UObject** const ppFoundObj = UContainerUtilLib::FindChildOf(ObjSet, ClassToSearch);
+				TestNull(TEXT("Must return nullptr"), ppFoundObj);
 			});
 		});
 	});
