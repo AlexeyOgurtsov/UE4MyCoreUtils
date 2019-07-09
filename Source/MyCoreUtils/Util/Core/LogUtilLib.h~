@@ -5,6 +5,11 @@
 #include "TextProperty.h"
 #include "LogUtilLib.generated.h"
 
+/**
+* @TODO Array utils:
+* 1. Should take UObject-derived classes also!
+*/
+
 UENUM(BlueprintType)
 enum class EMyLogObjectFlags : uint8
 {
