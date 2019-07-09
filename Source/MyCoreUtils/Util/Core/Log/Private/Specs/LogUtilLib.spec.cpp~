@@ -13,9 +13,19 @@ void LogUtilLibSpec::Define()
 			TestTrue(TEXT("Result text length must be greater than zero"), ResultS.Len() > 0);
 		});
 
-		//It("test failing test (is test running at all?)", [this]()
+		//It("tests failing test (is test running at all?)", [this]()
 		//{
-		//	TestTrue(TEXT("Result text length must be zero (to FAIL)"), false);
+		//	TestTrue(TEXT("Do Fail"), false);
 		//});
+	});
+
+	Describe("LogObjectRange", [this]()
+	{
+		It("should correctly process nullptr", [this]()
+		{
+			TArray<const UObject*> const A { nullptr, nullptr, nullptr };
+			int32 TotalObjects = ULogUtilLib::LogObjectRange(A);
+			TestEqual(TEXT("Must return count of objects processsed"), TotalObjects, A.Num());
+		});
 	});
 }
