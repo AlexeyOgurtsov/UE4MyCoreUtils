@@ -258,7 +258,7 @@ bool UWorldUtilLib::PurgeWorld
 			}
 			if(bInExcludeSet)
 			{
-				M_LOG_ERROR_IF_FLAGS(InLogFlags, TEXT("Actor {%s}: skipping - class in exclude set"), *ULogUtilLib::GetNameAndClassSafe(InActor));
+				M_LOG_IF_FLAGS(InLogFlags, TEXT("Actor {%s}: skipping - class in exclude set"), *ULogUtilLib::GetNameAndClassSafe(InActor));
 				return false;
 			}
 			return true;
