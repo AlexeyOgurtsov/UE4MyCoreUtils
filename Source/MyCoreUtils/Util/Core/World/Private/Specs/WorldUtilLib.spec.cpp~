@@ -1,6 +1,7 @@
 #include "Util/Core/WorldUtilLib.h"
 #include "Util/Core/LogUtilLib.h"
 #include "Util/TestUtil/TUActor.h"
+#include "Util/Core/ContainerUtilLib.h"
 
 #include "AutomationTest.h"
 #include "GameFramework/Actor.h"
@@ -39,17 +40,37 @@ void WorldUtilLibSpec::Define()
 			TestTrue(TEXT("Purge must succeeded"), bPurgeSucceeded);
 		});
 
-		It("should NOT purge player controllers by default", [this]()
+		It("should NOT purge system classes by default", [this]()
 		{
+			M_TO_BE_IMPL(TEXT("Here we should wait because removing is not instantenous"));
+
 			TSet<AActor*> const WorldActorsSet = UWorldUtilLib::GetActorsByPredicate
 			(
 				W, 
-		;		[](const AActor*) { return true; }, 
+				[](const AActor*) { return true; }, 
 				EActorIteratorFlags::AllActors 
 			);
 			TArray<AActor*> const WorldActors = WorldActorsSet.Array();
 
+			bool const bTUActorExists = UContainerUtilLib::ContainsChildOf(WorldActorsSet, ATUActor::StaticClass());
+			TestFalse(TEXT("Test actor should be destroyed after purge"), bTUActorExists);
+
+			bool const bPCExists = UContainerUtilLib::ContainsChildOf(WorldActorsSet, APlayerController::StaticClass());
+			TestTrue(TEXT("PC should still exist after purge"), bPCExists);
+
+			bool const bGameModeExists = UContainerUtilLib::ContainsChildOf(WorldActorsSet, AGameMode::StaticClass());
+			TestTrue(TEXT("Game mode should still exist after purge"), bGameModeExists);
+
+			bool const bGameState = UContainerUtilLib::ContainsChildOf(WorldActorsSet, AGameState::StaticClass());
+			TestTrue(TEXT("Game state should still exist after purge"), bGameStateExists);
+
 			M_NOT_IMPL();
+		});
+
+		AfterEach([this]()
+		{
+			UWorldUtilLib::DestroyWorldSafe(&W);
+			TestNull(TEXT("DestryoWorldSafe must succeed"), W);
 		});
 	});
 
