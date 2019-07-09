@@ -9,7 +9,6 @@
 
 #include "AutomationTest.h"
 
-/*
 BEGIN_DEFINE_SPEC(ContainerUtilLib_ClassContainerSpec, "MyUtil.Core.Container.ContainerUtilLib.ClassContainerSpec", EAutomationTestFlags::EngineFilter | EAutomationTestFlags::EditorContext)
 	TSet<UClass*> ClassSet;
 	TSet<const UClass*> ConstClassSet;
@@ -75,10 +74,9 @@ void ContainerUtilLib_ClassContainerSpec::Define()
 				UClass** const ppFoundClass = UContainerUtilLib::FindSubclassOf(ClassSet, ClassToSearch);
 				TestNull(TEXT("Must return nullptr"), ppFoundClass);
 			});
-		}
-	);
+		});
+	});
 }
-*/
 
 BEGIN_DEFINE_SPEC(ContainerUtilLib_ObjectOfClassSpec, "MyUtil.Core.Container.ContainerUtilLib.ObjectOfClassSpec", EAutomationTestFlags::EngineFilter | EAutomationTestFlags::EditorContext)
 	TSet<UObject*> ObjSet;

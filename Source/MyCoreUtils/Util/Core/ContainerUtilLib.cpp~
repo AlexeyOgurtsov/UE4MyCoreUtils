@@ -11,7 +11,7 @@ bool UContainerUtilLib::ContainsSubclassOf(const TSet<UClass*>& InRange, const U
 	M_NOT_IMPL_RET(false);
 }
 
-UClass** UContainerUtilLib::FindSubclassOf(const TSet<const UClass*>& InSet, const UClass* InClass)
+const UClass** UContainerUtilLib::FindSubclassOf(const TSet<const UClass*>& InSet, const UClass* InClass)
 {
 	M_NOT_IMPL_RET(nullptr);
 }

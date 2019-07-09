@@ -9,7 +9,6 @@
 
 #include "AutomationTest.h"
 
-/*
 BEGIN_DEFINE_SPEC(ContainerUtilLib_ClassContainerSpec, "MyUtil.Core.Container.ContainerUtilLib.ClassContainerSpec", EAutomationTestFlags::EngineFilter | EAutomationTestFlags::EditorContext)
 	TSet<UClass*> ClassSet;
 	TSet<const UClass*> ConstClassSet;
@@ -75,10 +74,9 @@ void ContainerUtilLib_ClassContainerSpec::Define()
 				UClass** const ppFoundClass = UContainerUtilLib::FindSubclassOf(ClassSet, ClassToSearch);
 				TestNull(TEXT("Must return nullptr"), ppFoundClass);
 			});
-		}
-	);
+		});
+	}
 }
-*/
 
 BEGIN_DEFINE_SPEC(ContainerUtilLib_ObjectOfClassSpec, "MyUtil.Core.Container.ContainerUtilLib.ObjectOfClassSpec", EAutomationTestFlags::EngineFilter | EAutomationTestFlags::EditorContext)
 	TSet<UObject*> ObjSet;
@@ -132,7 +130,7 @@ void ContainerUtilLib_ObjectOfClassSpec::Define()
 				const UClass* const ClassToSearch = UPrimitiveComponent::StaticClass();
 
 				UObject** const ppFoundObj = UContainerUtilLib::FindChildOf(ObjSet, ClassToSearch);
-				TestNotNull(TEXT("Object must be found"), FoundObj);
+				TestNotNull(TEXT("Object must be found"), ppFoundObj);
 
 				bool const bSuclass = (*ppFoundObj)->GetClass()->IsChildOf(ClassToSearch);
 				TestTrue(TEXT("Found object must be subclass of the demanded class"), bSuclass);
