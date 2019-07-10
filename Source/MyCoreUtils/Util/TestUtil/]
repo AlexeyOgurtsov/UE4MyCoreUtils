@@ -1,0 +1,31 @@
+#pragma once
+
+/**
+* Actor that has collision and mesh.
+*/
+
+#include "TUActor.h"
+#include "TUVisibleActor.generated.h"
+
+class UStaticMeshComponent;
+class USphereComponent;
+
+UCLASS()
+class ATUVisibleActor : public TUActor
+{
+	GENERATED_BODY()
+
+public:
+	UFUNCTION(BlueprintPure, Category = Visual)
+	UStaticMeshComponent* GetMesh() const { return Mesh; }
+
+	UFUNCTION(BlueprintPure, Category = Visual)
+	USphereComponent* GetProxSphere() const { return ProxSphere; }
+
+private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Visual, Meta=(AllowPrivateAccess = true))
+	UStaticMeshComponent* Mesh = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Visual, Meta=(AllowPrivateAccess = true))
+	USphereComponent* ProxSphere = nullptr;
+};
