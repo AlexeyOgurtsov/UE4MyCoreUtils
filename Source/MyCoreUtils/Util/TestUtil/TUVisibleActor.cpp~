@@ -36,6 +36,7 @@ void ATUVisibleActor::InitCameraAndSpringArm(USceneComponent* InAttachTo)
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
+	Camera->bUsePawnControlRotation = true;
 }
 
 void ATUVisibleActor::InitMesh(USceneComponent* InAttachTo)

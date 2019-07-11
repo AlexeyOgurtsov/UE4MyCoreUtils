@@ -20,11 +20,11 @@ namespace VisibleActorConfig
 		// ~ProxSphere End
 
 		// ~SpringArm Begin
-		constexpr float SPRINGARM_TARGET_ARM_LENGTH_EXTRA = 200.0F;
+		constexpr float SPRINGARM_TARGET_ARM_LENGTH_EXTRA = 300.0F;
 		constexpr float SPRINGARM_TARGET_ARM_LENGTH = MESH_BOUNDING_CUBE_SIDE/2.0F + SPRINGARM_TARGET_ARM_LENGTH_EXTRA;
-		constexpr bool SPRINGARM_ENABLE_CAMERA_LAG = true;
+		constexpr bool SPRINGARM_ENABLE_CAMERA_LAG = false;
 		constexpr float SPRINGARM_CAMERA_LAG_SPEED = 3.0F;
-		const FRotator SPRINGARM_RELATIVE_ROTATION { -20.0F, 0.0F, 0.0F };
+		const FRotator SPRINGARM_RELATIVE_ROTATION { -25.0F, 0.0F, 0.0F };
 		const FVector SPRINGARM_RELATIVE_LOCATION { 0, 0, MESH_BOUNDING_CUBE_SIDE/2.0F };
 		// ~SpringArm End
 

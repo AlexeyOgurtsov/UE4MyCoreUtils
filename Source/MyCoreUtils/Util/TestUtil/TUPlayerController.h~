@@ -131,17 +131,6 @@ private:
 	void Action_FireTwoChecked();
 	void Action_FireThreeChecked();
 
-	void Action_SelectZeroChecked();
-	void Action_SelectOneChecked();
-	void Action_SelectTwoChecked();
-	void Action_SelectThreeChecked();
-	void Action_SelectFourChecked();
-	void Action_SelectFiveChecked();
-	void Action_SelectSixChecked();
-	void Action_SelectSevenChecked();
-	void Action_SelectEightChecked();
-	void Action_SelectNineChecked();
-
 	void ActionSelectGeneralChecked(int32 InIndex);
 	// ~Actions End
 

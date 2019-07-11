@@ -36,6 +36,7 @@ void ATUPawn::InitCameraAndSpringArm(USceneComponent* InAttachTo)
 	SpringArm->SetupAttachment(InAttachTo);
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->bUsePawnControlRotation = true;
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 }
 
