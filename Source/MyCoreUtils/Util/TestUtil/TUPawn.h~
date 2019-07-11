@@ -5,7 +5,7 @@
 */
 
 #include "GameFramework/Pawn.h"
-#include "TUVisibleActor.generated.h"
+#include "TUPawn.generated.h"
 
 class UCameraComponent;
 class USpringArmComponent;
@@ -33,7 +33,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = Collision)
 	USphereComponent* GetProxSphere() const { return ProxSphere; }
 
-private:
+private:;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Components, Meta=(AllowPrivateAccess = true))
 	USceneComponent* RootSceneComponent = nullptr;
 

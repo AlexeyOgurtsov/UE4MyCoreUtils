@@ -1,5 +1,6 @@
 
 #include "TUPawn.h"
+#include "VisibleActorConfig.h"
 #include "Util/Core/LogUtilLib.h"
 
 #include "GameFramework/SpringArmComponent.h"
@@ -10,6 +11,8 @@
 #include "Components/SphereComponent.h"
 
 #include "UObject/ConstructorHelpers.h"
+
+using namespace VisibleActorConfig;
 
 ATUPawn::ATUPawn()
 {
@@ -25,10 +28,11 @@ void ATUPawn::InitCameraAndSpringArm(USceneComponent* InAttachTo)
 	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
-	SpringArm->TargetArmLength = 400.0F;
-	SpringArm->RelativeRotation = FRotator{-45.f, 0, 0 };
-	SpringArm->bEnableCameraLag = true;
-	SpringArm->CameraLagSpeed = 3.0F;
+	SpringArm->TargetArmLength = Default::SPRINGARM_TARGET_ARM_LENGTH;
+	SpringArm->RelativeRotation = Default::SPRINGARM_RELATIVE_ROTATION;
+	SpringArm->RelativeLocation = Default::SPRINGARM_RELATIVE_LOCATION;
+	SpringArm->bEnableCameraLag = Default::SPRINGARM_ENABLE_CAMERA_LAG;
+	SpringArm->CameraLagSpeed = Default::SPRINGARM_CAMERA_LAG_SPEED;
 	SpringArm->SetupAttachment(InAttachTo);
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -39,16 +43,14 @@ void ATUPawn::InitMesh(USceneComponent* InAttachTo)
 {
 	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
 
-	constexpr const TCHAR* DEFAULT_MESH_ASSET_PATH = TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'");
-
-	static ConstructorHelpers::FObjectFinderOptional<UStaticMesh> MeshFinder { DEFAULT_MESH_ASSET_PATH };
-	M_LOG_ERROR_IF( ! MeshFinder.Succeeded(), TEXT("Default mesh (\"%s\") NOT found"), DEFAULT_MESH_ASSET_PATH);
+	static ConstructorHelpers::FObjectFinderOptional<UStaticMesh> MeshFinder { Default::MESH_ASSET_PATH };
+	M_LOG_ERROR_IF( ! MeshFinder.Succeeded(), TEXT("Default mesh (\"%s\") NOT found"), Default::MESH_ASSET_PATH);
 
 	{
 		Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 		if(MeshFinder.Succeeded())
 		{
-			M_LOG(TEXT("Default mesh (\"%s\") found, setting it up"), DEFAULT_MESH_ASSET_PATH);
+			M_LOG(TEXT("Default mesh (\"%s\") found, setting it up"), Default::MESH_ASSET_PATH);
 			Mesh->SetStaticMesh(MeshFinder.Get());
 		}
 
@@ -61,6 +63,7 @@ void ATUPawn::InitProxSphere(USceneComponent* InAttachTo)
 	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
 
 	ProxSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
-	ProxSphere->InitSphereRadius(100.0f);
+	ProxSphere->InitSphereRadius(Default::PROX_SPHERE_RADIUS);
+	ProxSphere->RelativeLocation = Default::MESH_REAL_CENTER_ACTOR_SPACE_LOCATION;
 	ProxSphere->SetupAttachment(InAttachTo);
 }

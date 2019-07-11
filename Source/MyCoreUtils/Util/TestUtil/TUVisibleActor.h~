@@ -5,6 +5,7 @@
 */
 
 #include "TUActor.h"
+#include "VisibleActorConfig.h"
 #include "TUVisibleActor.generated.h"
 
 class UCameraComponent;
@@ -21,6 +22,9 @@ class ATUVisibleActor : public ATUActor
 public:
 	ATUVisibleActor();
 
+	UFUNCTION(Category = Config)
+	FVisibleActorConfig GetConfig() const { return Config; }
+
 	UFUNCTION(BlueprintPure, Category = Components)
 	USceneComponent* GetRootSceneComponent() const { return RootSceneComponent; }
 
@@ -34,12 +38,15 @@ public:
 	USphereComponent* GetProxSphere() const { return ProxSphere; }
 
 private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Config, Meta=(AllowPrivateAccess = true))
+	FVisibleActorConfig Config;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Components, Meta=(AllowPrivateAccess = true))
 	USceneComponent* RootSceneComponent = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Camera, Meta=(AllowPrivateAccess = true))
 	UCameraComponent* Camera = nullptr;
-	void InitCameraAndSpringArm(USceneComponent InAttachTo);
+	void InitCameraAndSpringArm(USceneComponent* InAttachTo);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Camera, Meta=(AllowPrivateAccess = true))
 	USpringArmComponent* SpringArm = nullptr;
