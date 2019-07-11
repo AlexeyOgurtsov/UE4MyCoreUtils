@@ -51,6 +51,7 @@ void ATUVisibleActor::InitMesh(USceneComponent* InAttachTo)
 		{
 			M_LOG(TEXT("Default mesh (\"%s\") found, setting it up"), DEFAULT_MESH_ASSET_PATH);
 			Mesh->SetStaticMesh(MeshFinder.Get());
+		}
 
 		Mesh->SetupAttachment(InAttachTo);
 	}

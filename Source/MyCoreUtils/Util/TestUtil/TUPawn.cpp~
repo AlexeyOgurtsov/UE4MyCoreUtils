@@ -1,4 +1,5 @@
-#include "TUVisibleActor.h"
+
+#include "TUPawn.h"
 #include "Util/Core/LogUtilLib.h"
 
 #include "GameFramework/SpringArmComponent.h"
@@ -10,7 +11,7 @@
 
 #include "UObject/ConstructorHelpers.h"
 
-ATUVisibleActor::ATUVisibleActor()
+ATUPawn::ATUPawn()
 {
 	RootComponent = RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComponent"));
 
@@ -19,7 +20,7 @@ ATUVisibleActor::ATUVisibleActor()
 	InitProxSphere(RootSceneComponent);
 }
 
-void ATUVisibleActor::InitCameraAndSpringArm(USceneComponent* InAttachTo)
+void ATUPawn::InitCameraAndSpringArm(USceneComponent* InAttachTo)
 {
 	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
 
@@ -34,7 +35,7 @@ void ATUVisibleActor::InitCameraAndSpringArm(USceneComponent* InAttachTo)
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 }
 
-void ATUVisibleActor::InitMesh(USceneComponent* InAttachTo)
+void ATUPawn::InitMesh(USceneComponent* InAttachTo)
 {
 	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
 
@@ -55,7 +56,7 @@ void ATUVisibleActor::InitMesh(USceneComponent* InAttachTo)
 	}
 }
 
-void ATUVisibleActor::InitProxSphere(USceneComponent* InAttachTo)
+void ATUPawn::InitProxSphere(USceneComponent* InAttachTo)
 {
 	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
 
