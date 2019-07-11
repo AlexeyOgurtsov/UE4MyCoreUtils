@@ -8,6 +8,8 @@
 #include "Engine/StaticMesh.h"
 #include "Components/SphereComponent.h"
 
+#include "UObject/ConstructorHelpers.h"
+
 ATUVisibleActor::ATUVisibleActor()
 {
 	M_NOT_IMPL_MSG(TEXT("Collision profile, movement settings"));
@@ -24,11 +26,13 @@ void ATUVisibleActor::InitCameraAndSpringArm(USceneComponent* InAttachTo)
 	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
-	M_NOT_IMPL();
+	SpringArm->TargetArmLength = 400.0F;
+	SpringArm->RelativeRotation = FRotator{-45.f, 0, 0 };
+	SpringArm->bEnableCameraLag = true;
+	SpringArm->CameraLagSpeed = 3.0F;
 	SpringArm->SetupAttachment(InAttachTo);
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	M_NOT_IMPL();
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 }
 
@@ -36,9 +40,21 @@ void ATUVisibleActor::InitMesh(USceneComponent* InAttachTo)
 {
 	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
 
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	M_NOT_IMPL();
-	Mesh->SetupAttachment(InAttachTo);
+	constexpr const TCHAR* DEFAULT_MESH_ASSET_PATH = TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'");
+
+	static ConstructorHelpers::FObjectFinderOptional<UStaticMesh> MeshFinder { DEFAULT_MESH_ASSET_PATH };
+	M_LOG_ERROR_IF( ! MeshFinder.Succeeded(), TEXT("Default mesh (\"%s\") NOT found"), DEFAULT_MESH_ASSET_PATH);
+
+	{
+		Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+		if(MeshFinder.Succeeded())
+		{
+			M_LOG(TEXT("Default mesh (\"%s\") found, setting it up"), DEFAULT_MESH_ASSET_PATH);
+			Mesh->SetStaticMesh(MeshFinder.Get());
+		}
+
+		Mesh->SetupAttachment(InAttachTo);
+	}
 }
 
 void ATUVisibleActor::InitProxSphere(USceneComponent* InAttachTo)
@@ -46,6 +62,6 @@ void ATUVisibleActor::InitProxSphere(USceneComponent* InAttachTo)
 	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
 
 	ProxSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
-	M_NOT_IMPL();
+	ProxSphere->InitSphereRadius(100.0f);
 	ProxSphere->SetupAttachment(InAttachTo);
 }
