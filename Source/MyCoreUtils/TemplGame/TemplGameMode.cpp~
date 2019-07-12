@@ -1,10 +1,11 @@
-#include "TUGameMode.h"
-#include "TUPawn.h"
-#include "TUPlayerController.h"
+#include "TemplGameMode.h"
+#include "TemplPlayerController.h"
+#include "TemplPawn.h"
+#include "TemplConfig.h"
 #include "Util/Core/LogUtilLib.h"
 
-ATUGameMode::ATUGameMode()
+ATemplGameMode::ATemplGameMode()
 {
-	DefaultPawnClass = ATUPawn::StaticClass();
-	PlayerControllerClass = ATUPlayerController::StaticClass();
+	DefaultPawnClass = ATemplPawn::StaticClass();
+	PlayerControllerClass = ATemplPlayerController::StaticClass();
 }

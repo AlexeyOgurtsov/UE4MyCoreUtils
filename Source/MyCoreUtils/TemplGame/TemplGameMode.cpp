@@ -1,10 +1,11 @@
 #include "TemplGameMode.h"
 #include "TemplPlayerController.h"
 #include "TemplPawn.h"
+#include "TemplConfig.h"
 #include "Util/Core/LogUtilLib.h"
 
-ATemplGameMode::ATemplGameMode()
+MyGameModeType::ATemplGameMode()
 {
-	DefaultPawnClass = ATemplPawn::StaticClass();
-	PlayerControllerClass = ATemplPlayerController::StaticClass();
+	DefaultPawnClass = MyPawnType::StaticClass();
+	PlayerControllerClass = MyPCType::StaticClass();
 }
