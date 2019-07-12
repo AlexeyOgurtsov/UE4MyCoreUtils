@@ -3,6 +3,9 @@
 #include "VisibleActorConfig.h"
 #include "Util/Core/LogUtilLib.h"
 
+#include "GameFramework/Controller.h"
+#include "I/ITUController.h"
+
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SceneComponent.h"
@@ -23,6 +26,30 @@ ATUPawn::ATUPawn()
 	InitProxSphere(RootSceneComponent);
 }
 
+void ATUPawn::BeginPlay()
+{
+	M_LOGFUNC();
+
+	Super::BeginPlay();
+
+	MyBeginPlay();
+	BeginPlayFinished();
+}
+
+void ATUPawn::MyBeginPlay_Implementation()
+{
+	M_LOGFUNC();
+}
+
+void ATUPawn::BeginPlayFinished()
+{
+	M_LOGFUNC();
+	if( TScriptInterface<ITUController> const C = K2GetTUControllerLogged() )
+	{
+		ITUController::Execute_PawnBeginPlayEnded(C.GetObject());
+	}
+}
+
 void ATUPawn::InitCameraAndSpringArm(USceneComponent* InAttachTo)
 {
 	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
@@ -36,6 +63,7 @@ void ATUPawn::InitCameraAndSpringArm(USceneComponent* InAttachTo)
 	SpringArm->SetupAttachment(InAttachTo);
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->bUsePawnControlRotation = true;
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 }
 
@@ -66,4 +94,87 @@ void ATUPawn::InitProxSphere(USceneComponent* InAttachTo)
 	ProxSphere->InitSphereRadius(Default::PROX_SPHERE_RADIUS);
 	ProxSphere->RelativeLocation = Default::MESH_REAL_CENTER_ACTOR_SPACE_LOCATION;
 	ProxSphere->SetupAttachment(InAttachTo);
+}
+
+TScriptInterface<ITUController> ATUPawn::K2GetTUController() const
+{
+	return TScriptInterface<ITUController>(GetController());
+}
+
+TScriptInterface<ITUController> ATUPawn::K2GetTUControllerLogged(ELogFlags InLogFlags) const
+{
+	TScriptInterface<ITUController> const C = K2GetTUController();
+	if( ! C )
+	{
+		M_LOG_ERROR_IF_FLAGS(InLogFlags, TEXT("GetTUController() returned NULL"));
+	}
+	return C;
+}
+
+TScriptInterface<ITUController> ATUPawn::K2GetTUControllerChecked() const
+{
+	TScriptInterface<ITUController> const C = K2GetTUController();	
+	checkf(C, TEXT("GetTUController() must return non-NULL pawn!"));
+	return C;
+}
+
+ITUController* ATUPawn::GetTUController() const
+{
+	return Cast<ITUController>(GetController());
+}
+
+ITUController* ATUPawn::GetTUControllerLogged(ELogFlags InLogFlags) const
+{
+	ITUController* const C = GetTUController();
+	if(C == nullptr)
+	{
+		M_LOG_ERROR_IF_FLAGS(InLogFlags, TEXT("GetTUController() returned NULL"));
+	}
+	return C;
+}
+
+ITUController* ATUPawn::GetTUControllerChecked() const
+{
+	ITUController* const C = GetTUController();	
+	checkf(C, TEXT("GetTUController() must return non-NULL pawn!"));
+	return C;
+}
+
+AController* ATUPawn::GetControllerLogged(ELogFlags InLogFlags) const
+{
+	AController* const C = GetController();
+	if(C == nullptr)
+	{
+		M_LOG_ERROR_IF_FLAGS(InLogFlags, TEXT("GetController() returned NULL"));
+	}
+	return C;
+}
+
+AController* ATUPawn::GetControllerChecked() const
+{
+	AController* const C = GetController();	
+	checkf(C, TEXT("GetController() must return non-NULL pawn!"));
+	return C;
+}
+
+APlayerController* ATUPawn::GetPCLogged(ELogFlags InLogFlags) const
+{
+	APlayerController* const C = GetPC();
+	if(C == nullptr)
+	{
+		M_LOG_ERROR_IF_FLAGS(InLogFlags, TEXT("GetPC() returned NULL"));
+	}
+	return C;
+}
+
+APlayerController* ATUPawn::GetPC() const
+{
+	return Cast<APlayerController>(GetController());
+}
+
+APlayerController* ATUPawn::GetPCChecked() const
+{
+	APlayerController* const C = GetPC();	
+	checkf(C, TEXT("GetController() must return non-NULL pawn!"));
+	return C;
 }

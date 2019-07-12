@@ -1,0 +1,17 @@
+#pragma once
+
+/**
+* To be copied to the destination and changed.
+*/
+
+#include "TUGameMode.h"
+#include "TemplPlayerController.generated.h"
+
+UCLASS()
+class ATemplGameMode : public ATUGameMode
+{
+	GENERATED_BODY()
+
+public:
+	ATemplGameMode();
+};

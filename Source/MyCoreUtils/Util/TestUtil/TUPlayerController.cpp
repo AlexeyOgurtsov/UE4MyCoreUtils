@@ -22,6 +22,12 @@ namespace
 ATUPlayerController::ATUPlayerController()
 {
 }
+
+void ATUPlayerController::PawnBeginPlayEnded_Implementation()
+{
+	M_LOGFUNC();
+}
+
 void ATUPlayerController::SetupInputComponent()
 {
 	M_LOGFUNC();
@@ -109,7 +115,7 @@ void ATUPlayerController::Axis_LookYaw(float const InValue)
 
 void ATUPlayerController::Axis_ForwardChecked(float const InValue)
 {
-	if(APawn* const P = GetPawnIfShouldLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
 		Axis_Forward(InValue);
 	}
@@ -117,7 +123,7 @@ void ATUPlayerController::Axis_ForwardChecked(float const InValue)
 
 void ATUPlayerController::Axis_RightChecked(float const InValue)
 {
-	if(APawn* const P = GetPawnIfShouldLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
 		Axis_Right(InValue);
 	}
@@ -125,7 +131,7 @@ void ATUPlayerController::Axis_RightChecked(float const InValue)
 
 void ATUPlayerController::Axis_UpChecked(float const InValue)
 {
-	if(APawn* const P = GetPawnIfShouldLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
 		Axis_Up(InValue);
 	}
@@ -399,10 +405,10 @@ void ATUPlayerController::ActionMoveGeneral(const FVector& InDirection, const fl
 {
 	if(InAmount != 0.0F)
 	{
+		M_LOG_ERROR_IF(GetPawn()->GetMovementComponent() == nullptr, TEXT("Movement component is nullptr for controlled pawn"));
 		GetPawn()->AddMovementInput(InDirection, MOVE_AMOUNT_COEFF * InAmount);
 	}
 }
-
 
 bool ATUPlayerController::ShouldProcessGameInputLogged(const TCHAR* const InSender) const
 {
@@ -411,7 +417,7 @@ bool ATUPlayerController::ShouldProcessGameInputLogged(const TCHAR* const InSend
 	return bShouldProcess;
 }
 
-APawn* ATUPlayerController::GetPawnIfShouldLogged(const TCHAR* const InSender) const
+APawn* ATUPlayerController::GetPawnIfShouldInGameContextLogged(const TCHAR* const InSender) const
 {
 	if( ! ShouldProcessGameInputLogged(InSender) )
 	{
@@ -424,4 +430,26 @@ APawn* ATUPlayerController::GetPawnIfShouldLogged(const TCHAR* const InSender) c
 bool ATUPlayerController::ShouldProcessGameInput() const
 {
 	return bGameInputAllowed && ! bCinematicMode;
+}
+
+ATUPawn* ATUPlayerController::GetTUPawn() const
+{
+	return Cast<ATUPawn>(GetPawn());
+}
+
+ATUPawn* ATUPlayerController::GetMyTUPawnLogged(ELogFlags InLogFlags) const
+{
+	ATUPawn* const P = GetTUPawn();
+	if(P == nullptr)
+	{
+		M_LOG_ERROR_IF_FLAGS(InLogFlags, TEXT("GetTUPawn() returned NULL"));
+	}
+	return P;
+}
+
+ATUPawn* ATUPlayerController::GetMyTUPawnChecked() const
+{
+	ATUPawn* const P = GetTUPawn();
+	checkf(P, TEXT("GetTUPawn() must return non-NULL pawn!"));
+	return P;
 }

@@ -1,16 +1,24 @@
 #pragma once
 
 #include "GameFramework/PlayerController.h"
+#include "Util/Core/Log/MyLoggingTypes.h"
+#include "I/ITUController.h"
 #include "TUPlayerController.generated.h"
 
 UCLASS()
-class ATUPlayerController : public APlayerController
+class ATUPlayerController 
+: public APlayerController
+, public ITUController
 {
 	GENERATED_BODY()
 
 public:
 	ATUPlayerController();
 
+	// ~ITUController Begin
+	virtual void PawnBeginPlayEnded_Implementation() override;
+	// ~ITUController End
+	
 	virtual void SetupInputComponent() override;
 
 
@@ -23,6 +31,20 @@ public:
 	UFUNCTION(BlueprintPure, Category = Input)
 	bool IsGameInputAllowed() const { return bGameInputAllowed; }
 
+	// ~Access helpers Begin
+	UFUNCTION(BlueprintPure, Category = Pawn)
+	ATUPawn* GetTUPawn() const;
+
+	UFUNCTION(BlueprintPure, Category = Pawn)
+	ATUPawn* GetMyTUPawnLogged(ELogFlags InLogFlags = ELogFlags::None) const;
+
+	/**
+	* Checks that the given pawn NOT null.
+	*/
+	UFUNCTION(BlueprintPure, Category = Pawn)
+	ATUPawn* GetMyTUPawnChecked() const;
+	// ~Access helpers End
+	
 protected:
 	UFUNCTION(Exec, Category = Motion)
 	virtual void Axis_LookPitch(float InValue);
@@ -114,7 +136,7 @@ protected:
 private:
 	// ~Actions Begin
 	bool ShouldProcessGameInputLogged(const TCHAR* InSender) const;
-	APawn* GetPawnIfShouldLogged(const TCHAR* InSender) const;
+	APawn* GetPawnIfShouldInGameContextLogged(const TCHAR* InSender) const;
 	
 	void Axis_LookPitchChecked(float InValue);
 	void Axis_LookYawChecked(float InValue);
