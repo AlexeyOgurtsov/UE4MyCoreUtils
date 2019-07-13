@@ -59,6 +59,19 @@ void ULogUtilLib::LogKeyedNameClassSafeC(const TCHAR* InKey, const UObject* cons
 	M_LOG(TEXT("%s"), *GetKeyedNameAndClassC(InKey, InObject));
 }
 
+void ULogUtilLib::LogKeyedNameClassSafeIf(bool const bInShouldLog, const FString& InKey, const UObject* const InObject)
+{
+	LogKeyedNameClassSafeIfC(bInShouldLog, *InKey, InObject);
+}
+
+void ULogUtilLib::LogKeyedNameClassSafeIfC(bool const bInShouldLog, const TCHAR* const InKey, const UObject* const InObject)
+{
+	if(bInShouldLog)
+	{
+		LogKeyedNameClassSafeC(InKey, InObject);
+	}
+}
+
 FString ULogUtilLib::GetYesNo(bool const bYes)
 {
 	return bYes ? FString(TEXT("YES")) : FString(TEXT("no"));

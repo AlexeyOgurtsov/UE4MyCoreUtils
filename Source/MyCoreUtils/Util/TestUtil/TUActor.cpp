@@ -22,7 +22,7 @@ void ATUActor::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ATUActor::EndPlay(EEndPlayReason::Type InReason)
+void ATUActor::EndPlay(EEndPlayReason::Type const InReason)
 {
 	M_LOGFUNC_IF(HasAnyTUFlags(ETUFlags::ExtLog));
 	LogThisIf(HasAnyTUFlags(ETUFlags::ExtLog));
@@ -71,26 +71,26 @@ void ATUActor::OnConstruction(const FTransform& Transform)
 	Super::OnConstruction(Transform);
 }
 
-void ATUActor::SetTUFlags(ETUFlags InTUFlags)
+void ATUActor::SetTUFlags(ETUFlags const InTUFlags)
 {
 	LogTUFlags();
 	TUFlags |= InTUFlags;
 	M_LOG(TEXT("New flags:"));
 	LogTUFlags();
 }
-void ATUActor::UnsetTUFlags(ETUFlags InFlagMask)
+void ATUActor::UnsetTUFlags(ETUFlags const InFlagMask)
 {
 	LogTUFlags();
 	TUFlags &= ~InFlagMask;
 	M_LOG(TEXT("New flags:"));
 	LogTUFlags();
 }
-bool ATUActor::HasAnyTUFlags(ETUFlags InFlagMask) const
+bool ATUActor::HasAnyTUFlags(ETUFlags const InFlagMask) const
 {
 	return ((TUFlags & InFlagMask) != ETUFlags::None);
 }
 
-bool ATUActor::HasAllTUFlags(ETUFlags InFlagMask) const
+bool ATUActor::HasAllTUFlags(ETUFlags const InFlagMask) const
 {
 	return ((TUFlags & InFlagMask) == InFlagMask);
 }
@@ -105,7 +105,7 @@ void ATUActor::LogThis()
 	ULogUtilLib::LogKeyedNameClassSafeC(TEXT("This"), this);
 }
 
-void ATUActor::LogThisIf(bool bInShouldLog)
+void ATUActor::LogThisIf(bool const bInShouldLog)
 {
 	if(bInShouldLog)
 	{

@@ -81,7 +81,7 @@ void ATUActor::SetTUFlags(ETUFlags InTUFlags)
 void ATUActor::UnsetTUFlags(ETUFlags InFlagMask)
 {
 	LogTUFlags();
-	TUFlags &= ~InTUFlags;
+	TUFlags &= ~InFlagMask;
 	M_LOG(TEXT("New flags:"));
 	LogTUFlags();
 }
