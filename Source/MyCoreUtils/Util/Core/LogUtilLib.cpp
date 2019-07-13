@@ -26,10 +26,16 @@ FString ULogUtilLib::GetNameAndClassSafe(const UObject* const InObject)
 
 FString ULogUtilLib::GetNameAndClassScoped(const UObject* const InObject)
 {
-	check(InObject);
 	FString Result;
 	Result.Append(TEXT("("));
-	Result.Append(GetNameAndClass(InObject));
+	if(InObject)
+	{
+		Result.Append(GetNameAndClass(InObject));
+	}
+	else
+	{
+		Result.Append(TEXT("nullptr"));
+	}
 	Result.Append(TEXT(")"));
 	return Result;
 }
