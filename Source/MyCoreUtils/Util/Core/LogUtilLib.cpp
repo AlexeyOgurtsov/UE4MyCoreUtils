@@ -157,14 +157,51 @@ void ULogUtilLib::LogVector4IfC(bool bInShouldLog, const TCHAR* InKey, const FVe
 	}
 }
 
+void ULogUtilLib::LogRotator(const FString& InKey, const FRotator& InRotator)
+{
+	LogRotatorC(*InKey, InRotator);
+}
+
 void ULogUtilLib::LogRotatorC(const TCHAR* InKey, const FRotator& InRotator)
 {
+	LogStringC(InKey, InRotator.ToString());
+}
+
+void ULogUtilLib::LogRotatorIf(bool bInShouldLog, const FString& InKey, const FRotator& InRotator)
+{
+	LogRotatorIfC(bInShouldLog, *InKey, InRotator);
+}
+
+void ULogUtilLib::LogRotatorIfC(bool bInShouldLog, const TCHAR* InKey, const FRotator& InRotator)
+{
+	if(bInShouldLog)
+	{
+		LogRotatorC(InKey, InRotator);
+	}
+}
+
+void ULogUtilLib::LogQuat(const FString& InKey, const FQuat& InQuat)
+{
+	LogQuatC(*InKey, InQuat);
 }
 
 void ULogUtilLib::LogQuatC(const TCHAR* InKey, const FQuat& InQuat)
 {
+	LogStringC(InKey, InQuat.ToString());
 }
 
+void ULogUtilLib::LogQuatIf(bool bInShouldLog, const FString& InKey, const FQuat& InQuat)
+{
+	LogQuatIfC(bInShouldLog, *InKey, InQuat);
+}
+
+void ULogUtilLib::LogQuatIfC(bool bInShouldLog, const TCHAR* InKey, const FQuat& InQuat)
+{
+	if(bInShouldLog)
+	{
+		LogQuatC(InKey, InQuat);
+	}
+}
 
 void ULogUtilLib::LogTransform(const FString& InKey, const FTransform& InTransform)
 {
@@ -173,6 +210,9 @@ void ULogUtilLib::LogTransform(const FString& InKey, const FTransform& InTransfo
 
 void ULogUtilLib::LogTransformC(const TCHAR* InKey, const FTransform& InTransform)
 {
+	LogVectorC(*FString::Printf(TEXT("%s.Translation"), InKey), InTransform.GetTranslation());
+	LogQuatC(*FString::Printf(TEXT("%s.Rotation"), InKey), InTransform.GetRotation());
+	LogVectorC(*FString::Printf(TEXT("%s.Scale3D"), InKey), InTransform.GetScale3D());
 }
 
 void ULogUtilLib::LogTransformIf(bool bInShouldLog, const FString& InKey, const FTransform& InTransform)
@@ -195,6 +235,7 @@ void ULogUtilLib::LogPlane(const FString& InKey, const FPlane& InPlane)
 
 void ULogUtilLib::LogPlaneC(const TCHAR* InKey, const FPlane& InPlane)
 {
+	LogStringC(InKey, InPlane.ToString());
 }
 
 void ULogUtilLib::LogPlaneIf(bool bInShouldLog, const FString& InKey, const FPlane& InPlane)
@@ -208,10 +249,6 @@ void ULogUtilLib::LogPlaneIfC(bool bInShouldLog, const TCHAR* InKey, const FPlan
 	{
 		LogPlaneC(InKey, InPlane);
 	}
-}
-
-void ULogUtilLib::LogRotationMatrixC(const TCHAR* InKey, const FRotationMatrix& InMatrix)
-{
 }
 
 FString ULogUtilLib::GetYesNo(bool const bYes)
