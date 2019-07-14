@@ -60,8 +60,8 @@ struct FRotator;
 struct FTransform;
 struct FPlane;
 
-struct FTranslationMatrix;
-struct FRotationMatrix;
+class FTranslationMatrix;
+class FRotationMatrix;
 
 UCLASS()
 class ULogUtilLib : public UBlueprintFunctionLibrary
@@ -272,11 +272,11 @@ public:
 	static void LogVector2DIfC(bool bInShouldLog, const TCHAR* InKey, const FVector2D& InVector);
 
 	UFUNCTION(BlueprintCallable, Category = "Log|Transform|Math")
-	static void LogVector4(const FString& InKey, const FVector2D& InVector);
-	static void LogVector4C(const TCHAR* InKey, const FVector2D& InVector);
+	static void LogVector4(const FString& InKey, const FVector4& InVector);
+	static void LogVector4C(const TCHAR* InKey, const FVector4& InVector);
 	UFUNCTION(BlueprintCallable, Category = "Log|Transform|Math")
-	static void LogVector4If(bool bInShouldLog, const FString& InKey, const FVector2D& InVector);
-	static void LogVector4IfC(bool bInShouldLog, const TCHAR* InKey, const FVector2D& InVector);
+	static void LogVector4If(bool bInShouldLog, const FString& InKey, const FVector4& InVector);
+	static void LogVector4IfC(bool bInShouldLog, const TCHAR* InKey, const FVector4& InVector);
 
 	UFUNCTION(BlueprintCallable, Category = "Log|Math|Transform|Rotation")
 	static void LogRotator(const FString& InKey, const FRotator& InRotator);

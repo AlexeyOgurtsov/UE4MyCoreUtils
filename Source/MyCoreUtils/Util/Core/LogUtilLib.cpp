@@ -112,10 +112,49 @@ void ULogUtilLib::LogVectorIfC(bool bInShouldLog, const TCHAR* InKey, const FVec
 
 void ULogUtilLib::LogVector2DC(const TCHAR* InKey, const FVector2D& InVector)
 {
+	LogStringC(InKey, InVector.ToString());
 }
 
-void ULogUtilLib::LogVector4C(const TCHAR* InKey, const FVector2D& InVector)
+void ULogUtilLib::LogVector2D(const FString& InKey, const FVector2D& InVector)
 {
+	LogVector2DC(*InKey, InVector);
+}
+
+
+void ULogUtilLib::LogVector2DIf(bool bInShouldLog, const FString& InKey, const FVector2D& InVector)
+{
+	LogVector2DIfC(bInShouldLog, *InKey, InVector);
+}
+
+void ULogUtilLib::LogVector2DIfC(bool bInShouldLog, const TCHAR* InKey, const FVector2D& InVector)
+{
+	if(bInShouldLog)
+	{
+		LogVector2DC(InKey, InVector);
+	}
+}
+
+void ULogUtilLib::LogVector4(const FString& InKey, const FVector4& InVector)
+{
+	LogVector4C(*InKey, InVector);
+}
+
+void ULogUtilLib::LogVector4C(const TCHAR* InKey, const FVector4& InVector)
+{
+	LogStringC(InKey, InVector.ToString());
+}
+
+void ULogUtilLib::LogVector4If(bool bInShouldLog, const FString& InKey, const FVector4& InVector)
+{
+	LogVector4IfC(bInShouldLog, *InKey, InVector);
+}
+
+void ULogUtilLib::LogVector4IfC(bool bInShouldLog, const TCHAR* InKey, const FVector4& InVector)
+{
+	if(bInShouldLog)
+	{
+		return;
+	}
 }
 
 void ULogUtilLib::LogRotatorC(const TCHAR* InKey, const FRotator& InRotator)

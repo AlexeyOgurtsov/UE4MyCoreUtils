@@ -3,6 +3,7 @@
 #include "Components/PrimitiveComponent.h" // For casts
 #include "PhysicalMaterials/PhysicalMaterial.h" // For casts
 #include "WorldCollision.h"
+#include "Util/Core/TypeUtilLib.h"
 #include "Util/Core/LogUtilLib.h"
 
 
@@ -119,11 +120,11 @@ void UPhysUtilLib::LogCollisionShape(const TCHAR* InKey, const FCollisionShape& 
 
 FString UPhysUtilLib::GetQueryMobilityTypeString(EQueryMobilityType InType)
 {
-	M_NOT_IMPL_RET(FString(TEXT("{not impl}")));
+	return UTypeUtilLib::EnumToString<EQueryMobilityType>(InType);
 }
 
 FString UPhysUtilLib::GetCollisionChannelString(ECollisionChannel InChannel)
 {
-	M_NOT_IMPL_RET(FString(TEXT("{not impl}")));
+	return UTypeUtilLib::EnumToString<ECollisionChannel>(InChannel);
 }
 
