@@ -52,6 +52,17 @@ enum class ELogRangeFlags : uint8
 };
 ENUM_CLASS_FLAGS(ELogRangeFlags);
 
+struct FVector;
+struct FVector2D;
+struct FVector4;
+struct FQuat;
+struct FRotator;
+struct FTransform;
+struct FPlane;
+
+class FTranslationMatrix;
+class FRotationMatrix;
+
 UCLASS()
 class ULogUtilLib : public UBlueprintFunctionLibrary
 {
@@ -244,6 +255,65 @@ public:
 		return Index;
 	}
 	// ~Range logging End
+	
+	// ~Math value logging Begin
+	UFUNCTION(BlueprintCallable, Category = "Log|Transform|Math")
+	static void LogVector(const FString& InKey, const FVector& InVector);
+	static void LogVectorC(const TCHAR* InKey, const FVector& InVector);
+	UFUNCTION(BlueprintCallable, Category = "Log|Transform|Math")
+	static void LogVectorIf(bool bInShouldLog, const FString& InKey, const FVector& InVector);
+	static void LogVectorIfC(bool bInShouldLog, const TCHAR* InKey, const FVector& InVector);
+
+	UFUNCTION(BlueprintCallable, Category = "Log|Transform|Math")
+	static void LogVector2D(const FString& InKey, const FVector2D& InVector);
+	static void LogVector2DC(const TCHAR* InKey, const FVector2D& InVector);
+	UFUNCTION(BlueprintCallable, Category = "Log|Transform|Math")
+	static void LogVector2DIf(bool bInShouldLog, const FString& InKey, const FVector2D& InVector);
+	static void LogVector2DIfC(bool bInShouldLog, const TCHAR* InKey, const FVector2D& InVector);
+
+	UFUNCTION(BlueprintCallable, Category = "Log|Transform|Math")
+	static void LogVector4(const FString& InKey, const FVector2D& InVector);
+	static void LogVector4C(const TCHAR* InKey, const FVector2D& InVector);
+	UFUNCTION(BlueprintCallable, Category = "Log|Transform|Math")
+	static void LogVector4If(bool bInShouldLog, const FString& InKey, const FVector2D& InVector);
+	static void LogVector4IfC(bool bInShouldLog, const TCHAR* InKey, const FVector2D& InVector);
+
+	UFUNCTION(BlueprintCallable, Category = "Log|Math|Transform|Rotation")
+	static void LogRotator(const FString& InKey, const FRotator& InRotator);
+	static void LogRotatorC(const TCHAR* InKey, const FRotator& InRotator);
+	UFUNCTION(BlueprintCallable, Category = "Log|Math|Transform|Rotation")
+	static void LogRotatorIf(bool bInShouldLog, const FString& InKey, const FRotator& InRotator);
+	static void LogRotatorIfC(bool bInShouldLog, const TCHAR* InKey, const FRotator& InRotator);
+
+	static void LogQuat(const FString& InKey, const FQuat& InQuat);
+	static void LogQuatC(const TCHAR* InKey, const FQuat& InQuat);
+	static void LogQuatIf(bool bInShouldLog, const FString& InKey, const FQuat& InQuat);
+	static void LogQuatIfC(bool bInShouldLog, const TCHAR* InKey, const FQuat& InQuat);
+
+	UFUNCTION(BlueprintCallable, Category = "Log|Math|Transform")
+	static void LogTransform(const FString& InKey, const FTransform& InTransform);
+	static void LogTransformC(const TCHAR* InKey, const FTransform& InTransform);
+	UFUNCTION(BlueprintCallable, Category = "Log|Math|Transform")
+	static void LogTransformIf(bool bInShouldLog, const FString& InKey, const FTransform& InTransform);
+	static void LogTransformIfC(bool bInShouldLog, const TCHAR* InKey, const FTransform& InTransform);
+
+	UFUNCTION(BlueprintCallable, Category = "Log|Math|Transform")
+	static void LogPlane(const FString& InKey, const FPlane& InPlane);
+	static void LogPlaneC(const TCHAR* InKey, const FPlane& InPlane);
+	UFUNCTION(BlueprintCallable, Category = "Log|Math|Plane")
+	static void LogPlaneIf(bool bInShouldLog, const FString& InKey, const FPlane& InPlane);
+	static void LogPlaneIfC(bool bInShouldLog, const TCHAR* InKey, const FPlane& InPlane);
+
+	static void LogTranslationMatrix(const FString& InKey, const FTranslationMatrix& InMatrix);
+	static void LogTranslationMatrixC(const TCHAR* InKey, const FTranslationMatrix& InMatrix);
+	static void LogTranslationMatrixIf(bool bInShouldLog, const FString& InKey, const FTranslationMatrix& InMatrix);
+	static void LogTranslationMatrixIfC(bool bInShouldLog, const TCHAR* InKey, const FTranslationMatrix& InMatrix);
+
+	static void LogRotationMatrix(const FString& InKey, const FRotationMatrix& InMatrix);
+	static void LogRotationMatrixC(const TCHAR* InKey, const FRotationMatrix& InMatrix);
+	static void LogRotationMatrixIf(bool bInShouldLog, const FString& InKey, const FRotationMatrix& InMatrix);
+	static void LogRotationMatrixIfC(bool bInShouldLog, const TCHAR* InKey, const FRotationMatrix& InMatrix);
+	// ~Math value logging End
 
 	// ~Value logging Begin
 	UFUNCTION(BlueprintCallable, Category = Log)

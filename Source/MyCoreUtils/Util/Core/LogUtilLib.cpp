@@ -1,4 +1,13 @@
 #include "LogUtilLib.h"
+#include "Math/Vector.h"
+#include "Math/Vector2D.h"
+#include "Math/Vector4.h"
+#include "Math/Rotator.h"
+#include "Math/Quat.h"
+#include "Math/Plane.h"
+#include "Math/Transform.h"
+#include "Math/TranslationMatrix.h"
+#include "Math/RotationMatrix.h"
 
 DEFINE_LOG_CATEGORY(MyLog);
 
@@ -76,6 +85,94 @@ void ULogUtilLib::LogKeyedNameClassSafeIfC(bool const bInShouldLog, const TCHAR*
 	{
 		LogKeyedNameClassSafeC(InKey, InObject);
 	}
+}
+
+void ULogUtilLib::LogVector(const FString& InKey, const FVector& InVector)
+{
+	LogVectorC(*InKey, InVector);
+}
+
+void ULogUtilLib::LogVectorC(const TCHAR* InKey, const FVector& InVector)
+{
+	LogStringC(InKey, InVector.ToString());
+}
+
+void ULogUtilLib::LogVectorIf(bool bInShouldLog, const FString& InKey, const FVector& InVector)
+{
+	LogVectorIfC(bInShouldLog, *InKey, InVector);
+}
+
+void ULogUtilLib::LogVectorIfC(bool bInShouldLog, const TCHAR* InKey, const FVector& InVector)
+{
+	if(bInShouldLog)
+	{
+		LogVectorC(InKey, InVector);
+	}
+}
+
+void ULogUtilLib::LogVector2DC(const TCHAR* InKey, const FVector2D& InVector)
+{
+}
+
+void ULogUtilLib::LogVector4C(const TCHAR* InKey, const FVector2D& InVector)
+{
+}
+
+void ULogUtilLib::LogRotatorC(const TCHAR* InKey, const FRotator& InRotator)
+{
+}
+
+void ULogUtilLib::LogQuatC(const TCHAR* InKey, const FQuat& InQuat)
+{
+}
+
+
+void ULogUtilLib::LogTransform(const FString& InKey, const FTransform& InTransform)
+{
+	LogTransformC(*InKey, InTransform);
+}
+
+void ULogUtilLib::LogTransformC(const TCHAR* InKey, const FTransform& InTransform)
+{
+}
+
+void ULogUtilLib::LogTransformIf(bool bInShouldLog, const FString& InKey, const FTransform& InTransform)
+{
+	LogTransformIfC(bInShouldLog, *InKey, InTransform);
+}
+
+void ULogUtilLib::LogTransformIfC(bool bInShouldLog, const TCHAR* InKey, const FTransform& InTransform)
+{
+	if(bInShouldLog)
+	{
+		LogTransformC(InKey, InTransform);
+	}
+}
+
+void ULogUtilLib::LogPlane(const FString& InKey, const FPlane& InPlane)
+{
+	LogPlaneC(*InKey, InPlane);
+}
+
+void ULogUtilLib::LogPlaneC(const TCHAR* InKey, const FPlane& InPlane)
+{
+}
+
+void ULogUtilLib::LogPlaneIf(bool bInShouldLog, const FString& InKey, const FPlane& InPlane)
+{
+	LogPlaneIfC(bInShouldLog, *InKey, InPlane);
+}
+
+void ULogUtilLib::LogPlaneIfC(bool bInShouldLog, const TCHAR* InKey, const FPlane& InPlane)
+{
+	if(bInShouldLog)
+	{
+		LogPlaneC(InKey, InPlane);
+	}
+}
+
+void ULogUtilLib::LogRotationMatrixC(const TCHAR* InKey, const FRotationMatrix& InMatrix)
+{
 }
 
 FString ULogUtilLib::GetYesNo(bool const bYes)
