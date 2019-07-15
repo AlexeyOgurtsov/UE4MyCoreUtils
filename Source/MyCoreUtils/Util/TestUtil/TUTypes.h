@@ -18,10 +18,10 @@ struct FTUConfig
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Flags)
-	ETUFlags Flags = ETUFlags::None;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(Bitmask, BitmaskEnum=ETUFlags), Category = Flags)
+	uint8 Flags = static_cast<uint8>(ETUFlags::None);
 
-	ETUFlags GetFlags() const { return Flags; }
+	ETUFlags GetFlags() const { return static_cast<ETUFlags>(Flags); }
 	void SetFlags(ETUFlags InFlags);
 	void UnsetFlags(ETUFlags InFlags);
 	bool HasAnyFlags(ETUFlags InFlagMask) const;

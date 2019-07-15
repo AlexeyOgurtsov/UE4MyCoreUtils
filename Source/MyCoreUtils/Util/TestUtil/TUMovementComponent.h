@@ -4,7 +4,7 @@
 #include "TUTypes.h"
 #include "TUMovementComponent.generated.h"
 
-UCLASS()
+UCLASS(ClassGroup=(Movement), Meta=(BlueprintSpawnableComponent))
 class UTUMovementComponent : public UMovementComponent
 {
 	GENERATED_BODY()

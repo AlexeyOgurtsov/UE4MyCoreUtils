@@ -423,7 +423,7 @@ void ATUPlayerController::ActionMoveGeneral(APawn* const P, const FVector& InDir
 	{
 		M_LOG_IF(HasAnyInputDebugFlagsSet(ETUPCInputDebugFlags::LogMovement), TEXT("Movement action: Direction=%s Amount=%f (Movement={%s})"), *InDirection.ToString(), InAmount, *ULogUtilLib::GetNameAndClassSafe(P->GetMovementComponent()));
 
-		M_LOG_ERROR_IF(GetPawn()->GetMovementComponent() == nullptr, TEXT("Movement component is nullptr for controlled pawn"));
+		M_LOG_WARN_IF(GetPawn()->GetMovementComponent() == nullptr, TEXT("Movement component is nullptr for controlled pawn"));
 		P->AddMovementInput(InDirection, MOVE_AMOUNT_COEFF * InAmount);
 	}
 }

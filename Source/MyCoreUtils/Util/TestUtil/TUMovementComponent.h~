@@ -4,7 +4,7 @@
 #include "TUTypes.h"
 #include "TUMovementComponent.generated.h"
 
-UCLASS()
+UCLASS(ClassGroup=(Movement), Meta=(BlueprintSpawnableComponent))
 class UTUMovementComponent : public UMovementComponent
 {
 	GENERATED_BODY()
@@ -145,7 +145,7 @@ public:
 
 	// ~Config Begin
 	UFUNCTION(BlueprintPure, Category = "Config")
-	ETUFlags GetTUFlags() const { return TUFlags; }
+	ETUFlags GetTUFlags() const { return TUConfig.GetFlags(); }
 
 	/**
 	* Sets flags (and KEEPS old!)

@@ -3,7 +3,7 @@
 #include "Util/TestUtil/TUMovementComponent.h"
 #include "TemplMovementComponent.generated.h"
 
-UCLASS()
+UCLASS(Meta=(BlueprintSpawnableComponent))
 class UTemplMovementComponent : public UTUMovementComponent
 {
 	GENERATED_BODY()
@@ -11,7 +11,7 @@ class UTemplMovementComponent : public UTUMovementComponent
 public:
 	UTemplMovementComponent();
 
-	virtual void TickComponent(float InDeltaTime, ELevelTick InLevelTick, FComponentTickFunction* InThisTickFunction) override;
+	virtual void TickComponent(float InDeltaTime, ELevelTick InLevelTick, FActorComponentTickFunction* InThisTickFunction) override;
 
 protected:
 	UFUNCTION(BlueprintCallable, Category = Movement)

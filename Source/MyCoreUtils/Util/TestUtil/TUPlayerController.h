@@ -27,8 +27,8 @@ struct FTUPlayerControllerConfig
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Debug")
 	FTUConfig TUConfig;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Debug")
-	ETUPCInputDebugFlags InputDebugFlags;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta=(Bitflags, BitmaskEnum=ETUPCInputDebugFlags), Category = "Input|Debug")
+	uint8 InputDebugFlags;
 };
 // ~Types end
 
@@ -50,7 +50,7 @@ public:
 
 	// ~Config Begin
 	FTUPlayerControllerConfig GetTUConfig() const { return TUConfig; }
-	ETUPCInputDebugFlags GetInputDebugFlags() const { return TUConfig.InputDebugFlags; }
+	ETUPCInputDebugFlags GetInputDebugFlags() const { return static_cast<ETUPCInputDebugFlags>(TUConfig.InputDebugFlags); }
 	bool HasAnyInputDebugFlagsSet(ETUPCInputDebugFlags const InFlagMask) const { return (GetInputDebugFlags() & InFlagMask) != ETUPCInputDebugFlags::None; }
 	bool HasAllInputDebugFlagsSet(ETUPCInputDebugFlags const InFlagMask) const { return (GetInputDebugFlags() & InFlagMask) == InFlagMask; }
 

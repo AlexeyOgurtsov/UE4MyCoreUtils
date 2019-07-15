@@ -3,7 +3,7 @@
 #include "Util/TestUtil/TUMovementComponent.h"
 #include "TemplMovementComponent.generated.h"
 
-UCLASS()
+UCLASS(ClassGroup=(Movement), Meta=(BlueprintSpawnableComponent))
 class UTemplMovementComponent : public UTUMovementComponent
 {
 	GENERATED_BODY()
