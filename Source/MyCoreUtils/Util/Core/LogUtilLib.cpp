@@ -187,7 +187,19 @@ void ULogUtilLib::LogQuat(const FString& InKey, const FQuat& InQuat)
 
 void ULogUtilLib::LogQuatC(const TCHAR* InKey, const FQuat& InQuat)
 {
-	LogStringC(InKey, InQuat.ToString());
+	FVector Axis;
+	float Angle;
+	InQuat.ToAxisAndAngle(Axis, Angle);
+
+	TArray<FStringFormatArg> const FormatArgs
+	{
+		InQuat.ToString(),
+		Axis.ToString(),
+		Angle,
+		InQuat.Rotator().ToString()
+	};
+
+	LogStringC(InKey, FString::Format(TEXT("%s [Axis=%s Angle=%f] { %s }"), FormatArgs));
 }
 
 void ULogUtilLib::LogQuatIf(bool bInShouldLog, const FString& InKey, const FQuat& InQuat)
