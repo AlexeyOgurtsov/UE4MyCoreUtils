@@ -24,6 +24,6 @@ struct FTUConfig
 	ETUFlags GetFlags() const { return Flags; }
 	void SetFlags(ETUFlags InFlags);
 	void UnsetFlags(ETUFlags InFlags);
-	bool HasAnyFlags(ETUFlags InFlagMask) const;
-	bool HasAllFlags(ETUFlags InFlagMask) const;
+	bool HasAnyFlags(ETUFlags InFlagMask);
+	bool HasAllFlags(ETUFlags InFlagMask);
 };

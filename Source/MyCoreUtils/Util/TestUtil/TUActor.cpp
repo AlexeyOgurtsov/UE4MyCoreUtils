@@ -73,32 +73,26 @@ void ATUActor::OnConstruction(const FTransform& Transform)
 
 void ATUActor::SetTUFlags(ETUFlags const InTUFlags)
 {
-	LogTUFlags();
-	TUFlags |= InTUFlags;
-	M_LOG(TEXT("New flags:"));
-	LogTUFlags();
+	TUConfig.SetFlags(InTUFlags);
 }
 void ATUActor::UnsetTUFlags(ETUFlags const InFlagMask)
 {
-	LogTUFlags();
-	TUFlags &= ~InFlagMask;
-	M_LOG(TEXT("New flags:"));
-	LogTUFlags();
+	TUConfig.UnsetFlags(InFlagMask);
 }
 bool ATUActor::HasAnyTUFlags(ETUFlags const InFlagMask) const
 {
-	return ((TUFlags & InFlagMask) != ETUFlags::None);
+	return TUConfig.HasAnyFlags(InFlagMask);
 }
 
 bool ATUActor::HasAllTUFlags(ETUFlags const InFlagMask) const
 {
-	return ((TUFlags & InFlagMask) == InFlagMask);
+	return TUConfig.HasAllFlags(InFlagMask);
 }
 
 void ATUActor::LogTUFlags()
 {
 	LogThis();
-	UTUTypesLib::LogTUFlags(GetTUFlags());
+	UTUTypesLib::LogTUFlags(TUConfig.GetFlags());
 }
 void ATUActor::LogThis()
 {

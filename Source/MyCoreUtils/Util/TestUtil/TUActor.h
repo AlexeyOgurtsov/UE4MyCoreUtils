@@ -36,7 +36,7 @@ public:
 
 	// ~Config Begin
 	UFUNCTION(BlueprintPure, Category = "Config")
-	ETUFlags GetTUFlags() const { return TUFlags; }
+	ETUFlags GetTUFlags() const { return TUConfig.GetFlags(); }
 
 	/**
 	* Sets flags (and KEEPS old!)
@@ -70,5 +70,6 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config", Meta=(AllowPrivateAccess = true))
-	ETUFlags TUFlags;
+	FTUConfig TUConfig;
+
 };
