@@ -243,26 +243,20 @@ void UTUMovementComponent::OnTeleported()
 
 void UTUMovementComponent::SetTUFlags(ETUFlags const InTUFlags)
 {
-	LogTUFlags();
-	TUFlags |= InTUFlags;
-	M_LOG(TEXT("New flags:"));
-	LogTUFlags();
+	TUConfig.SetFlags(InTUFlags);
 }
 void UTUMovementComponent::UnsetTUFlags(ETUFlags const InFlagMask)
 {
-	LogTUFlags();
-	TUFlags &= ~InFlagMask;
-	M_LOG(TEXT("New flags:"));
-	LogTUFlags();
+	TUConfig.UnsetFlags(InFlagMask);
 }
 bool UTUMovementComponent::HasAnyTUFlags(ETUFlags const InFlagMask) const
 {
-	return ((TUFlags & InFlagMask) != ETUFlags::None);
+	return TUConfig.HasAnyFlags(InFlagMask);
 }
 
 bool UTUMovementComponent::HasAllTUFlags(ETUFlags const InFlagMask) const
 {
-	return ((TUFlags & InFlagMask) == InFlagMask);
+	return TUConfig.HasAllFlags(InFlagMask);
 }
 
 void UTUMovementComponent::LogTUFlags()
