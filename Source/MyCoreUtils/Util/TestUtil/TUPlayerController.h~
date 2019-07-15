@@ -7,7 +7,7 @@
 #include "TUPlayerController.generated.h"
 
 // ~Types begin
-UENUM(BlueprintType)
+UENUM(BlueprintType, Meta=(Bitflags))
 enum class ETUPCInputDebugFlags : uint8
 {
 	None              = 0                  UMETA(Hidden),
@@ -92,19 +92,19 @@ public:
 	
 protected:
 	UFUNCTION(Exec, Category = Motion)
-	virtual void Axis_LookPitch(float InValue);
+	virtual void Axis_LookPitch(APawn* P, float InAmount);
 
 	UFUNCTION(Exec, Category = Motion)
-	virtual void Axis_LookYaw(float InValue);
+	virtual void Axis_LookYaw(APawn* P, float InAmount);
 
 	UFUNCTION(Exec, Category = Motion)
-	virtual void Axis_Forward(float InValue);
+	virtual void Axis_Forward(APawn* P, float InAmount);
 
 	UFUNCTION(Exec, Category = Motions)
-	virtual void Axis_Right(float InValue);
+	virtual void Axis_Right(APawn* P, float InAmount);
 
 	UFUNCTION(Exec, Category = Motion)
-	virtual void Axis_Up(float InValue);
+	virtual void Axis_Up(APawn* P, float InAmount);
 
 	UFUNCTION(Exec, Category = Use)
 	virtual void Action_Use();
@@ -175,7 +175,7 @@ protected:
 	*/
 	virtual bool ShouldProcessGameInput() const;
 
-	virtual void ActionMoveGeneral(const FVector& InDirection, float InAmount);
+	virtual void ActionMoveGeneral(APawn* P, const FVector& InDirection, float InAmount);
 	virtual void ActionSelectGeneral(int32 InIndex);
 
 private:
@@ -188,6 +188,7 @@ private:
 	
 	void Axis_LookPitchChecked(float InValue);
 	void Axis_LookYawChecked(float InValue);
+	void LogLookIfShould(const APawn* P, float InAmount);
 
 	void Axis_ForwardChecked(float InValue);
 	void Axis_RightChecked(float InValue);

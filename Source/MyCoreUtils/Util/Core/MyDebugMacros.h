@@ -50,6 +50,36 @@ DECLARE_LOG_CATEGORY_EXTERN(MyLog, Log, All);
 	M_LOG_CUSTOM_TO_IF_FLAGS(LogFlags, LogCategory, Log, FormatString, ##__VA_ARGS__);\
 }
 
+#define M_LOG_VERBOSE_TO(LogCategory, FormatString, ...)\
+{\
+	M_LOG_CUSTOM_TO(LogCategory, Verbose, FormatString, ##__VA_ARGS__);\
+}
+
+#define M_LOG_VERBOSE_TO_IF(ShouldLog, LogCategory, FormatString, ...)\
+{\
+	M_LOG_CUSTOM_TO_IF(ShouldLog, LogCategory, Verbose, FormatString, ##__VA_ARGS__);\
+}
+
+#define M_LOG_VERBOSE_TO_IF_FLAGS(LogFlags, LogCategory, FormatString, ...)\
+{\
+	M_LOG_CUSTOM_TO_IF_FLAGS(LogFlags, LogCategory, Verbose, FormatString, ##__VA_ARGS__);\
+}
+
+#define M_LOG_VERY_VERBOSE_TO(LogCategory, FormatString, ...)\
+{\
+	M_LOG_CUSTOM_TO(LogCategory, VerboseVerbose, FormatString, ##__VA_ARGS__);\
+}
+
+#define M_LOG_VERY_VERBOSE_TO_IF(ShouldLog, LogCategory, FormatString, ...)\
+{\
+	M_LOG_CUSTOM_TO_IF(ShouldLog, LogCategory, VerboseVerbose, FormatString, ##__VA_ARGS__);\
+}
+
+#define M_LOG_VERY_VERBOSE_TO_IF_FLAGS(LogFlags, LogCategory, FormatString, ...)\
+{\
+	M_LOG_CUSTOM_TO_IF_FLAGS(LogFlags, LogCategory, VerboseVerbose, FormatString, ##__VA_ARGS__);\
+}
+
 #define M_LOG_WARN_TO(LogCategory, FormatString, ...)\
 {\
 	M_LOG_CUSTOM_TO(LogCategory, Warning, FormatString, ##__VA_ARGS__);\
@@ -194,6 +224,19 @@ DECLARE_LOG_CATEGORY_EXTERN(MyLog, Log, All);
 	M_LOG_TO_IF_FLAGS(LogFlags, MyLog, FormatString, ##__VA_ARGS__);\
 }
 
+#define M_LOG_VERBOSE(FormatString, ...)\
+{\
+	M_LOG_VERBOSE_TO(MyLog, FormatString, ##__VA_ARGS__);\
+}
+#define M_LOG_VERBOSE_IF(ShouldLog, FormatString, ...)\
+{\
+	M_LOG_VERBOSE_TO_IF(ShouldLog, MyLog, FormatString, ##__VA_ARGS__);\
+}
+#define M_LOG_VERBOSE_IF_FLAGS(LogFlags, FormatString, ...)\
+{\
+	M_LOG_VERBOSE_TO_IF_FLAGS(LogFlags, MyLog, FormatString, ##__VA_ARGS__);\
+}
+
 #define M_LOG_WARN(FormatString, ...)\
 {\
 	M_LOG_WARN_TO(MyLog, FormatString, ##__VA_ARGS__);\
@@ -205,6 +248,19 @@ DECLARE_LOG_CATEGORY_EXTERN(MyLog, Log, All);
 #define M_LOG_WARN_IF_FLAGS(LogFlags, FormatString, ...)\
 {\
 	M_LOG_WARN_TO_IF_FLAGS(LogFlags, MyLog, FormatString, ##__VA_ARGS__);\
+}
+
+#define M_LOG_VERY_VERBOSE(FormatString, ...)\
+{\
+	M_LOG_VERY_VERBOSE_TO(MyLog, FormatString, ##__VA_ARGS__);\
+}
+#define M_LOG_VERY_VERBOSE_IF(ShouldLog, FormatString, ...)\
+{\
+	M_LOG_VERY_VERBOSE_TO_IF(ShouldLog, MyLog, FormatString, ##__VA_ARGS__);\
+}
+#define M_LOG_VERY_VERBOSE_IF_FLAGS(LogFlags, FormatString, ...)\
+{\
+	M_LOG_VERY_VERBOSE_TO_IF_FLAGS(LogFlags, MyLog, FormatString, ##__VA_ARGS__);\
 }
 
 #define M_LOG_ERROR(FormatString, ...)\

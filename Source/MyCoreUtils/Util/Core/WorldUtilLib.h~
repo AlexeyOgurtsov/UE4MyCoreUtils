@@ -156,6 +156,7 @@ public:
 	 	UWorld* InWorld, 
 		TSet<const UClass*>* pInExcludeSet = nullptr,
 		TSet<AActor*>* pOutErrorActors = nullptr, 
+		EActorIteratorFlags InActorIteratorFlags = EActorIteratorFlags::SkipPendingKill,
 		EMyActorSelectionFlags InFlags = EMyActorSelectionFlags::None, 
 		ELogFlags InLogFlags = ELogFlags::None
 	);
