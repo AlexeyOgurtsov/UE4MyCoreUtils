@@ -3,7 +3,34 @@
 #include "GameFramework/PlayerController.h"
 #include "Util/Core/Log/MyLoggingTypes.h"
 #include "I/ITUController.h"
+#include "TUTypes.h"
 #include "TUPlayerController.generated.h"
+
+// ~Types begin
+UENUM(BlueprintType)
+enum class ETUPCInputDebugFlags : uint8
+{
+	None              = 0                  UMETA(Hidden),
+
+	LogMovement       = 1 << 0             UMETA(DisplayName="Log movement"),
+	LogLook           = 1 << 1             UMETA(DisplayName="Log look"),
+
+	Default           = None
+};
+ENUM_CLASS_FLAGS(ETUPCInputDebugFlags);
+
+USTRUCT(BlueprintType)
+struct FTUPlayerControllerConfig
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Debug")
+	FTUConfig TUConfig;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Debug")
+	ETUPCInputDebugFlags InputDebugFlags;
+};
+// ~Types end
 
 UCLASS()
 class ATUPlayerController 
@@ -21,6 +48,24 @@ public:
 	
 	virtual void SetupInputComponent() override;
 
+	// ~Config Begin
+	FTUPlayerControllerConfig GetTUConfig() const { return TUConfig; }
+	ETUPCInputDebugFlags GetInputDebugFlags() const { return TUConfig.InputDebugFlags; }
+	bool HasAnyInputDebugFlagsSet(ETUPCInputDebugFlags const InFlagMask) const { return (GetInputDebugFlags() & InFlagMask) != ETUPCInputDebugFlags::None; }
+	bool HasAllInputDebugFlagsSet(ETUPCInputDebugFlags const InFlagMask) const { return (GetInputDebugFlags() & InFlagMask) == InFlagMask; }
+
+	UFUNCTION(BlueprintCallable, Category = "Config")
+	ETUFlags GetTUFlags() const { return TUConfig.TUConfig.GetFlags(); }
+
+	UFUNCTION(BlueprintCallable, Category = "Config")
+	void UnsetTUFlags(ETUFlags const InFlagMask) { TUConfig.TUConfig.UnsetFlags(InFlagMask); } 
+
+	UFUNCTION(BlueprintPure, Category = "Config")
+	bool HasAnyTUFlags(ETUFlags const InFlagMask) const { return TUConfig.TUConfig.HasAnyFlags(InFlagMask); }
+
+	UFUNCTION(BlueprintPure, Category = "Config")
+	bool HasAllTUFlags(ETUFlags const InFlagMask) const { return TUConfig.TUConfig.HasAllFlags(InFlagMask); }
+	// ~Config End
 
 	/**
 	* Sets the new game input enabled state (true - will be processed)
@@ -47,19 +92,19 @@ public:
 	
 protected:
 	UFUNCTION(Exec, Category = Motion)
-	virtual void Axis_LookPitch(float InValue);
+	virtual void Axis_LookPitch(float InAmount);
 
 	UFUNCTION(Exec, Category = Motion)
-	virtual void Axis_LookYaw(float InValue);
+	virtual void Axis_LookYaw(float InAmount);
 
 	UFUNCTION(Exec, Category = Motion)
-	virtual void Axis_Forward(float InValue);
+	virtual void Axis_Forward(float InAmount);
 
 	UFUNCTION(Exec, Category = Motions)
-	virtual void Axis_Right(float InValue);
+	virtual void Axis_Right(float InAmount);
 
 	UFUNCTION(Exec, Category = Motion)
-	virtual void Axis_Up(float InValue);
+	virtual void Axis_Up(float InAmount);
 
 	UFUNCTION(Exec, Category = Use)
 	virtual void Action_Use();
@@ -134,6 +179,9 @@ protected:
 	virtual void ActionSelectGeneral(int32 InIndex);
 
 private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config", Meta=(AllowPrivateAccess = true))
+	FTUPlayerControllerConfig TUConfig;
+
 	// ~Actions Begin
 	bool ShouldProcessGameInputLogged(const TCHAR* InSender) const;
 	APawn* GetPawnIfShouldInGameContextLogged(const TCHAR* InSender) const;
