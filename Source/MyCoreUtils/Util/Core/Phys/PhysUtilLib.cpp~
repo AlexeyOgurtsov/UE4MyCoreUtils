@@ -5,6 +5,7 @@
 #include "WorldCollision.h"
 #include "Util/Core/TypeUtilLib.h"
 #include "Util/Core/LogUtilLib.h"
+#include "Util/Core/SystemUtils.h"
 
 
 void UPhysUtilLib::LogHitResult(const FHitResult& InHitResult, ELogHitFlags const InFlags)
@@ -140,8 +141,6 @@ void UPhysUtilLib::LogCollisionChannelC(const TCHAR* const InKey, const ECollisi
 
 void UPhysUtilLib::LogCollisionShape(const TCHAR* const InKey, const FCollisionShape& InValue)
 {
-	M_TO_BE_IMPL(TEXT("Box"));
-	M_TO_BE_IMPL(TEXT("Capsule"));
 	LogCollisionShapeTypeC(*FString::Printf(TEXT("%s.ShapeType"), InKey), InValue.ShapeType);
 	switch(InValue.ShapeType)
 	{
@@ -160,7 +159,6 @@ void UPhysUtilLib::LogCollisionShape(const TCHAR* const InKey, const FCollisionS
 		ULogUtilLib::LogFloatC(*FString::Printf(TEXT("%s.Capsule.HalfHeight"), InKey), InValue.Capsule.HalfHeight);
 		break;
 	}
-	M_TO_BE_IMPL(TEXT("Sphere"));
 }
 
 
@@ -181,124 +179,72 @@ FString UPhysUtilLib::GetQueryMobilityTypeString(EQueryMobilityType const InType
 	// StaticEnum fails to compile
 	//return UTypeUtilLib::EnumToString<EQueryMobilityType>(InType);
 
-	switch(InType)
-	{
-	case EQueryMobilityType::Any:
-		return FString(TEXT("Any"));
-	case EQueryMobilityType::Static:
-		return FString(TEXT("Static"));
-	case EQueryMobilityType::Dynamic:
-		return FString(TEXT("Dynamic"));
-	default:
-		break;
-	}
-	return FString(TEXT("Unknown enum value"));
+	#define M_CASE_PREFIX() EQueryMobilityType::
+	M_SWITCH_BEGIN(InType)
+		M_CASE_ENUM_PREFIX_STRING(Any);
+		M_CASE_ENUM_PREFIX_STRING(Static);
+		M_CASE_ENUM_PREFIX_STRING(Dynamic);
+	M_SWITCH_END_DEFAULT_WRONG_ENUM_STRING()
+	#undef M_CASE_PREFIX
 }
 
 FString UPhysUtilLib::GetCollisionChannelString(ECollisionChannel const InChannel)
 {
 	// StaticEnum fails to compile
 	//return UTypeUtilLib::EnumToString<ECollisionChannel>(InChannel);
-	//
-	switch(InChannel)
-	{
-	case ECC_WorldStatic:
-		return FString(TEXT("WorldStatic"));
-	case ECC_WorldDynamic:
-		return FString(TEXT("WorldDynamic"));
-	case ECC_Pawn:
-		return FString(TEXT("Pawn"));
-	case ECC_Visibility:
-		return FString(TEXT("Visibility"));
-	case ECC_Camera:
-		return FString(TEXT("Camera"));
-	case ECC_PhysicsBody:
-		return FString(TEXT("PhysicsBody"));
-	case ECC_Vehicle:
-		return FString(TEXT("Vehicle"));
-	case ECC_Destructible:
-		return FString(TEXT("Destructible"));
-	case ECC_EngineTraceChannel1:
-		return FString(TEXT("EngineTraceChannel1"));
-	case ECC_EngineTraceChannel2:
-		return FString(TEXT("EngineTraceChannel2"));
-	case ECC_EngineTraceChannel3:
-		return FString(TEXT("EngineTraceChannel3"));
-	case ECC_EngineTraceChannel4:
-		return FString(TEXT("EngineTraceChannel4"));
-	case ECC_EngineTraceChannel5:
-		return FString(TEXT("EngineTraceChannel5"));
-	case ECC_GameTraceChannel1:
-		return FString(TEXT("GameTraceChannel1"));
-	case ECC_GameTraceChannel2:
-		return FString(TEXT("GameTraceChannel2"));
-	case ECC_GameTraceChannel3:
-		return FString(TEXT("GameTraceChannel3"));
-	case ECC_GameTraceChannel4:
-		return FString(TEXT("GameTraceChannel4"));
-	case ECC_GameTraceChannel5:
-		return FString(TEXT("GameTraceChannel5"));
-	case ECC_GameTraceChannel6:
-		return FString(TEXT("GameTraceChannel6"));
-	case ECC_GameTraceChannel7:
-		return FString(TEXT("GameTraceChannel7"));
-	case ECC_GameTraceChannel8:
-		return FString(TEXT("GameTraceChannel8"));
-	case ECC_GameTraceChannel9:
-		return FString(TEXT("GameTraceChannel9"));
-	case ECC_GameTraceChannel10:
-		return FString(TEXT("GameTraceChannel10"));
-	case ECC_GameTraceChannel11:
-		return FString(TEXT("GameTraceChannel11"));
-	case ECC_GameTraceChannel12:
-		return FString(TEXT("GameTraceChannel12"));
-	case ECC_GameTraceChannel13:
-		return FString(TEXT("GameTraceChannel13"));
-	case ECC_GameTraceChannel14:
-		return FString(TEXT("GameTraceChannel14"));
-	case ECC_GameTraceChannel15:
-		return FString(TEXT("GameTraceChannel15"));
-	case ECC_GameTraceChannel16:
-		return FString(TEXT("GameTraceChannel16"));
-	case ECC_GameTraceChannel17:
-		return FString(TEXT("GameTraceChannel17"));
-	case ECC_GameTraceChannel18:
-		return FString(TEXT("GameTraceChannel18"));
-	case ECC_OverlapAll_Deprecated:
-		return FString(TEXT("ECC_OverlapAll_Deprecated"));
-	default:
-		break;
-	}
-	return FString(TEXT("Unknown enum value"));
+
+	#define M_CASE_PREFIX() ECC_
+	M_SWITCH_BEGIN(InChannel)	
+		M_CASE_ENUM_PREFIX_STRING(WorldStatic);
+		M_CASE_ENUM_PREFIX_STRING(WorldDynamic);
+		M_CASE_ENUM_PREFIX_STRING(Pawn);
+		M_CASE_ENUM_PREFIX_STRING(Visibility);
+		M_CASE_ENUM_PREFIX_STRING(Camera);
+		M_CASE_ENUM_PREFIX_STRING(PhysicsBody);
+		M_CASE_ENUM_PREFIX_STRING(Vehicle);
+		M_CASE_ENUM_PREFIX_STRING(Destructible);
+		M_CASE_ENUM_PREFIX_STRING(EngineTraceChannel1);
+		M_CASE_ENUM_PREFIX_STRING(EngineTraceChannel2);
+		M_CASE_ENUM_PREFIX_STRING(EngineTraceChannel3);
+		M_CASE_ENUM_PREFIX_STRING(EngineTraceChannel4);
+		M_CASE_ENUM_PREFIX_STRING(EngineTraceChannel5);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel1);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel2);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel3);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel4);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel5);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel6);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel7);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel8);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel9);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel10);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel11);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel12);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel13);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel14);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel15);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel16);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel17);
+		M_CASE_ENUM_PREFIX_STRING(GameTraceChannel18);
+		M_CASE_ENUM_PREFIX_STRING(OverlapAll_Deprecated);
+	M_SWITCH_END_DEFAULT_WRONG_ENUM_STRING()
+	#undef M_CASE_PREFIX
 }
 
 FString UPhysUtilLib::GetPlaneConstraintAxisSettingString(EPlaneConstraintAxisSetting const InValue)
 {
 	// StaticEnum fails to compile
 	//return UTypeUtilLib::EnumToString<EPlaneConstraintAxisSetting>(InValue);
-	//
-
-	switch(InValue)
-	{
-	case EPlaneConstraintAxisSetting::Custom:
-		return FString(TEXT("Custom"));
-
-	case EPlaneConstraintAxisSetting::X:
-		return FString(TEXT("X"));
-
-	case EPlaneConstraintAxisSetting::Y:
-		return FString(TEXT("Y"));
-
-	case EPlaneConstraintAxisSetting::Z:
-		return FString(TEXT("Z"));
-
-	case EPlaneConstraintAxisSetting::UseGlobalPhysicsSetting:
-		return FString(TEXT("UseGlobalPhysicsSetting"));
-
-	default:
-		break;
-	}
-	return FString(TEXT("Unknown enum value"));
+	
+	#define M_CASE_PREFIX() EPlaneConstraintAxisSetting::
+	M_SWITCH_BEGIN(InValue)	
+		M_CASE_ENUM_PREFIX_STRING(Custom);
+		M_CASE_ENUM_PREFIX_STRING(X);
+		M_CASE_ENUM_PREFIX_STRING(Y);
+		M_CASE_ENUM_PREFIX_STRING(Z);
+		M_CASE_ENUM_PREFIX_STRING(UseGlobalPhysicsSetting);
+	M_SWITCH_END_DEFAULT_WRONG_ENUM_STRING()
+	#undef M_CASE_PREFIX
 }
 
 FString UPhysUtilLib::GetRadialImpulseFalloffString(ERadialImpulseFalloff const InValue)
@@ -306,34 +252,23 @@ FString UPhysUtilLib::GetRadialImpulseFalloffString(ERadialImpulseFalloff const 
 	// StaticEnum fails to compile
 	//return UTypeUtilLib::EnumToString<ERadialImpulseFalloff>(InValue);
 	
-	switch(InValue)
-	{
-	case RIF_Constant:
-		return FString(TEXT("Constant"));
-	case RIF_Linear:
-		return FString(TEXT("Linear"));
-	case RIF_MAX:
-		return FString(TEXT("MAX"));
-	default:
-		break;
-	}
-	return FString(TEXT("Unknown enum value"));
+	#define M_CASE_PREFIX() RIF_
+	M_SWITCH_BEGIN(InValue)	
+		M_CASE_ENUM_PREFIX_STRING(Constant);
+		M_CASE_ENUM_PREFIX_STRING(Linear);
+		M_CASE_ENUM_PREFIX_STRING(MAX);
+	M_SWITCH_END_DEFAULT_WRONG_ENUM_STRING()
+	#undef M_CASE_PREFIX
 }
 
 FString UPhysUtilLib::GetCollisionShapeTypeString(ECollisionShape::Type const InValue)
 {
-	switch(InValue)
-	{
-	case ECollisionShape::Type::Line:
-		return FString(TEXT("Line"));
-	case ECollisionShape::Type::Box:
-		return FString(TEXT("Box"));
-	case ECollisionShape::Type::Sphere:
-		return FString(TEXT("Sphere"));
-	case ECollisionShape::Type::Capsule:
-		return FString(TEXT("Capsule"));
-	default:
-		break;
-	}
-	return FString(TEXT("Unknown enum value"));
+	#define M_CASE_PREFIX() ECollisionShape::Type::
+	M_SWITCH_BEGIN(InValue)	
+		M_CASE_ENUM_PREFIX_STRING(Line);
+		M_CASE_ENUM_PREFIX_STRING(Box);
+		M_CASE_ENUM_PREFIX_STRING(Sphere);
+		M_CASE_ENUM_PREFIX_STRING(Capsule);
+	M_SWITCH_END_DEFAULT_WRONG_ENUM_STRING()
+	#undef M_CASE_PREFIX
 }
