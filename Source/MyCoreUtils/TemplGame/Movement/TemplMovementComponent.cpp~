@@ -14,14 +14,14 @@ MyComponentType::UTemplMovementComponent()
 	Velocity = TEST_VELOCITY;
 }
 
-void MyComponentType::TickComponent(float const InDeltaTime, ELevelTick const InLevelTick, FComponentTickFunction* const InThisTickFunction)
+void MyComponentType::TickComponent(float const InDeltaTime, ELevelTick const InLevelTick, FActorComponentTickFunction* const InThisTickFunction)
 {
-	if(ShouldSkipUpdated(InDeltaTime))
+	if(ShouldSkipUpdate(InDeltaTime))
 	{
 		return;
 	}
 
-	Super::TickComponent(InDeltaTime, InThisTickFunction);
+	Super::TickComponent(InDeltaTime, InLevelTick, InThisTickFunction);
 
 	TestMoveTick(InDeltaTime); M_TO_BE_IMPL(TEXT("Replace TestMoveTick with own code (@see TestMoveTick)"));
 }
@@ -32,7 +32,7 @@ bool MyComponentType::TestMoveTick(float const InDeltaTime)
 
 	FVector const DeltaLocation = InDeltaTime * Velocity;
 
-	FHitResult const Hit;
+	FHitResult Hit;
 	bool const bCollisionEnabled = true;
 	bool const bMoved = MoveUpdatedComponent(DeltaLocation, UpdatedComponent->GetComponentQuat(), bCollisionEnabled, &Hit/*, ETeleportType::None*/);
 
