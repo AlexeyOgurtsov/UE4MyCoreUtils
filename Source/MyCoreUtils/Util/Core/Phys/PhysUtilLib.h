@@ -3,6 +3,7 @@
 #include "PhysUtilLibTypes.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Engine/EngineTypes.h"
+#include "WorldCollision.h" // ECollisionShape::Type
 #include "CollisionQueryParams.h"
 #include "GameFramework/MovementComponent.h" // EPlaneConstraintAxisSetting
 #include "PhysUtilLib.generated.h"
@@ -28,6 +29,9 @@ public:
 	static void LogComponentQueryParams(const FComponentQueryParams InParams);
 	static void LogComponentQueryParamsIf(bool bInShouldLog, const FComponentQueryParams& InParams);
 
+	static void LogCollisionShapeTypeC(const TCHAR* InKey, ECollisionShape::Type InType);
+	static void LogCollisionShapeTypeIfC(bool bInShouldLog, const TCHAR* InKey, ECollisionShape::Type InType);
+
 	static void LogQueryMobilityTypeC(const TCHAR* InKey, EQueryMobilityType InType);
 	static void LogQueryMobilityTypeIfC(bool bInShouldLog, const TCHAR* InKey, EQueryMobilityType InType);
 
@@ -47,5 +51,7 @@ public:
 	static FString GetPlaneConstraintAxisSettingString(EPlaneConstraintAxisSetting InValue);
 
 	static FString GetRadialImpulseFalloffString(ERadialImpulseFalloff InValue);
+
+	static FString GetCollisionShapeTypeString(ECollisionShape::Type InValue);
 	// ~Log End
 };
