@@ -65,7 +65,7 @@ void UPhysUtilLib::LogCollisionQueryParams(const FCollisionQueryParams& InParams
 	ULogUtilLib::LogNameC(TEXT("TraceTag"), InParams.TraceTag);
 }
 
-void UPhysUtilLib::LogCollisionQueryParamsIf(bool bInShouldLog, const FCollisionQueryParams& InParams)
+void UPhysUtilLib::LogCollisionQueryParamsIf(bool const bInShouldLog, const FCollisionQueryParams& InParams)
 {
 	if(bInShouldLog)
 	{
@@ -79,7 +79,7 @@ void UPhysUtilLib::LogComponentQueryParams(const FComponentQueryParams InParams)
 	LogCollisionQueryParams(InParams);
 }
 
-void UPhysUtilLib::LogComponentQueryParamsIf(bool bInShouldLog, const FComponentQueryParams& InParams)
+void UPhysUtilLib::LogComponentQueryParamsIf(bool const bInShouldLog, const FComponentQueryParams& InParams)
 {
 	if(bInShouldLog)
 	{
@@ -88,12 +88,12 @@ void UPhysUtilLib::LogComponentQueryParamsIf(bool bInShouldLog, const FComponent
 }
 
 
-void UPhysUtilLib::LogQueryMobilityTypeC(const TCHAR* InKey, EQueryMobilityType InType)
+void UPhysUtilLib::LogQueryMobilityTypeC(const TCHAR* const InKey, EQueryMobilityType const InType)
 {
 	ULogUtilLib::LogStringC(InKey, *GetQueryMobilityTypeString(InType));
 }
 
-void UPhysUtilLib::LogQueryMobilityTypeIfC(bool bInShouldLog, const TCHAR* InKey, EQueryMobilityType InType)
+void UPhysUtilLib::LogQueryMobilityTypeIfC(bool const bInShouldLog, const TCHAR* const InKey, EQueryMobilityType const InType)
 {
 	if(bInShouldLog)
 	{
@@ -102,29 +102,64 @@ void UPhysUtilLib::LogQueryMobilityTypeIfC(bool bInShouldLog, const TCHAR* InKey
 }
 
 
+void UPhysUtilLib::LogPlaneConstraintAxisSettingC(const TCHAR* const InKey, EPlaneConstraintAxisSetting const InValue)
+{
+	ULogUtilLib::LogStringC(InKey, GetPlaneConstraintAxisSettingString(InValue));
+}
+
+void UPhysUtilLib::LogPlaneConstraintAxisSettingIfC(bool const bInShouldLog, const TCHAR* const InKey, EPlaneConstraintAxisSetting const InValue)
+{
+	if(bInShouldLog)
+	{
+		LogPlaneConstraintAxisSettingC(InKey, InValue);
+	}
+}
+
+void UPhysUtilLib::LogRadialImpulseFalloffC(const TCHAR* InKey, ERadialImpulseFalloff const InValue)
+{
+	ULogUtilLib::LogStringC(InKey, GetRadialImpulseFalloffString(InValue));
+}
+
+void UPhysUtilLib::LogRadialImpulseFalloffIfC(bool const bInShouldLog, const TCHAR* const InKey, ERadialImpulseFalloff const InValue)
+{
+	if(bInShouldLog)
+	{
+		LogRadialImpulseFalloffC(InKey, InValue);
+	}
+}
+
 void UPhysUtilLib::LogCollisionResponseParams(const FCollisionResponseParams& InParams)
 {
 	M_TO_BE_IMPL(TEXT("Collision query"));
 }
 
-void UPhysUtilLib::LogCollisionChannelC(const TCHAR* InKey, const ECollisionChannel InValue)
+void UPhysUtilLib::LogCollisionChannelC(const TCHAR* const InKey, const ECollisionChannel InValue)
 {
 	ULogUtilLib::LogStringC(InKey, *GetCollisionChannelString(InValue));
 }
 
-void UPhysUtilLib::LogCollisionShape(const TCHAR* InKey, const FCollisionShape& InValue)
+void UPhysUtilLib::LogCollisionShape(const TCHAR* const InKey, const FCollisionShape& InValue)
 {
 	M_TO_BE_IMPL(TEXT("Collision shape"));
 }
 
 
-FString UPhysUtilLib::GetQueryMobilityTypeString(EQueryMobilityType InType)
+FString UPhysUtilLib::GetQueryMobilityTypeString(EQueryMobilityType const InType)
 {
 	return UTypeUtilLib::EnumToString<EQueryMobilityType>(InType);
 }
 
-FString UPhysUtilLib::GetCollisionChannelString(ECollisionChannel InChannel)
+FString UPhysUtilLib::GetCollisionChannelString(ECollisionChannel const InChannel)
 {
-	return UTypeUtilLib::EnumToString<ECollisionChannel>(InType);
+	return UTypeUtilLib::EnumToString<ECollisionChannel>(InChannel);
 }
 
+FString UPhysUtilLib::GetPlaneConstraintAxisSettingString(EPlaneConstraintAxisSetting const InValue)
+{
+	return UTypeUtilLib::EnumToString<EPlaneConstraintAxisSetting>(InValue);
+}
+
+FString UPhysUtilLib::GetRadialImpulseFalloffString(ERadialImpulseFalloff const InValue)
+{
+	return UTypeUtilLib::EnumToString<ERadialImpulseFalloff>(InValue);
+}

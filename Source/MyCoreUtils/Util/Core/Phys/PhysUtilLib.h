@@ -4,6 +4,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Engine/EngineTypes.h"
 #include "CollisionQueryParams.h"
+#include "GameFramework/MovementComponent.h" // EPlaneConstraintAxisSetting
 #include "PhysUtilLib.generated.h"
 
 struct FCollisionShape;
@@ -30,11 +31,21 @@ public:
 	static void LogQueryMobilityTypeC(const TCHAR* InKey, EQueryMobilityType InType);
 	static void LogQueryMobilityTypeIfC(bool bInShouldLog, const TCHAR* InKey, EQueryMobilityType InType);
 
+	static void LogPlaneConstraintAxisSettingC(const TCHAR* InKey, EPlaneConstraintAxisSetting InValue);
+	static void LogPlaneConstraintAxisSettingIfC(bool bInShouldLog, const TCHAR* InKey, EPlaneConstraintAxisSetting InValue);
+
+	static void LogRadialImpulseFalloffC(const TCHAR* InKey, ERadialImpulseFalloff InValue);
+	static void LogRadialImpulseFalloffIfC(bool bInShouldLog, const TCHAR* InKey, ERadialImpulseFalloff InValue);
+
 	static void LogCollisionResponseParams(const FCollisionResponseParams& InParams);
 	static void LogCollisionChannelC(const TCHAR* InKey, const ECollisionChannel InValue);
 	static void LogCollisionShape(const TCHAR* InKey, const FCollisionShape& InValue);
 
 	static FString GetQueryMobilityTypeString(EQueryMobilityType InType);
 	static FString GetCollisionChannelString(ECollisionChannel InChannel);
+
+	static FString GetPlaneConstraintAxisSettingString(EPlaneConstraintAxisSetting InValue);
+
+	static FString GetRadialImpulseFalloffString(ERadialImpulseFalloff InValue);
 	// ~Log End
 };

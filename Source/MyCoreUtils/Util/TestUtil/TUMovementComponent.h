@@ -101,6 +101,48 @@ public:
 	 */
 	virtual void AddRadialImpulse(const FVector& Origin, float Radius, float Strength, ERadialImpulseFalloff Falloff, bool bVelChange) override;
 
+	/**
+	 * Set the plane constraint axis setting.
+	 * Changing this setting will modify the current value of PlaneConstraintNormal.
+	 * 
+	 * @param  NewAxisSetting New plane constraint axis setting.
+	 */
+	virtual void SetPlaneConstraintAxisSetting(EPlaneConstraintAxisSetting NewAxisSetting) override;
+
+	/**
+	 * Sets the normal of the plane that constrains movement, enforced if the plane constraint is enabled.
+	 * Changing the normal automatically sets PlaneConstraintAxisSetting to "Custom".
+	 *
+	 * @param PlaneNormal	The normal of the plane. If non-zero in length, it will be normalized.
+	 */
+	virtual void SetPlaneConstraintNormal(FVector PlaneNormal) override;
+
+	/** Uses the Forward and Up vectors to compute the plane that constrains movement, enforced if the plane constraint is enabled. */
+	virtual void SetPlaneConstraintFromVectors(FVector Forward, FVector Up) override;
+
+	/** Sets the origin of the plane that constrains movement, enforced if the plane constraint is enabled. */
+	virtual void SetPlaneConstraintOrigin(FVector PlaneOrigin) override;
+	
+	/** Sets whether or not the plane constraint is enabled. */
+	virtual void SetPlaneConstraintEnabled(bool bEnabled) override;
+	/**
+	 * Constrain a direction vector to the plane constraint, if enabled.
+	 * @see SetPlaneConstraint
+	 */
+	virtual FVector ConstrainDirectionToPlane(FVector Direction) const override;
+
+	/** Constrain a position vector to the plane constraint, if enabled. */
+	virtual FVector ConstrainLocationToPlane(FVector Location) const override;
+
+	/** Constrain a normal vector (of unit length) to the plane constraint, if enabled. */
+	virtual FVector ConstrainNormalToPlane(FVector Normal) const override;
+
+	/** Snap the updated component to the plane constraint, if enabled. */
+	virtual void SnapUpdatedComponentToPlane() override;
+
+	/** Called by owning Actor upon successful teleport from AActor::TeleportTo(). */
+	virtual void OnTeleported() override;
+
 	// ~Config Begin
 	UFUNCTION(BlueprintPure, Category = "Config")
 	ETUFlags GetTUFlags() const { return TUFlags; }
