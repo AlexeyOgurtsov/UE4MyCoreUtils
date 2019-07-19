@@ -58,9 +58,8 @@
 * Checks that no default entry.
 */
 #define M_SWITCH_END() \
-	default: break; \
-} \
-checkNoEntry();
+	default: checkNoEntry(); \
+}
 
 /**
 * Ends C++ switch instruction.
