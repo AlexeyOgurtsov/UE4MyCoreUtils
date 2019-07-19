@@ -1,5 +1,32 @@
 #include "PropertyLogLib.h"
 #include "UObject/TextProperty.h"
+#include "Util/Core/SystemUtils.h"
+
+FString UPropertyLogLib::GetPropertyChangeTypeString(EPropertyChangeType::Type InChangeType)
+{
+	#define M_CASE_PREFIX() EPropertyChangeType::
+	M_SWITCH_BEGIN(InChangeType)
+		M_CASE_ENUM_PREFIX_STRING(Unspecified);
+		M_CASE_ENUM_PREFIX_STRING(ArrayAdd);
+		M_CASE_ENUM_PREFIX_STRING(ArrayRemove);
+		M_CASE_ENUM_PREFIX_STRING(ArrayClear);
+		M_CASE_ENUM_PREFIX_STRING(ValueSet);
+		M_CASE_ENUM_PREFIX_STRING(Duplicate);
+		M_CASE_ENUM_PREFIX_STRING(Interactive);
+		M_CASE_ENUM_PREFIX_STRING(Redirected);
+	M_SWITCH_END_DEFAULT_WRONG_ENUM_STRING()
+	#undef M_CASE_PREFIX
+}
+
+void UPropertyLogLib::LogPropertyChangedEvent(const FPropertyChangedEvent& InEvent)
+{
+	M_LOGFUNC();
+
+	ULogUtilLib::LogStringC(TEXT("ChangeType"), GetPropertyChangeTypeString(InEvent.ChangeType));
+	ULogUtilLib::LogStringC(TEXT("MemberProperty"), *GetFieldString(InEvent.MemberProperty));
+	ULogUtilLib::LogInt32C(TEXT("ObjectIteratorIndex"), InEvent.ObjectIteratorIndex);
+	ULogUtilLib::LogStringC(TEXT("Property"), *GetFieldString(InEvent.Property));
+}
 
 FString UPropertyLogLib::GetFieldString(const UField* const InField, EFieldStringFlags const InFlags)
 {

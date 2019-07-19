@@ -2,20 +2,22 @@
 
 #include "Util/Core/LogUtilLib.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "UObject/UnrealType.h" // EPropertyChangeType
 #include "PropertyLogLib.generated.h"
 
 UENUM(BlueprintType)
 enum class EFieldStringFlags : uint8
 {
-	None = 0 UMETA(DisplayName="None"),
-	ExcludeOwner = 1 << 0 UMETA(DisplayName="Exclude owner")
+	None                     = 0                  UMETA(Hidden),
+	ExcludeOwner             = 1 << 0             UMETA(DisplayName="Exclude owner"),
+	Default                  = None               UMETA(Hidden)
 };
 ENUM_CLASS_FLAGS(EFieldStringFlags);
 
 UENUM()
 enum class EPropertyValueStringFlags
 {
-	None = 0 UMETA(DisplayName="None")
+	None = 0 UMETA(Hidden)
 };
 ENUM_CLASS_FLAGS(EPropertyValueStringFlags);
 
@@ -26,18 +28,28 @@ class UPropertyLogLib : public UBlueprintFunctionLibrary
 
 public:
 	/**
+	* String corresponding the given property type
+	*/	
+	static FString GetPropertyChangeTypeString(EPropertyChangeType::Type InChangeType);
+
+	/**
+	* Logs the property changed event.
+	*/
+	static void LogPropertyChangedEvent(const FPropertyChangedEvent& InEvent);
+
+	/**
 	* Returns field string representation.
 	*
 	* @param InField: Field can NOT be nullptr.
 	*/
-	static FString GetFieldString(const UField* InField, EFieldStringFlags InFlags = EFieldStringFlags::None);
+	static FString GetFieldString(const UField* InField, EFieldStringFlags InFlags = EFieldStringFlags::Default);
 
 	/**
 	* Returns field string representation. 
 	*
 	* @param InField: Field can be nullptr.
 	*/
-	static FString GetFieldStringSafe(const UField* InField, EFieldStringFlags InFlags = EFieldStringFlags::None);
+	static FString GetFieldStringSafe(const UField* InField, EFieldStringFlags InFlags = EFieldStringFlags::Default);
 
 	/**
 	* Logs property values of the given struct.
