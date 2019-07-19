@@ -5,11 +5,11 @@
 UENUM(BlueprintType, Meta=(Bitflags))
 enum class ETUFlags : uint8
 {
-	None                      = 0              UMETA(DisplayName="None"),
+	None                      = 0              UMETA(Hidden),
 
 	ExtLog                    = 1 << 0         UMETA(DisplayName="Extended log"),
 
-	Default                   = None           UMETA(DisplayName="Default")
+	Default                   = None           UMETA(Hidden)
 };
 ENUM_CLASS_FLAGS(ETUFlags);
 

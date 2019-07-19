@@ -12,6 +12,6 @@ enum class ELogHitFlags : uint8
 	LeanAndMeanLocation           = 1 << 1                                              UMETA(DisplayName = "LeanAndMean Location"),
 	LeanAndMean                   = LeanAndMeanOwner | LeanAndMeanLocation              UMETA(DisplayName = "LeanAndMean"),
 
-	Default                       = None                                                UMETA(DisplayName = "Default")
+	Default                       = None                                                UMETA(Hidden)
 };
 ENUM_CLASS_FLAGS(ELogHitFlags);

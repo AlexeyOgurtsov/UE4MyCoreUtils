@@ -15,10 +15,10 @@
 
 #include "WorldUtilLib.generated.h"
 
-UENUM()
+UENUM(Meta = (Bitflags))
 enum class ENewWorldFlags : uint8
 {
-	None                             = 0             UMETA(DisplayName = "None"),
+	None                             = 0             UMETA(Hidden),
 	SkipContextCreation              = 1 << 0        UMETA(DisplayName="Skip context creation"),	
 
 	/**
@@ -43,21 +43,21 @@ enum class ENewWorldFlags : uint8
 	*/
 	SkipAddToRoot                    = 1 << 4        UMETA(DisplayName="Skip add to root"),
 	
-	Default                          = None          UMETA(DisplayName="Default")
+	Default                          = None          UMETA(Hidden)
 };
 ENUM_CLASS_FLAGS(ENewWorldFlags);
 
-UENUM()
+UENUM(Meta = (Bitflags))
 enum class EMyActorSelectionFlags : uint8
 {
-	None                             = 0             UMETA(DisplayName="None"),
+	None                             = 0             UMETA(Hidden),
 };
 ENUM_CLASS_FLAGS(EMyActorSelectionFlags);
 
-UENUM()
+UENUM(Meta = (Bitflags))
 enum class EMySpawnFlags : uint8
 {
-	None                             = 0             UMETA(DisplayName="None"),
+	None                             = 0             UMETA(Hidden),
 
 	/**
 	* If specified, the spawn actor utility function returns nullptr when fails,
@@ -74,16 +74,16 @@ enum class EMySpawnFlags : uint8
 
 	MaximalLogging                   = FullActorLog  UMETA(DisplayName="Maximal logging"),
 
-	Default                          = None          UMETA(DisplayName="Default")
+	Default                          = None          UMETA(Hidden)
 };
 ENUM_CLASS_FLAGS(EMySpawnFlags);
 
-UENUM()
+UENUM(Meta = (Bitflags))
 enum class EWorldStringFlags : uint8
 {
-	None                             = 0             UMETA(DisplayName="None"),
+	None                             = 0             UMETA(Hidden),
 
-	Default                          = None          UMETA(DisplayName="Default")
+	Default                          = None          UMETA(Hidden)
 };
 ENUM_CLASS_FLAGS(EWorldStringFlags);
 

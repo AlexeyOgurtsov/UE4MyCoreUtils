@@ -15,7 +15,7 @@ enum class ETUPCInputDebugFlags : uint8
 	LogMovement       = 1 << 0             UMETA(DisplayName="Log movement"),
 	LogLook           = 1 << 1             UMETA(DisplayName="Log look"),
 
-	Default           = None
+	Default           = None               UMETA(Hidden)
 };
 ENUM_CLASS_FLAGS(ETUPCInputDebugFlags);
 
