@@ -3,7 +3,7 @@
 #include "Math/Rotator.h"
 #include "Math/Vector.h"
 
-namespace VisibleActorConfig
+namespace ProjectileConfig
 {
 	namespace Default
 	{
@@ -27,6 +27,16 @@ namespace VisibleActorConfig
 		const FRotator SPRINGARM_RELATIVE_ROTATION { -25.0F, 0.0F, 0.0F };
 		const FVector SPRINGARM_RELATIVE_LOCATION { 0, 0, MESH_BOUNDING_CUBE_SIDE/2.0F };
 		// ~SpringArm End
+
+		// ~ Movement Begin
+		constexpr float MAX_SPEED = 300.0F;
+		constexpr float SPEED = MAX_SPEED;
+		// ~ Movement End
+
+		// ~ Damage Begin
+		constexpr float DAMAGE = 10.0F;
+		constexpr float DAMAGE_RADIUS = 100.0F;
+		// ~ Damage End
 
 	}
 }
