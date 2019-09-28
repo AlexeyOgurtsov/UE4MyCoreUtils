@@ -83,8 +83,8 @@ void ATUProjectileActor::InitProjectileMovementComponent(USceneComponent* Update
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
 	ProjectileMovementComponent->SetUpdatedComponent(UpdatedComponent);
 
-	ProjectileMovementComponent->MaxSpeed = Default::MAX_SPEED;
-	ProjectileMovementComponent->InitialSpeed = Default::MAX_SPEED;
+	ProjectileMovementComponent->MaxSpeed = ProjectileConfig::Default::MAX_SPEED;
+	ProjectileMovementComponent->InitialSpeed = ProjectileConfig::Default::MAX_SPEED;
 	ProjectileMovementComponent->Velocity = UpdatedComponent->GetComponentQuat().Vector();
 
 }
@@ -94,11 +94,11 @@ void ATUProjectileActor::InitCameraAndSpringArm(USceneComponent* InAttachTo)
 	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
-	SpringArm->TargetArmLength = Default::SPRINGARM_TARGET_ARM_LENGTH;
-	SpringArm->RelativeRotation = Default::SPRINGARM_RELATIVE_ROTATION;
-	SpringArm->RelativeLocation = Default::SPRINGARM_RELATIVE_LOCATION;
-	SpringArm->bEnableCameraLag = Default::SPRINGARM_ENABLE_CAMERA_LAG;
-	SpringArm->CameraLagSpeed = Default::SPRINGARM_CAMERA_LAG_SPEED;
+	SpringArm->TargetArmLength = ProjectileConfig::Default::SPRINGARM_TARGET_ARM_LENGTH;
+	SpringArm->RelativeRotation = ProjectileConfig::Default::SPRINGARM_RELATIVE_ROTATION;
+	SpringArm->RelativeLocation = ProjectileConfig::Default::SPRINGARM_RELATIVE_LOCATION;
+	SpringArm->bEnableCameraLag = ProjectileConfig::Default::SPRINGARM_ENABLE_CAMERA_LAG;
+	SpringArm->CameraLagSpeed = ProjectileConfig::Default::SPRINGARM_CAMERA_LAG_SPEED;
 	SpringArm->SetupAttachment(InAttachTo);
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -110,15 +110,15 @@ void ATUProjectileActor::InitMesh(USceneComponent* InAttachTo)
 {
 	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
 
-	static ConstructorHelpers::FObjectFinderOptional<UStaticMesh> MeshFinder { Default::MESH_ASSET_PATH };
-	M_LOG_ERROR_IF( ! MeshFinder.Succeeded(), TEXT("Default mesh (\"%s\") NOT found"), Default::MESH_ASSET_PATH);
+	static ConstructorHelpers::FObjectFinderOptional<UStaticMesh> MeshFinder { ProjectileConfig::Default::MESH_ASSET_PATH };
+	M_LOG_ERROR_IF( ! MeshFinder.Succeeded(), TEXT("ProjectileConfig mesh (\"%s\") NOT found"), ProjectileConfig::Default::MESH_ASSET_PATH);
 
 	{
 		Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 
 		if(MeshFinder.Succeeded())
 		{
-			M_LOG(TEXT("Default mesh (\"%s\") found, setting it up"), Default::MESH_ASSET_PATH);
+			M_LOG(TEXT("ProjectileConfig mesh (\"%s\") found, setting it up"), ProjectileConfig::Default::MESH_ASSET_PATH);
 			Mesh->SetStaticMesh(MeshFinder.Get());
 		}
 
@@ -131,7 +131,7 @@ void ATUProjectileActor::InitProxSphere(USceneComponent* InAttachTo)
 	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
 
 	ProxSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
-	ProxSphere->InitSphereRadius(Default::PROX_SPHERE_RADIUS);
-	ProxSphere->RelativeLocation = Default::MESH_REAL_CENTER_ACTOR_SPACE_LOCATION;
+	ProxSphere->InitSphereRadius(ProjectileConfig::Default::PROX_SPHERE_RADIUS);
+	ProxSphere->RelativeLocation = ProjectileConfig::Default::MESH_REAL_CENTER_ACTOR_SPACE_LOCATION;
 	ProxSphere->SetupAttachment(InAttachTo);
 }

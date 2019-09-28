@@ -1,0 +1,9 @@
+--------- Player
+1. BUG: no moving with WASD?
+
+--------- Fire
+1. BUG: Wrong fire direction calculation:
+1.1. Log actor direction and look pitch, yaw, roll
+
+--------- Collision
+1. BUG: no projectile collision

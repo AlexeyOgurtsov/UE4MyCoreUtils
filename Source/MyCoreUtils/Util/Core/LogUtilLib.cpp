@@ -199,7 +199,7 @@ void ULogUtilLib::LogQuatC(const TCHAR* InKey, const FQuat& InQuat)
 		InQuat.Rotator().ToString()
 	};
 
-	LogStringC(InKey, FString::Format(TEXT("%s [Axis=%s Angle=%f] { %s }"), FormatArgs));
+	LogStringC(InKey, FString::Format(TEXT("{0} [Axis={1} Angle={2}] { {3} }"), FormatArgs));
 }
 
 void ULogUtilLib::LogQuatIf(bool bInShouldLog, const FString& InKey, const FQuat& InQuat)

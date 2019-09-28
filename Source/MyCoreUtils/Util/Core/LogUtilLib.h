@@ -92,7 +92,7 @@ public:
 	template<class T>
 	static FString GetWeakNameAndClassSafe(const TWeakObjectPtr<T>& InObject, bool bInThreadSafe = false)
 	{
-		if(InObject.IsValid(/*bEverIfPendingKill*/true, bInThreadSafe))
+		if( ! InObject.IsValid(/*bEverIfPendingKill*/true, bInThreadSafe) )
 		{
 			return FString(TEXT("{invalid_weak_ptr}"));
 		}
@@ -336,7 +336,7 @@ public:
 	template<class T>
 	static void LogWeakKeyedNameClassSafeC(const TCHAR* InKey, const TWeakObjectPtr<T>& InObject, bool bInThreadSafe = false)
 	{
-		M_LOG(TEXT("%s"), InKey, *GetWeakNameAndClassSafe(InObject, bInThreadSafe));
+		M_LOG(TEXT("%s: %s"), InKey, *GetWeakNameAndClassSafe(InObject, bInThreadSafe));
 	}
 
 	template<class T>
