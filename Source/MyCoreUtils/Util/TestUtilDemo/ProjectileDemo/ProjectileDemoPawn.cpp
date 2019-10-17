@@ -15,12 +15,15 @@
 
 namespace
 {
-	namespace Config
+	namespace ProjecilePawn
 	{
-		constexpr float MAX_SPEED = 100.0F;
-		constexpr float ACCELERATION = 0.0F;
-		constexpr float DECELERATION = 0.0F;
-	} // Config
+		namespace Config
+		{
+			constexpr float MAX_SPEED = 100.0F;
+			constexpr float ACCELERATION = 0.0F;
+			constexpr float DECELERATION = 0.0F;
+		} // Config
+	} // ProjecilePawn
 } // anonymous
 
 MyProjectileDemoPawnType::AProjectileDemoPawn()
@@ -83,9 +86,9 @@ void MyProjectileDemoPawnType::InitMovement()
 {
 	M_LOGFUNC();
 	UFloatingPawnMovement* const MyMovement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("Movement"));
-	MyMovement->Acceleration = Config::ACCELERATION;
-	MyMovement->Deceleration = Config::DECELERATION;
-	MyMovement->MaxSpeed = Config::MAX_SPEED;
+	MyMovement->Acceleration = ProjecilePawn::Config::ACCELERATION;
+	MyMovement->Deceleration = ProjecilePawn::Config::DECELERATION;
+	MyMovement->MaxSpeed = ProjecilePawn::Config::MAX_SPEED;
 	Movement = MyMovement;
 }
 
