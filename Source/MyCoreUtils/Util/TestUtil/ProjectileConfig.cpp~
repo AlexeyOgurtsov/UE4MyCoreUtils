@@ -1,8 +1,0 @@
-#include "ProjectilConfig.h"
-
-namespace ProjectileConfig
-{
-	namespace Default
-	{
-	} // Default
-} // ProjectileConfig

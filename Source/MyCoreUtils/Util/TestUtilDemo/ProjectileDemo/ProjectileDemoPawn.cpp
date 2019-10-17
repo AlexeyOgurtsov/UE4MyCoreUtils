@@ -23,13 +23,13 @@ namespace
 	} // Config
 } // anonymous
 
-MyPawnType::AProjectileDemoPawn()
+MyProjectileDemoPawnType::AProjectileDemoPawn()
 {
 	ProjectileClass = ATUProjectileActor::StaticClass();
 
 	InitMovement();
 }
-void MyPawnType::MyBeginPlay_Implementation()
+void MyProjectileDemoPawnType::MyBeginPlay_Implementation()
 {
 	M_LOGFUNC();
 
@@ -37,21 +37,21 @@ void MyPawnType::MyBeginPlay_Implementation()
 	// Custom actions here
 }
 
-void MyPawnType::LogDirection()
+void MyProjectileDemoPawnType::LogDirection()
 {
 	ULogUtilLib::LogRotatorC(TEXT("ActorRotation"), GetActorRotation());
 	ULogUtilLib::LogVectorC(TEXT("ActorRotation.Vector()"), GetActorRotation().Vector());
 	ULogUtilLib::LogRotatorC(TEXT("ControlRotation"), GetControlRotation());
 }
 
-ATUProjectileActor* MyPawnType::LaunchProjectile()
+ATUProjectileActor* MyProjectileDemoPawnType::LaunchProjectile()
 {
 	FTransform const SpawnTransform = GetProjectileLaunchTransform();
 	ATUProjectileActor* const NewActor = LaunchProjectileGeneral(SpawnTransform, ProjectileClass);
 	return NewActor;
 }
 
-ATUProjectileActor* MyPawnType::LaunchProjectileGeneral(const FTransform& InTransform, TSubclassOf<ATUProjectileActor> InClass)
+ATUProjectileActor* MyProjectileDemoPawnType::LaunchProjectileGeneral(const FTransform& InTransform, TSubclassOf<ATUProjectileActor> InClass)
 {
 	LogDirection();
 
@@ -61,7 +61,7 @@ ATUProjectileActor* MyPawnType::LaunchProjectileGeneral(const FTransform& InTran
 	return NewActor;
 }
 
-FTransform MyPawnType::GetProjectileLaunchTransform() const
+FTransform MyProjectileDemoPawnType::GetProjectileLaunchTransform() const
 {
 	//FRotator const LaunchRotation = GetActorRotation();
 	//FVector const LaunchLocation = GetActorLocation() + LaunchRotation.Vector() * ProjectileSettings.LaunchShift; 
@@ -79,7 +79,7 @@ FTransform MyPawnType::GetProjectileLaunchTransform() const
 	return FTransform{ LaunchRotation, LaunchLocation, FVector::OneVector };
 }
 
-void MyPawnType::InitMovement()
+void MyProjectileDemoPawnType::InitMovement()
 {
 	M_LOGFUNC();
 	UFloatingPawnMovement* const MyMovement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("Movement"));
@@ -89,14 +89,14 @@ void MyPawnType::InitMovement()
 	Movement = MyMovement;
 }
 
-MyPCType* MyPawnType::GetMyPC() const
+MyProjectileDemoPCType* MyProjectileDemoPawnType::GetMyPC() const
 {
-	return Cast<MyPCType>(GetController());
+	return Cast<MyProjectileDemoPCType>(GetController());
 }
 
-MyPCType* MyPawnType::GetMyPCLogged(ELogFlags InLogFlags) const
+MyProjectileDemoPCType* MyProjectileDemoPawnType::GetMyPCLogged(ELogFlags InLogFlags) const
 {
-	MyPCType* const PC = GetMyPC();
+	MyProjectileDemoPCType* const PC = GetMyPC();
 	if(PC == nullptr)
 	{
 		M_LOG_ERROR_IF_FLAGS(InLogFlags, TEXT("GetMyPC() returned NULL"));
@@ -104,9 +104,9 @@ MyPCType* MyPawnType::GetMyPCLogged(ELogFlags InLogFlags) const
 	return PC;
 }
 
-MyPCType* MyPawnType::GetMyPCChecked() const
+MyProjectileDemoPCType* MyProjectileDemoPawnType::GetMyPCChecked() const
 {
-	MyPCType* const PC = GetMyPC();
+	MyProjectileDemoPCType* const PC = GetMyPC();
 	checkf(PC, TEXT("GetMyPawn must return non-NULL pawn!"));
 	return PC;
 }

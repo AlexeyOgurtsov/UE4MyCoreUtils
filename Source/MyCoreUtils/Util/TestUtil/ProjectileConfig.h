@@ -7,15 +7,19 @@ namespace ProjectileConfig
 {
 	namespace Default
 	{
+		// ~Scale Begin
+		constexpr float Scale = 1.0F/5.0F;
+		// ~Scale End
+
 		// ~Mesh Begin
 		constexpr const TCHAR* MESH_ASSET_PATH = TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'");
-		constexpr float MESH_BOUNDING_CUBE_SIDE = 100.0F;
+		constexpr float MESH_BOUNDING_CUBE_SIDE = 100.0F * Scale;
 		const FVector MESH_PIVOT_POINT_ACTOR_SPACE_LOCATION { MESH_BOUNDING_CUBE_SIDE/2.0F, MESH_BOUNDING_CUBE_SIDE/2.0F, 0.0F };
 		const FVector MESH_REAL_CENTER_ACTOR_SPACE_LOCATION { 0, 0, MESH_BOUNDING_CUBE_SIDE/2.0F };
 		// ~Mesh End
 
 		// ~ProxSphere Begin
-		constexpr float PROX_SPHERE_RADIUS_EXTRA = 50.0F;
+		constexpr float PROX_SPHERE_RADIUS_EXTRA = 50.0F * Scale;
 		constexpr float PROX_SPHERE_RADIUS = MESH_BOUNDING_CUBE_SIDE/2.0F + PROX_SPHERE_RADIUS_EXTRA;
 		// ~ProxSphere End
 
@@ -29,7 +33,7 @@ namespace ProjectileConfig
 		// ~SpringArm End
 
 		// ~ Movement Begin
-		constexpr float MAX_SPEED = 300.0F;
+		constexpr float MAX_SPEED = 400.0F;
 		constexpr float SPEED = MAX_SPEED;
 		// ~ Movement End
 
@@ -37,6 +41,10 @@ namespace ProjectileConfig
 		constexpr float DAMAGE = 10.0F;
 		constexpr float DAMAGE_RADIUS = 100.0F;
 		// ~ Damage End
+		
+		// ~Lifetime Begin
+		constexpr float MAX_LIFETIME_SECONDS = 30.0F;
+		// ~Lifetime End
 
 	}
 }

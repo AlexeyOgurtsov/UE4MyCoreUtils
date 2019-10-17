@@ -24,6 +24,10 @@ class ATUProjectileActor : public ATUActor
 public:
 	ATUProjectileActor();
 
+	/** BeginPlay*/
+	UFUNCTION(BlueprintCallable, Category=Misc)
+	void BeginPlay() override;
+	
 	UFUNCTION(BlueprintPure, Category = Components)
 	USceneComponent* GetRootSceneComponent() const { return RootSceneComponent; }
 
@@ -141,3 +145,9 @@ private:
 	void MakeDamage(AActor* ActorToDamage, const FHitResult& InHitInfo);
 	// ~ Damage End
 };
+
+// ~ RightHere_ATUProjectileActor Begin
+
+
+// Adhoc impl lines (WARNING! move to .cpp file, otherwise will fail to compile!)
+// ~ RightHere_ATUProjectileActor End

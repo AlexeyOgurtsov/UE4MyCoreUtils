@@ -5,14 +5,14 @@
 */
 
 #include "ProjectileDemoTypes.h"
-#include "Util/TestUtil/TUPawn.h"
+#include "ProjectileDemoPawnBase.h"
 #include "Util/Core/Log/MyLoggingTypes.h"
 #include "ProjectileDemoPawn.generated.h"
 
 class ATUProjectileActor;
 
 UCLASS()
-class AProjectileDemoPawn : public ATUPawn
+class AProjectileDemoPawn : public AProjectileDemoPawnBase
 {
 	GENERATED_BODY()
 

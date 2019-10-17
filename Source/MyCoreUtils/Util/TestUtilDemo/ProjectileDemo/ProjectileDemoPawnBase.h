@@ -6,7 +6,7 @@
 
 #include "GameFramework/Pawn.h"
 #include "Util/Core/Log/MyLoggingTypes.h"
-#include "TUPawn.generated.h"
+#include "ProjectileDemoPawnBase.generated.h"
 
 class UCameraComponent;
 class USpringArmComponent;
@@ -17,12 +17,12 @@ class USphereComponent;
 class ITUPlayerController;
 
 UCLASS()
-class ATUPawn : public APawn
+class AProjectileDemoPawnBase : public APawn
 {
 	GENERATED_BODY()
 
 public:
-	ATUPawn();
+	AProjectileDemoPawnBase();
 
 
 	// ~Components Begin

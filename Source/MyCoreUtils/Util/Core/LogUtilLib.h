@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MyDebugMacros.h"
+#include "Log/MyLoggingTypes.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "TextProperty.h"
 #include "LogUtilLib.generated.h"

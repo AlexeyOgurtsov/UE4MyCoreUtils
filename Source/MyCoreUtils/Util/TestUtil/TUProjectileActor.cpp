@@ -1,5 +1,6 @@
 #include "TUProjectileActor.h"
 #include "Util/Core/LogUtilLib.h"
+#include "Util/Core/Phys/PhysUtilLib.h"
 
 #include "GameFramework/DamageType.h"
 #include "Kismet/GameplayStatics.h"
@@ -12,6 +13,8 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 
 #include "UObject/ConstructorHelpers.h"
+
+#include "Engine/CollisionProfile.h"
 
 /**
 * TODO:
@@ -31,24 +34,38 @@ using namespace ProjectileConfig;
 
 ATUProjectileActor::ATUProjectileActor()
 {
-	RootComponent = RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComponent"));
-
 	OnActorHit.AddDynamic(this, &ATUProjectileActor::ActorHit);
 
-	InitCameraAndSpringArm(RootSceneComponent);
 	InitMesh(RootSceneComponent);
+	RootComponent = Mesh;
+	RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComponent"));
+	RootSceneComponent->SetupAttachment(RootComponent);
+
+	InitCameraAndSpringArm(RootSceneComponent);
 	InitProxSphere(RootSceneComponent);
 
 	InitProjectileMovementComponent(RootComponent);
 }
 
+void ATUProjectileActor::BeginPlay()
+{
+	M_LOGFUNC();
+	SetLifeSpan(ProjectileConfig::Default::MAX_LIFETIME_SECONDS);
+}
+
 void ATUProjectileActor::ActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
 {
+	M_LOGFUNC();
+
 	MakeImpact(Hit.Actor.Get(), Hit);
 }
 
 void ATUProjectileActor::MakeDamage(AActor* const ActorToDamage, const FHitResult& InHitInfo)
 {
+	M_LOGFUNC();
+	ULogUtilLib::LogKeyedNameClassSafeC(TEXT("ActorToDamage"), ActorToDamage);
+	UPhysUtilLib::LogHitResult(InHitInfo);
+
 	if(bPointDamage)
 	{
 		if(ActorToDamage)
@@ -66,8 +83,9 @@ void ATUProjectileActor::MakeDamage(AActor* const ActorToDamage, const FHitResul
 
 void ATUProjectileActor::MakeImpact(AActor* const ActorToDamage, const FHitResult& InHitInfo)
 {
-	MakeDamage(ActorToDamage, InHitInfo);
+	M_LOGFUNC();
 
+	MakeDamage(ActorToDamage, InHitInfo);
 
 	ProjectileMovementComponent->StopMovementImmediately();
 
@@ -86,20 +104,21 @@ void ATUProjectileActor::InitProjectileMovementComponent(USceneComponent* Update
 	ProjectileMovementComponent->MaxSpeed = ProjectileConfig::Default::MAX_SPEED;
 	ProjectileMovementComponent->InitialSpeed = ProjectileConfig::Default::MAX_SPEED;
 	ProjectileMovementComponent->Velocity = UpdatedComponent->GetComponentQuat().Vector();
-
+	ProjectileMovementComponent->ProjectileGravityScale = 0.0F;
 }
 
 void ATUProjectileActor::InitCameraAndSpringArm(USceneComponent* InAttachTo)
 {
-	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
-
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->TargetArmLength = ProjectileConfig::Default::SPRINGARM_TARGET_ARM_LENGTH;
 	SpringArm->RelativeRotation = ProjectileConfig::Default::SPRINGARM_RELATIVE_ROTATION;
 	SpringArm->RelativeLocation = ProjectileConfig::Default::SPRINGARM_RELATIVE_LOCATION;
 	SpringArm->bEnableCameraLag = ProjectileConfig::Default::SPRINGARM_ENABLE_CAMERA_LAG;
 	SpringArm->CameraLagSpeed = ProjectileConfig::Default::SPRINGARM_CAMERA_LAG_SPEED;
-	SpringArm->SetupAttachment(InAttachTo);
+	if(InAttachTo)
+	{
+		SpringArm->SetupAttachment(InAttachTo);
+	}
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->bUsePawnControlRotation = true;
@@ -108,8 +127,6 @@ void ATUProjectileActor::InitCameraAndSpringArm(USceneComponent* InAttachTo)
 
 void ATUProjectileActor::InitMesh(USceneComponent* InAttachTo)
 {
-	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
-
 	static ConstructorHelpers::FObjectFinderOptional<UStaticMesh> MeshFinder { ProjectileConfig::Default::MESH_ASSET_PATH };
 	M_LOG_ERROR_IF( ! MeshFinder.Succeeded(), TEXT("ProjectileConfig mesh (\"%s\") NOT found"), ProjectileConfig::Default::MESH_ASSET_PATH);
 
@@ -120,18 +137,25 @@ void ATUProjectileActor::InitMesh(USceneComponent* InAttachTo)
 		{
 			M_LOG(TEXT("ProjectileConfig mesh (\"%s\") found, setting it up"), ProjectileConfig::Default::MESH_ASSET_PATH);
 			Mesh->SetStaticMesh(MeshFinder.Get());
+			Mesh->SetCollisionProfileName(UCollisionProfile::DefaultProjectile_ProfileName);
+			Mesh->SetRelativeScale3D(FVector{ProjectileConfig::Default::Scale});
 		}
 
-		Mesh->SetupAttachment(InAttachTo);
+		if(InAttachTo)
+		{
+			Mesh->SetupAttachment(InAttachTo);
+		}
 	}
 }
 
 void ATUProjectileActor::InitProxSphere(USceneComponent* InAttachTo)
 {
-	checkf(InAttachTo, TEXT("When calling %s component to attach to must be non-NULL pointer"), TEXT(__FUNCTION__));
-
 	ProxSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
 	ProxSphere->InitSphereRadius(ProjectileConfig::Default::PROX_SPHERE_RADIUS);
 	ProxSphere->RelativeLocation = ProjectileConfig::Default::MESH_REAL_CENTER_ACTOR_SPACE_LOCATION;
-	ProxSphere->SetupAttachment(InAttachTo);
+	if(InAttachTo)
+	{
+		ProxSphere->SetupAttachment(InAttachTo);
+		ProxSphere->SetRelativeScale3D(FVector{ProjectileConfig::Default::Scale});
+	}
 }

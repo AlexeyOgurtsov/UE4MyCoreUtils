@@ -4,8 +4,8 @@
 #include "ProjectileDemoConfig.h"
 #include "Util/Core/LogUtilLib.h"
 
-MyGameModeType::AProjectileDemoGameMode()
+MyProjectileDemoGameModeType::AProjectileDemoGameMode()
 {
-	DefaultPawnClass = MyPawnType::StaticClass();
-	PlayerControllerClass = MyPCType::StaticClass();
+	DefaultPawnClass = MyProjectileDemoPawnType::StaticClass();
+	PlayerControllerClass = MyProjectileDemoPCType::StaticClass();
 }
