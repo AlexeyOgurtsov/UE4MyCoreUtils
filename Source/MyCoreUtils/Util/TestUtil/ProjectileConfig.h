@@ -33,7 +33,7 @@ namespace ProjectileConfig
 		// ~SpringArm End
 
 		// ~ Movement Begin
-		constexpr float MAX_SPEED = 400.0F;
+		constexpr float MAX_SPEED = 1000.0F;
 		constexpr float SPEED = MAX_SPEED;
 		// ~ Movement End
 

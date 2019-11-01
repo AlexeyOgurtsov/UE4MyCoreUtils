@@ -36,7 +36,7 @@ ATUProjectileActor::ATUProjectileActor()
 {
 	OnActorHit.AddDynamic(this, &ATUProjectileActor::ActorHit);
 
-	InitMesh(RootSceneComponent);
+	InitMesh(nullptr);
 	RootComponent = Mesh;
 	RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComponent"));
 	RootSceneComponent->SetupAttachment(RootComponent);
@@ -95,16 +95,37 @@ void ATUProjectileActor::MakeImpact(AActor* const ActorToDamage, const FHitResul
 	M_LOG_WARN_IF( ! bDestroyed, TEXT("AActor::Destroy() returned false for '%s'"), *ULogUtilLib::GetNameAndClassSafe(this));
 }
 
-void ATUProjectileActor::InitProjectileMovementComponent(USceneComponent* UpdatedComponent)
+void ATUProjectileActor::FireProjectile()
 {
-	check(UpdatedComponent);
-	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
-	ProjectileMovementComponent->SetUpdatedComponent(UpdatedComponent);
+	M_LOGFUNC();
 
+	float const INITIAL_SPEED = ProjectileMovementComponent->InitialSpeed;
+
+	//ProjectileMovementComponent->Velocity = UpdatedComponent->GetComponentQuat().Vector() * INITIAL_SPEED;
+	ProjectileMovementComponent->Velocity = GetActorQuat().Vector().GetSafeNormal() * INITIAL_SPEED;
+	ProjectileMovementComponent->bInitialVelocityInLocalSpace = false;
+	ProjectileMovementComponent->UpdateComponentVelocity(); // Does NOT help
+
+	ULogUtilLib::LogFloatC(TEXT("INITIAL_SPEED"), INITIAL_SPEED);
+	ULogUtilLib::LogQuatC(TEXT("GetActorQuat()"), GetActorQuat());
+	ULogUtilLib::LogVectorC(TEXT("GetActorQuat().Vector()"), GetActorQuat().Vector());
+	ULogUtilLib::LogVectorC(TEXT("GetActorQuat().Vector().SafeNormal()"), GetActorQuat().Vector().GetSafeNormal());
+	ULogUtilLib::LogVectorC(TEXT("Velocity"), ProjectileMovementComponent->Velocity);
+}
+
+void ATUProjectileActor::InitProjectileMovementComponent(USceneComponent* InUpdatedComponent)
+{
+	M_LOGFUNC();
+	float const INITIAL_SPEED = ProjectileConfig::Default::SPEED;
+
+	check(InUpdatedComponent);
+
+	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
+	//ProjectileMovementComponent->SetUpdatedComponent(InUpdatedComponent);
 	ProjectileMovementComponent->MaxSpeed = ProjectileConfig::Default::MAX_SPEED;
-	ProjectileMovementComponent->InitialSpeed = ProjectileConfig::Default::MAX_SPEED;
-	ProjectileMovementComponent->Velocity = UpdatedComponent->GetComponentQuat().Vector();
+	ProjectileMovementComponent->InitialSpeed = INITIAL_SPEED;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.0F;
+	ProjectileMovementComponent->bInitialVelocityInLocalSpace = false;
 }
 
 void ATUProjectileActor::InitCameraAndSpringArm(USceneComponent* InAttachTo)

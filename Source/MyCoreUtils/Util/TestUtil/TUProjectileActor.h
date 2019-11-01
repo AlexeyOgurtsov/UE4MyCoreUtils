@@ -28,6 +28,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category=Misc)
 	void BeginPlay() override;
 	
+	/**
+	* This function is to be called to fire the projectile.
+	* The projectile will be fired in the direction of the rotation.
+	*/
+	UFUNCTION(BlueprintCallable, Category=Fire)
+	virtual void FireProjectile();
+
 	UFUNCTION(BlueprintPure, Category = Components)
 	USceneComponent* GetRootSceneComponent() const { return RootSceneComponent; }
 
@@ -109,10 +116,9 @@ private:
 	UFUNCTION(Category=Collision)
 	void ActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
 	
-	
 	/** InitProjectileMovementComponent*/
-	UFUNCTION(BlueprintCallable, Category=Movement)
 	void InitProjectileMovementComponent(USceneComponent* UpdatedComponent);
+
 	
 	// ~ Movement End
 	
