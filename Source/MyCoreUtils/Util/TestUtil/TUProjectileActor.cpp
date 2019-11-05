@@ -1,6 +1,7 @@
 #include "TUProjectileActor.h"
 #include "Util/Core/LogUtilLib.h"
 #include "Util/Core/Phys/PhysUtilLib.h"
+#include "Util/Audio/AudioUtilLib.h"
 
 #include "GameFramework/DamageType.h"
 #include "Kismet/GameplayStatics.h"
@@ -11,6 +12,7 @@
 #include "Engine/StaticMesh.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Components/AudioComponent.h"
 
 #include "UObject/ConstructorHelpers.h"
 
@@ -26,8 +28,6 @@
 * 1.1. Stop movement (+DONE)
 * 1.2. Make damage (+DONE)
 * 1.3. Begin destruction
-* 2. Init projectile movement component
-* 2.1. Init movement direction
 */
 
 using namespace ProjectileConfig;
@@ -43,19 +43,30 @@ ATUProjectileActor::ATUProjectileActor()
 
 	InitCameraAndSpringArm(RootSceneComponent);
 	InitProxSphere(RootSceneComponent);
-
 	InitProjectileMovementComponent(RootComponent);
+	InitAudio(RootSceneComponent);
+	
 }
 
 void ATUProjectileActor::BeginPlay()
 {
 	M_LOGFUNC();
+	Super::BeginPlay();
 	SetLifeSpan(ProjectileConfig::Default::MAX_LIFETIME_SECONDS);
+	StartFlyAudio();
+}
+
+void ATUProjectileActor::StartFlyAudio()
+{
+	UAudioUtilLib::SetAudioComponentFromMySoundMultiplier(FlySound, ConfigProps.Audio.FlyMultiplier);
+	FlySound->Play();
 }
 
 void ATUProjectileActor::ActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
 {
 	M_LOGFUNC();
+
+	UAudioUtilLib::PlayMySoundAtLocationIfShould(this, ConfigProps.Audio.HitSound, Hit.Location, FRotator::ZeroRotator);
 
 	MakeImpact(Hit.Actor.Get(), Hit);
 }
@@ -95,22 +106,16 @@ void ATUProjectileActor::MakeImpact(AActor* const ActorToDamage, const FHitResul
 	M_LOG_WARN_IF( ! bDestroyed, TEXT("AActor::Destroy() returned false for '%s'"), *ULogUtilLib::GetNameAndClassSafe(this));
 }
 
-void ATUProjectileActor::FireProjectile()
+void ATUProjectileActor::InitAudio(USceneComponent* InParentComponent)
 {
 	M_LOGFUNC();
+	FlySound = CreateDefaultSubobject<UAudioComponent>(TEXT("FlySoundComponent"));
+	FlySound->bAutoActivate = false;
 
-	float const INITIAL_SPEED = ProjectileMovementComponent->InitialSpeed;
-
-	//ProjectileMovementComponent->Velocity = UpdatedComponent->GetComponentQuat().Vector() * INITIAL_SPEED;
-	ProjectileMovementComponent->Velocity = GetActorQuat().Vector().GetSafeNormal() * INITIAL_SPEED;
-	ProjectileMovementComponent->bInitialVelocityInLocalSpace = false;
-	ProjectileMovementComponent->UpdateComponentVelocity(); // Does NOT help
-
-	ULogUtilLib::LogFloatC(TEXT("INITIAL_SPEED"), INITIAL_SPEED);
-	ULogUtilLib::LogQuatC(TEXT("GetActorQuat()"), GetActorQuat());
-	ULogUtilLib::LogVectorC(TEXT("GetActorQuat().Vector()"), GetActorQuat().Vector());
-	ULogUtilLib::LogVectorC(TEXT("GetActorQuat().Vector().SafeNormal()"), GetActorQuat().Vector().GetSafeNormal());
-	ULogUtilLib::LogVectorC(TEXT("Velocity"), ProjectileMovementComponent->Velocity);
+	if(InParentComponent)
+	{
+		FlySound->SetupAttachment(InParentComponent);
+	}
 }
 
 void ATUProjectileActor::InitProjectileMovementComponent(USceneComponent* InUpdatedComponent)
@@ -121,11 +126,11 @@ void ATUProjectileActor::InitProjectileMovementComponent(USceneComponent* InUpda
 	check(InUpdatedComponent);
 
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
-	//ProjectileMovementComponent->SetUpdatedComponent(InUpdatedComponent);
 	ProjectileMovementComponent->MaxSpeed = ProjectileConfig::Default::MAX_SPEED;
 	ProjectileMovementComponent->InitialSpeed = INITIAL_SPEED;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.0F;
-	ProjectileMovementComponent->bInitialVelocityInLocalSpace = false;
+	ProjectileMovementComponent->bInitialVelocityInLocalSpace = true;
+	ProjectileMovementComponent->Velocity = FVector{INITIAL_SPEED, 0.0F, 0.0F};
 }
 
 void ATUProjectileActor::InitCameraAndSpringArm(USceneComponent* InAttachTo)

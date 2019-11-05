@@ -6,8 +6,10 @@
 
 #include "TUActor.h"
 #include "ProjectileConfig.h"
+#include "TUProjectileConfigProps.h"
 #include "TUProjectileActor.generated.h"
 
+class USoundBase;
 class UProjectileMovementComponent;
 class UCameraComponent;
 class USpringArmComponent;
@@ -15,6 +17,7 @@ class USceneComponent;
 class UStaticMeshComponent;
 class USphereComponent;
 class UDamageType;
+class UAudioComponent;
 
 UCLASS()
 class ATUProjectileActor : public ATUActor
@@ -27,13 +30,6 @@ public:
 	/** BeginPlay*/
 	UFUNCTION(BlueprintCallable, Category=Misc)
 	void BeginPlay() override;
-	
-	/**
-	* This function is to be called to fire the projectile.
-	* The projectile will be fired in the direction of the rotation.
-	*/
-	UFUNCTION(BlueprintCallable, Category=Fire)
-	virtual void FireProjectile();
 
 	UFUNCTION(BlueprintPure, Category = Components)
 	USceneComponent* GetRootSceneComponent() const { return RootSceneComponent; }
@@ -88,12 +84,40 @@ public:
 	
 	// ~ Damage End
 	
+	/** GetFlySound*/
+	UFUNCTION(BlueprintPure, Category=Sound)
+	UAudioComponent* GetFlySound() const
+	{
+		return FlySound;
+	}
+	
+	/** GetConfigProps*/
+	UFUNCTION(BlueprintPure, Category=Config)
+	const FTUProjectileConfigProps& GetConfigProps() const
+	{
+		return ConfigProps;
+	}
+	
 private:
+	/** ConfigProps*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta=(AllowPrivateAccess=true), Category=Config)
+	FTUProjectileConfigProps ConfigProps;
+
+	// ~ Sound Begin
+	/** FlySound*/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Meta=(AllowPrivateAccess=true), Category=Sound)
+	UAudioComponent* FlySound = nullptr;
+
+	void InitAudio(USceneComponent* InParentComponent);
+	void StartFlyAudio();
+	// ~ Sound End
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Components, Meta=(AllowPrivateAccess = true))
 	USceneComponent* RootSceneComponent = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Camera, Meta=(AllowPrivateAccess = true))
 	UCameraComponent* Camera = nullptr;
+
 	void InitCameraAndSpringArm(USceneComponent* InAttachTo);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Camera, Meta=(AllowPrivateAccess = true))
@@ -101,10 +125,12 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Visual, Meta=(AllowPrivateAccess = true))
 	UStaticMeshComponent* Mesh = nullptr;
+
 	void InitMesh(USceneComponent* InAttachTo);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Collision, Meta=(AllowPrivateAccess = true))
 	USphereComponent* ProxSphere = nullptr;
+
 	void InitProxSphere(USceneComponent* InAttachTo);
 
 	// ~ Movement Begin
