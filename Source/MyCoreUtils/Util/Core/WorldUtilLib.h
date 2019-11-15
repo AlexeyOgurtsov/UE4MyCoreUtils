@@ -15,7 +15,7 @@
 
 #include "WorldUtilLib.generated.h"
 
-UENUM(Meta = (Bitflags))
+UENUM(Meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor="true"))
 enum class ENewWorldFlags : uint8
 {
 	None                             = 0             UMETA(Hidden),
@@ -47,14 +47,14 @@ enum class ENewWorldFlags : uint8
 };
 ENUM_CLASS_FLAGS(ENewWorldFlags);
 
-UENUM(Meta = (Bitflags))
+UENUM(Meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor = "true"))
 enum class EMyActorSelectionFlags : uint8
 {
 	None                             = 0             UMETA(Hidden),
 };
 ENUM_CLASS_FLAGS(EMyActorSelectionFlags);
 
-UENUM(Meta = (Bitflags))
+UENUM(Meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor = "true"))
 enum class EMySpawnFlags : uint8
 {
 	None                             = 0             UMETA(Hidden),
@@ -78,7 +78,7 @@ enum class EMySpawnFlags : uint8
 };
 ENUM_CLASS_FLAGS(EMySpawnFlags);
 
-UENUM(Meta = (Bitflags))
+UENUM(Meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor = "true"))
 enum class EWorldStringFlags : uint8
 {
 	None                             = 0             UMETA(Hidden),

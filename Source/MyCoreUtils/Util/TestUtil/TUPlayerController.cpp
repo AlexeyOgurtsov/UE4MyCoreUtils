@@ -419,6 +419,7 @@ void ATUPlayerController::ActionMoveGeneral(APawn* const P, const FVector& InDir
 {
 	checkf(P, TEXT("When calling %s Pawn must be valid non-NULL pointer"), TEXT(__FUNCTION__));
 
+	// For debug:
 	if(InAmount != 0.0F)
 	{
 		M_LOG_IF(HasAnyInputDebugFlagsSet(ETUPCInputDebugFlags::LogMovement), TEXT("Movement action: Direction=%s Amount=%f (Movement={%s})"), *InDirection.ToString(), InAmount, *ULogUtilLib::GetNameAndClassSafe(P->GetMovementComponent()));

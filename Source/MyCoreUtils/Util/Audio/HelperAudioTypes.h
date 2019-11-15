@@ -3,6 +3,8 @@
 #include "Util/Core/Misc/MyInterval.h"
 #include "HelperAudioTypes.generated.h"
 
+class USoundBase;
+
 USTRUCT(BlueprintType, Category=Audio)
 struct FMySoundMultiplierProps
 {

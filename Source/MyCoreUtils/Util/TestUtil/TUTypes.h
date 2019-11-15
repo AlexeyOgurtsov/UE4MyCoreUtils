@@ -2,7 +2,7 @@
 
 #include "TUTypes.generated.h"
 
-UENUM(BlueprintType, Meta=(Bitflags))
+UENUM(BlueprintType, Meta=(Bitflags, UseEnumValuesAsMaskValuesInEditor="true"))
 enum class ETUFlags : uint8
 {
 	None                      = 0              UMETA(Hidden),

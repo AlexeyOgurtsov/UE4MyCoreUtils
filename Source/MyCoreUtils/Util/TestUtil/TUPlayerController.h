@@ -7,15 +7,13 @@
 #include "TUPlayerController.generated.h"
 
 // ~Types begin
-UENUM(BlueprintType, Meta=(Bitflags))
+UENUM(BlueprintType, Meta=(Bitflags, UseEnumValuesAsMaskValuesInEditor="true"))
 enum class ETUPCInputDebugFlags : uint8
 {
-	None              = 0                  UMETA(Hidden),
+	None                  = 0               UMETA(Hidden),
 
-	LogMovement       = 1 << 0             UMETA(DisplayName="Log movement"),
-	LogLook           = 1 << 1             UMETA(DisplayName="Log look"),
-
-	Default           = None               UMETA(Hidden)
+	LogMovement           = 1 << 0          UMETA(DisplayName="Log movement"),
+	LogLook               = 1 << 1          UMETA(DisplayName="Log look")
 };
 ENUM_CLASS_FLAGS(ETUPCInputDebugFlags);
 
@@ -27,8 +25,8 @@ struct FTUPlayerControllerConfig
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Debug")
 	FTUConfig TUConfig;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta=(Bitflags, BitmaskEnum=ETUPCInputDebugFlags), Category = "Input|Debug")
-	uint8 InputDebugFlags;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta=(Bitmask, BitmaskEnum=ETUPCInputDebugFlags), Category = "Input|Debug")
+	uint8 InputDebugFlags = static_cast<uint8>(ETUPCInputDebugFlags::None);
 };
 // ~Types end
 

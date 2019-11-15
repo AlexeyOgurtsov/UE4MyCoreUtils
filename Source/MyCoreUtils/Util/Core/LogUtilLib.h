@@ -11,7 +11,7 @@
 * 1. Should take UObject-derived classes also!
 */
 
-UENUM(BlueprintType)
+UENUM(BlueprintType, Meta=(Bitflags, UseEnumValuesAsMaskValuesInEditor="true"))
 enum class EMyLogObjectFlags : uint8
 {
 	None UMETA(DisplayName="None"),
@@ -30,7 +30,7 @@ enum class EMyLogObjectFlags : uint8
 };
 ENUM_CLASS_FLAGS(EMyLogObjectFlags);
 
-UENUM()
+UENUM(BlueprintType, Meta=(Bitflags, UseEnumValuesAsFlagValuesInEditor="true"))
 enum class ELogRangeFlags : uint8
 {
 	None                       = 0            UMETA(DisplayName="None"),

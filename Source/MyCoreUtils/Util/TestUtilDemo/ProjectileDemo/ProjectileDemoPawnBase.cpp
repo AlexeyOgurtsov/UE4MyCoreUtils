@@ -3,7 +3,7 @@
 #include "Util/TestUtil/VisibleActorConfig.h"
 #include "Util/Core/LogUtilLib.h"
 
-#include "GameFramework/Controller.h"
+#include "GameFramework/PlayerController.h"
 #include "Util/TestUtil/I/ITUController.h"
 
 #include "GameFramework/SpringArmComponent.h"

@@ -3,7 +3,7 @@
 #include "Util/Core/Log/MyLoggingTypes.h"
 #include "PhysUtilLibTypes.generated.h"
 
-UENUM(BlueprintType)
+UENUM(BlueprintType, Meta=(BitFlags, UseEnumValuesAsMaskValuesInEditor = "true"))
 enum class ELogHitFlags : uint8
 {
 	None                          = 0    UMETA(Hidden),

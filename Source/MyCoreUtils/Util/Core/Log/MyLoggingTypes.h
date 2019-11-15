@@ -4,7 +4,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MyLoggingTypes.generated.h"
 
-UENUM(BlueprintType, Meta=(Bitflags))
+UENUM(BlueprintType, Meta=(Bitflags, UseEnumValuesAsMaskValuesInEditor="true"))
 enum class ELogFlags : uint8
 {
 	None              = 0          UMETA(Hidden),
