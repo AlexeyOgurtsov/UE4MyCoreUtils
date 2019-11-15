@@ -15,9 +15,9 @@ namespace
 {
 	namespace Config
 	{
-		constexpr float MAX_SPEED = 100.0F;
-		constexpr float ACCELERATION = 0.0F;
-		constexpr float DECELERATION = 0.0F;
+		constexpr float MAX_SPEED = 300.0F;
+		constexpr float ACCELERATION = 100.0F;
+		constexpr float DECELERATION = 100.0F;
 	} // Config
 } // anonymous
 
