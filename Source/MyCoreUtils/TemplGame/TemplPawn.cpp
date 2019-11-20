@@ -40,6 +40,7 @@ void MyPawnType::InitMovement()
 	MyMovement->Acceleration = Config::ACCELERATION;
 	MyMovement->Deceleration = Config::DECELERATION;
 	MyMovement->MaxSpeed = Config::MAX_SPEED;
+	MyMovement->bEditableWhenInherited = true;
 	Movement = MyMovement;
 }
 
