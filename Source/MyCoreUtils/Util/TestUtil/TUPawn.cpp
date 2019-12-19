@@ -28,9 +28,53 @@ ATUPawn::ATUPawn()
 	InitCameraAndSpringArm(RootSceneComponent);
 }
 
+void ATUPawn::PossessedBy(AController* InNewController)
+{
+	M_LOGFUNC_IF(bLogBigEvents);
+	LogThis();
+	ULogUtilLib::LogKeyedNameClassSafeC(TEXT("InNewController"), InNewController);
+	ULogUtilLib::LogKeyedNameClassSafeC(TEXT("GetController() Before SUPER"), GetController());
+	Super::PossessedBy(InNewController);
+	ULogUtilLib::LogKeyedNameClassSafeC(TEXT("GetController() After SUPER"), GetController());
+}
+
+void ATUPawn::UnPossessed()
+{
+	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
+	if(bLogBigEvents)
+	{
+		ULogUtilLib::LogKeyedNameClassSafeC(TEXT("GetController() Before SUPER"), GetController());
+	}
+	Super::UnPossessed();
+	if(bLogBigEvents)
+	{
+		ULogUtilLib::LogKeyedNameClassSafeC(TEXT("GetController() After SUPER"), GetController());
+	}
+}
+
+void ATUPawn::Restart()
+{
+	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
+	Super::Restart();
+}
+
+void ATUPawn::BecomeViewTarget(APlayerController* PC)
+{
+	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
+	if(bLogBigEvents)
+	{
+		ULogUtilLib::LogKeyedNameClassSafeC(TEXT("PC"), PC);
+	}
+	Super::BecomeViewTarget(PC);
+}
+
 void ATUPawn::BeginPlay()
 {
-	M_LOGFUNC();
+	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
 
 	Super::BeginPlay();
 
@@ -40,12 +84,13 @@ void ATUPawn::BeginPlay()
 
 void ATUPawn::MyBeginPlay_Implementation()
 {
-	M_LOGFUNC();
+	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
 }
 
 void ATUPawn::BeginPlayFinished()
 {
-	M_LOGFUNC();
+	M_LOGFUNC_IF(bLogBigEvents);
 	if( TScriptInterface<ITUController> const C = K2GetTUControllerLogged() )
 	{
 		ITUController::Execute_PawnBeginPlayEnded(C.GetObject());
@@ -182,4 +227,17 @@ APlayerController* ATUPawn::GetPCChecked() const
 	APlayerController* const C = GetPC();	
 	checkf(C, TEXT("GetController() must return non-NULL pawn!"));
 	return C;
+}
+
+void ATUPawn::LogThisIf(bool const bInShouldLog)
+{
+	if(bInShouldLog)
+	{
+		LogThis();
+	}
+}
+
+void ATUPawn::LogThis()
+{
+	ULogUtilLib::LogKeyedNameClassSafeC(TEXT("This"), this);
 }
