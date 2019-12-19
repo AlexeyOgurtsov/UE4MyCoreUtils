@@ -13,12 +13,14 @@ ATUGameMode::ATUGameMode()
 void ATUGameMode::PreInitializeComponents()
 {
 	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
 	Super::PreInitializeComponents();
 }
 
 void ATUGameMode::Reset()
 {
 	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
 	Super::Reset();
 }
 // ~AActor End
@@ -26,6 +28,7 @@ void ATUGameMode::Reset()
 void ATUGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
 	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
 	if(bLogBigEvents)
 	{
 		ULogUtilLib::LogStringC(TEXT("MapName"), MapName);
@@ -41,18 +44,21 @@ void ATUGameMode::InitGame(const FString& MapName, const FString& Options, FStri
 void ATUGameMode::InitGameState()
 {
 	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
 	Super::InitGameState();
 }
 
 void ATUGameMode::ResetLevel()
 {
 	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
 	Super::ResetLevel();
 }
 
 void ATUGameMode::PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage)
 {
 	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
 	if(bLogBigEvents)
 	{
 		ULogUtilLib::LogStringC(TEXT("Options"), Options);
@@ -68,6 +74,7 @@ void ATUGameMode::PreLogin(const FString& Options, const FString& Address, const
 APlayerController* ATUGameMode::Login(UPlayer* NewPlayer, ENetRole InRemoteRole, const FString& Portal, const FString& Options, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage)
 {
 	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
 	if(bLogBigEvents)
 	{
 		ULogUtilLib::LogStringC(TEXT("Portal"), Portal);
@@ -84,6 +91,7 @@ APlayerController* ATUGameMode::Login(UPlayer* NewPlayer, ENetRole InRemoteRole,
 void ATUGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
 	if(bLogBigEvents)
 	{
 		ULogUtilLib::LogKeyedNameClassSafeC(TEXT("NewPlayer"), NewPlayer);

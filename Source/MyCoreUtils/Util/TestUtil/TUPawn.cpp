@@ -18,6 +18,9 @@
 
 ATUPawn::ATUPawn()
 {
+	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
+
 	InitMesh(nullptr);
 	RootComponent = Mesh;
 
@@ -31,11 +34,17 @@ ATUPawn::ATUPawn()
 void ATUPawn::PossessedBy(AController* InNewController)
 {
 	M_LOGFUNC_IF(bLogBigEvents);
-	LogThis();
-	ULogUtilLib::LogKeyedNameClassSafeC(TEXT("InNewController"), InNewController);
-	ULogUtilLib::LogKeyedNameClassSafeC(TEXT("GetController() Before SUPER"), GetController());
+	LogThisIf(bLogBigEvents);
+	if(bLogBigEvents)
+	{
+		ULogUtilLib::LogKeyedNameClassSafeC(TEXT("InNewController"), InNewController);
+		ULogUtilLib::LogKeyedNameClassSafeC(TEXT("GetController() Before SUPER"), GetController());
+	}
 	Super::PossessedBy(InNewController);
-	ULogUtilLib::LogKeyedNameClassSafeC(TEXT("GetController() After SUPER"), GetController());
+	if(bLogBigEvents)
+	{
+		ULogUtilLib::LogKeyedNameClassSafeC(TEXT("GetController() After SUPER"), GetController());
+	}
 }
 
 void ATUPawn::UnPossessed()
@@ -69,6 +78,42 @@ void ATUPawn::BecomeViewTarget(APlayerController* PC)
 		ULogUtilLib::LogKeyedNameClassSafeC(TEXT("PC"), PC);
 	}
 	Super::BecomeViewTarget(PC);
+}
+
+void ATUPawn::PostInitProperties()
+{
+	Super::PostInitProperties();
+
+	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
+}
+
+void ATUPawn::PreRegisterAllComponents()
+{
+	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
+	Super::PreRegisterAllComponents();
+}
+
+void ATUPawn::PostRegisterAllComponents() 
+{
+	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
+	Super::PostRegisterAllComponents();
+}
+
+void ATUPawn::PreInitializeComponents()
+{
+	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
+	Super::PreInitializeComponents();
+}
+
+void ATUPawn::PostInitializeComponents()
+{
+	M_LOGFUNC_IF(bLogBigEvents);
+	LogThisIf(bLogBigEvents);
+	Super::PostInitializeComponents();
 }
 
 void ATUPawn::BeginPlay()

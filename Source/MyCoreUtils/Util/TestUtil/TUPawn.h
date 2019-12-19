@@ -88,7 +88,16 @@ public:
 	APlayerController* GetPCChecked() const;
 	// ~Controller End
 	
-	// ~Framework Begin
+	// ~UObject Begin
+	virtual void PostInitProperties() override;
+	// ~UObject End
+
+	// ~AActor Begin
+	virtual void PreRegisterAllComponents() override;
+	virtual void PostRegisterAllComponents() override;
+
+	virtual void PreInitializeComponents() override;
+	virtual void PostInitializeComponents() override;
 	/**
 	* AActor::BeginPlay implementation
 	*
@@ -96,7 +105,7 @@ public:
 	* @see: MyBeginPlay
 	*/
 	virtual void BeginPlay() override final;
-	// ~Framework End
+	// ~AActor End
 
 protected:
 	// ~Framework Begin

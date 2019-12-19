@@ -27,6 +27,9 @@ struct FTUPlayerControllerConfig
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta=(Bitmask, BitmaskEnum=ETUPCInputDebugFlags), Category = "Input|Debug")
 	uint8 InputDebugFlags = static_cast<uint8>(ETUPCInputDebugFlags::None);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta=(Bitmask, BitmaskEnum=ETUPCInputDebugFlags), Category = "Log|Test|Debug")
+	bool bLogBigEvents = true;
 };
 // ~Types end
 
@@ -39,6 +42,26 @@ class ATUPlayerController
 
 public:
 	ATUPlayerController();
+
+	// ~UObject Begin
+	virtual void PostInitProperties() override;
+	// ~UObject End
+
+	// ~AActor Begin
+	virtual void PreRegisterAllComponents() override;
+	virtual void PostRegisterAllComponents() override;
+
+	virtual void PreInitializeComponents() override;
+	virtual void PostInitializeComponents() override;
+
+	virtual void BeginPlay() override;
+	virtual void EndPlay(EEndPlayReason::Type InReason) override;
+	// ~AActor End
+
+	// ~Logging Begin
+	virtual void LogThis();
+	void LogThisIf(bool bInShouldLog);
+	// ~Logging End
 
 	// ~ITUController Begin
 	virtual void PawnBeginPlayEnded_Implementation() override;

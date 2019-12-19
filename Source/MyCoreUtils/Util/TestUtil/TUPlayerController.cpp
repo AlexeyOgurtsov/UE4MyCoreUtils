@@ -22,16 +22,71 @@ namespace
 
 ATUPlayerController::ATUPlayerController()
 {
+	M_LOGFUNC();
+	LogThis();
+}
+
+void ATUPlayerController::PostInitProperties()
+{
+	Super::PostInitProperties();
+
+	M_LOGFUNC_IF(TUConfig.bLogBigEvents);
+	LogThisIf(TUConfig.bLogBigEvents);
+}
+
+void ATUPlayerController::PreRegisterAllComponents()
+{
+	M_LOGFUNC_IF(TUConfig.bLogBigEvents);
+	LogThisIf(TUConfig.bLogBigEvents);
+	Super::PreRegisterAllComponents();
+}
+
+void ATUPlayerController::PostRegisterAllComponents() 
+{
+	M_LOGFUNC_IF(TUConfig.bLogBigEvents);
+	LogThisIf(TUConfig.bLogBigEvents);
+	Super::PostRegisterAllComponents();
+}
+
+void ATUPlayerController::PreInitializeComponents()
+{
+	M_LOGFUNC_IF(TUConfig.bLogBigEvents);
+	LogThisIf(TUConfig.bLogBigEvents);
+	Super::PreInitializeComponents();
+}
+
+void ATUPlayerController::PostInitializeComponents()
+{
+	M_LOGFUNC_IF(TUConfig.bLogBigEvents);
+	LogThisIf(TUConfig.bLogBigEvents);
+	Super::PostInitializeComponents();
+}
+
+void ATUPlayerController::BeginPlay()
+{
+	M_LOGFUNC_IF(TUConfig.bLogBigEvents);
+	LogThisIf(TUConfig.bLogBigEvents);
+	Super::BeginPlay();
+}
+
+void ATUPlayerController::EndPlay(EEndPlayReason::Type InReason)
+{
+	M_LOGFUNC_IF(TUConfig.bLogBigEvents);
+	LogThisIf(TUConfig.bLogBigEvents);
+	Super::EndPlay(InReason);
 }
 
 void ATUPlayerController::PawnBeginPlayEnded_Implementation()
 {
-	M_LOGFUNC();
+	M_LOGFUNC_IF(TUConfig.bLogBigEvents);
+	LogThisIf(TUConfig.bLogBigEvents);
 }
 
 void ATUPlayerController::SetupInputComponent()
 {
-	M_LOGFUNC();
+	M_LOGFUNC_IF(TUConfig.bLogBigEvents);
+	LogThisIf(TUConfig.bLogBigEvents);
+
 	Super::SetupInputComponent();
 	checkf(InputComponent, TEXT("Input component must be created (did you forget Super-call?)"));
 
@@ -471,4 +526,17 @@ ATUPawn* ATUPlayerController::GetMyTUPawnChecked() const
 	ATUPawn* const P = GetTUPawn();
 	checkf(P, TEXT("GetTUPawn() must return non-NULL pawn!"));
 	return P;
+}
+
+void ATUPlayerController::LogThisIf(bool const bInShouldLog)
+{
+	if(bInShouldLog)
+	{
+		LogThis();
+	}
+}
+
+void ATUPlayerController::LogThis()
+{
+	ULogUtilLib::LogKeyedNameClassSafeC(TEXT("This"), this);
 }
