@@ -57,6 +57,12 @@ public:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(EEndPlayReason::Type InReason) override;
 	// ~AActor End
+	
+	// ~AController Begin
+	virtual void OnPossess(APawn* InPawn) override;
+	virtual void OnUnPossess() override;
+	virtual void SetPawn(APawn* InPawn) override;
+	// ~AController End
 
 	// ~Logging Begin
 	virtual void LogThis();

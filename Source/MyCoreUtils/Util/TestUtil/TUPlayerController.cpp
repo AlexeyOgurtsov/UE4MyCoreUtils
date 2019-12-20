@@ -76,6 +76,31 @@ void ATUPlayerController::EndPlay(EEndPlayReason::Type InReason)
 	Super::EndPlay(InReason);
 }
 
+void ATUPlayerController::OnPossess(APawn* InPawn)
+{
+	M_LOGFUNC_IF(TUConfig.bLogBigEvents);
+	LogThisIf(TUConfig.bLogBigEvents);
+	ULogUtilLib::LogKeyedNameClassSafeC(TEXT("GetPawn() (BEFORE Super)"), GetPawn());
+	Super::OnPossess(InPawn);
+	ULogUtilLib::LogKeyedNameClassSafeC(TEXT("GetPawn() (AFTER Super)"), GetPawn());
+}
+
+void ATUPlayerController::OnUnPossess()
+{
+	M_LOGFUNC_IF(TUConfig.bLogBigEvents);
+	LogThisIf(TUConfig.bLogBigEvents);
+	Super::OnUnPossess();
+}
+
+void ATUPlayerController::SetPawn(APawn* InPawn)
+{
+	M_LOGFUNC_IF(TUConfig.bLogBigEvents);
+	LogThisIf(TUConfig.bLogBigEvents);
+	ULogUtilLib::LogKeyedNameClassSafeC(TEXT("GetPawn() (BEFORE Super)"), GetPawn());
+	Super::SetPawn(InPawn);
+	ULogUtilLib::LogKeyedNameClassSafeC(TEXT("GetPawn() (AFTER Super)"), GetPawn());
+}
+
 void ATUPlayerController::PawnBeginPlayEnded_Implementation()
 {
 	M_LOGFUNC_IF(TUConfig.bLogBigEvents);
