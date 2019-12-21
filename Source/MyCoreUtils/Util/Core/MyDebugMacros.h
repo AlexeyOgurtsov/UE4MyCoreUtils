@@ -347,14 +347,14 @@ DECLARE_LOG_CATEGORY_EXTERN(MyLog, Log, All);
 		{\
 			if(bShouldLog)\
 			{\
-				UE_LOG(LogCategory, LogLevel, TEXT("%s : Block entered"), *PrefixString);\
+				UE_LOG(LogCategory, LogLevel, TEXT("BL %s {"), *PrefixString);\
 			}\
 		}\
 		~M_CUSTOM_SCOPED_LOG_HELPER_CLASS_NAME(ClassNamePrefix)()\
 		{\
 			if(bShouldLog)\
 			{\
-				UE_LOG(LogCategory, LogLevel, TEXT("%s : Exiting block"), *PrefixString);\
+				UE_LOG(LogCategory, LogLevel, TEXT("} BL %s"), *PrefixString);\
 			}\
 		}\
 	private:\

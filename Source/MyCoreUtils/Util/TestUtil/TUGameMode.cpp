@@ -2,6 +2,7 @@
 #include "TUPawn.h"
 #include "TUPlayerController.h"
 #include "TUPlayerState.h"
+#include "TUGameState.h"
 #include "Util/Core/LogUtilLib.h"
 
 ATUGameMode::ATUGameMode()
@@ -9,6 +10,7 @@ ATUGameMode::ATUGameMode()
 	DefaultPawnClass = ATUPawn::StaticClass();
 	PlayerControllerClass = ATUPlayerController::StaticClass();
 	PlayerStateClass = ATUPlayerState::StaticClass();
+	GameStateClass = ATUGameState::StaticClass();
 }
 
 // ~AActor Begin

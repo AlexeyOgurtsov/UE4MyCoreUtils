@@ -12,6 +12,10 @@ class UAIUtil : public UBlueprintFunctionLibrary
 public:
 	UAIUtil();
 
+	static FString GetPathFollowingRequestResultString(EPathFollowingRequestResult::Type Code);
+
+	static void LogPathFollowingRequestResult(const FString& InKey, const EPathFollowingRequestResult::Type Code);
+
 	static FString GetPathFollowingResultString(EPathFollowingResult::Type Code);
 
 	static void LogPathFollowingResultCode(const FString& InKey, EPathFollowingResult::Type Code);

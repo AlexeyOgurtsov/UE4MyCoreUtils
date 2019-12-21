@@ -5,6 +5,27 @@ UAIUtil::UAIUtil()
 {
 }
 
+FString UAIUtil::GetPathFollowingRequestResultString(EPathFollowingRequestResult::Type Code)
+{
+	switch(Code)
+	{
+	case EPathFollowingRequestResult::Type::Failed:
+		return FString(TEXT("Failed"));
+	case EPathFollowingRequestResult::Type::AlreadyAtGoal:
+		return FString(TEXT("AlreadyAtGoal"));
+	case EPathFollowingRequestResult::Type::RequestSuccessful:
+		return FString(TEXT("RequestSuccessful"));
+	default:
+		break;
+	}
+	return FString(TEXT("Unknown"));
+}
+
+void UAIUtil::LogPathFollowingRequestResult(const FString& InKey, const EPathFollowingRequestResult::Type Code)
+{
+	ULogUtilLib::LogString(InKey, GetPathFollowingRequestResultString(Code));
+}
+
 FString UAIUtil::GetPathFollowingResultString(EPathFollowingResult::Type Code)
 {
 	switch(Code)
