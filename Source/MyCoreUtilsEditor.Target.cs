@@ -8,6 +8,8 @@ public class MyCoreUtilsEditorTarget : TargetRules
 	public MyCoreUtilsEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
+		DefaultBuildSettings = BuildSettingsVersion.Latest;
+
 
 		ExtraModuleNames.AddRange( new string[] { "MyCoreUtils" } );
 	}
