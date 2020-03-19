@@ -19,4 +19,19 @@ public:
 	*/
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Framework)
 	void PawnBeginPlayEnded();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Framework)
+	void Default_Axis_LookPitch(APawn* P, float InAmount);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Framework)
+	void Default_Axis_LookYaw(APawn* P, float InAmount);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Framework)
+	void Default_Axis_Forward(APawn* P, float InAmount);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Framework)
+	void Default_Axis_Right(APawn* P, float InAmount);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Framework)
+	void Default_Axis_Up(APawn* P, float InAmount);
 };

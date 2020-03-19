@@ -36,5 +36,35 @@ public:
 	ATemplPawn* GetMyPawnChecked() const;
 	// ~Access helpers End
 
+protected:
+	// ~Controller-level action handlers Begin
+	virtual void Axis_LookPitch(APawn* P, float InAmount) override;
+	virtual void Axis_LookYaw(APawn* P, float InAmount) override;
+	virtual void Axis_Forward(APawn* P, float InAmount) override;
+	virtual void Axis_Right(APawn* P, float InAmount) override;
+	virtual void Axis_Up(APawn* P, float InAmount) override;
+	virtual void Action_Use() override;
+	virtual void Action_UseTwo() override;
+	virtual void Action_UseThree() override;
+	virtual void Action_Fire() override;
+	virtual void Action_FireTwo() override;
+	virtual void Action_FireThree() override;
+	virtual void Action_SelectZero() override;
+	virtual void Action_SelectOne() override;
+	virtual void Action_SelectTwo() override;
+	virtual void Action_SelectThree() override;
+	virtual void Action_SelectFour() override;
+	virtual void Action_SelectFive() override;
+	virtual void Action_SelectSix() override;
+	virtual void Action_SelectSeven() override;
+	virtual void Action_SelectEight() override;
+	virtual void Action_SelectNine() override;
+	virtual void Action_OpenGameMenu() override;
+	virtual void Action_CloseGameMenu() override;
+	virtual void Action_DebugOne() override;
+	virtual void Action_DebugTwo() override;
+	virtual void Action_DebugThree() override;
+	// ~Controller-level action handlers End
+
 private:
 };

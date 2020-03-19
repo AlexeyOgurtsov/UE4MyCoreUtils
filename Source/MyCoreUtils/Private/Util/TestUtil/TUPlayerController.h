@@ -4,7 +4,9 @@
 #include "Util\Core\Log\MyLoggingTypes.h"
 #include "I/ITUController.h"
 #include "TUTypes.h"
+#include "Engine/EngineTypes.h"
 #include "TUPlayerController.generated.h"
+
 
 // ~Types begin
 UENUM(BlueprintType, Meta=(Bitflags, UseEnumValuesAsMaskValuesInEditor="true"))
@@ -64,6 +66,13 @@ public:
 	virtual void SetPawn(APawn* InPawn) override;
 	// ~AController End
 
+	// ~Helpers Begin
+	UFUNCTION(BlueprintCallable, Category=Trace)
+	AActor* TraceByLook(bool bInTraceComplex = false, ECollisionChannel CollisionChannel = ECollisionChannel::ECC_Visibility, ELogFlags InLogFlags = ELogFlags::LogEverSuccess) const;
+
+	AActor* TraceByLookCustom(float Length, bool bTraceComplex = false, ECollisionChannel CollisionChannel = ECollisionChannel::ECC_Visibility, ELogFlags InLogFlags = ELogFlags::LogEverSuccess) const;
+	// ~Helpers End
+
 	// ~Logging Begin
 	virtual void LogThis();
 	void LogThisIf(bool bInShouldLog);
@@ -71,6 +80,13 @@ public:
 
 	// ~ITUController Begin
 	virtual void PawnBeginPlayEnded_Implementation() override;
+
+	virtual void Default_Axis_LookPitch_Implementation(APawn* P, float InAmount) override;
+	virtual void Default_Axis_LookYaw_Implementation(APawn* P, float InAmount) override;
+
+	virtual void Default_Axis_Forward_Implementation(APawn* P, float InAmount) override;
+	virtual void Default_Axis_Right_Implementation(APawn* P, float InAmount) override;
+	virtual void Default_Axis_Up_Implementation(APawn* P, float InAmount) override;
 	// ~ITUController End
 	
 	virtual void SetupInputComponent() override;
@@ -239,6 +255,13 @@ private:
 	void Action_SelectSevenChecked();
 	void Action_SelectEightChecked();
 	void Action_SelectNineChecked();
+
+	void Action_OpenGameMenuChecked();
+	void Action_CloseGameMenuChecked();
+
+	void Action_DebugOneChecked();
+	void Action_DebugTwoChecked();
+	void Action_DebugThreeChecked();
 
 	void ActionSelectGeneralChecked(int32 InIndex);
 	// ~Actions End

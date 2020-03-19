@@ -141,12 +141,12 @@ void ATUPlayerController::SetupInputComponent()
 	InputComponent->BindAction(TEXT("SelectEight"), IE_Pressed, this, &ATUPlayerController::Action_SelectEightChecked);
 	InputComponent->BindAction(TEXT("SelectNine"), IE_Pressed, this, &ATUPlayerController::Action_SelectNineChecked);
 
-	InputComponent->BindAction(TEXT("OpenGameMenu"), IE_Pressed, this, &ATUPlayerController::Action_OpenGameMenu);
-	InputComponent->BindAction(TEXT("CloseGameMenu"), IE_Pressed, this, &ATUPlayerController::Action_CloseGameMenu);
+	InputComponent->BindAction(TEXT("OpenGameMenu"), IE_Pressed, this, &ATUPlayerController::Action_OpenGameMenuChecked);
+	InputComponent->BindAction(TEXT("CloseGameMenu"), IE_Pressed, this, &ATUPlayerController::Action_CloseGameMenuChecked);
 
-	InputComponent->BindAction(TEXT("DebugOne"), IE_Pressed, this, &ATUPlayerController::Action_DebugOne);
-	InputComponent->BindAction(TEXT("DebugTwo"), IE_Pressed, this, &ATUPlayerController::Action_DebugTwo);
-	InputComponent->BindAction(TEXT("DebugThree"), IE_Pressed, this, &ATUPlayerController::Action_DebugThree);
+	InputComponent->BindAction(TEXT("DebugOne"), IE_Pressed, this, &ATUPlayerController::Action_DebugOneChecked);
+	InputComponent->BindAction(TEXT("DebugTwo"), IE_Pressed, this, &ATUPlayerController::Action_DebugTwoChecked);
+	InputComponent->BindAction(TEXT("DebugThree"), IE_Pressed, this, &ATUPlayerController::Action_DebugThreeChecked);
 }
 
 void ATUPlayerController::SetGameInputEnableState(bool bInEnabled)
@@ -166,6 +166,15 @@ void ATUPlayerController::Axis_LookPitchChecked(float const InAmount)
 {
 	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Axis_LookPitch(P, InAmount);
+		}
+		else
+		{
+			// Always performs default look pitch if pawn actions are NOT supported
+			ITUController::Execute_Default_Axis_LookPitch(this, P, InAmount);
+		}
 		Axis_LookPitch(P, InAmount);
 	}
 }
@@ -174,11 +183,32 @@ void ATUPlayerController::Axis_LookYawChecked(float const InAmount)
 {
 	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Axis_LookYaw(P, InAmount);
+		}
+		else
+		{
+			// Always performs default look yaw if pawn actions are NOT supported
+			ITUController::Execute_Default_Axis_LookYaw(this, P, InAmount);
+		}
 		Axis_LookYaw(P, InAmount);
 	}
 }
 
 void ATUPlayerController::Axis_LookPitch(APawn* const P, float const InAmount)
+{
+	// WARNING!!! This action should be handled (and overriden) inside the ITPawnActions-implementing class
+}
+
+
+void ATUPlayerController::Axis_LookYaw(APawn* const P, float const InAmount)
+{
+	// WARNING!!! This action should be handled (and overriden) inside the ITPawnActions-implementing class
+}
+
+
+void ATUPlayerController::Default_Axis_LookPitch_Implementation(APawn* const P, float InAmount)
 {
 	checkf(P, TEXT("When calling %s pawn must be valid non-NULL pointer"), TEXT(__FUNCTION__));
 	if(InAmount != 0.0F)
@@ -188,8 +218,7 @@ void ATUPlayerController::Axis_LookPitch(APawn* const P, float const InAmount)
 	}
 }
 
-
-void ATUPlayerController::Axis_LookYaw(APawn* const P, float const InAmount)
+void ATUPlayerController::Default_Axis_LookYaw_Implementation(APawn* const P, float InAmount)
 {
 	checkf(P, TEXT("When calling %s pawn must be valid non-NULL pointer"), TEXT(__FUNCTION__));
 	if(InAmount != 0.0F)
@@ -208,6 +237,15 @@ void ATUPlayerController::Axis_ForwardChecked(float const InAmount)
 {
 	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Axis_Forward(P, InAmount);
+		}
+		else
+		{
+			// Always performs default forward if pawn actions are NOT supported
+			ITUController::Execute_Default_Axis_Forward(this, P, InAmount);
+		}
 		Axis_Forward(P, InAmount);
 	}
 }
@@ -216,6 +254,15 @@ void ATUPlayerController::Axis_RightChecked(float const InAmount)
 {
 	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Axis_Right(P, InAmount);
+		}
+		else
+		{
+			// Always performs default forward if pawn actions are NOT supported
+			ITUController::Execute_Default_Axis_Right(this, P, InAmount);
+		}
 		Axis_Right(P, InAmount);
 	}
 }
@@ -224,23 +271,49 @@ void ATUPlayerController::Axis_UpChecked(float const InAmount)
 {
 	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Axis_Up(P, InAmount);
+		}
+		else
+		{
+			// Always performs default forward if pawn actions are NOT supported
+			ITUController::Execute_Default_Axis_Up(this, P, InAmount);
+		}
 		Axis_Up(P, InAmount);
 	}
 }
 
+
 void ATUPlayerController::Axis_Forward(APawn* const P, float const InAmount)
+{
+	// WARNING!!! This action should be handled (and overriden) inside the ITPawnActions-implementing class
+}
+
+void ATUPlayerController::Axis_Right(APawn* const P, float const InAmount)
+{
+	// WARNING!!! This action should be handled (and overriden) inside the ITPawnActions-implementing class
+}
+
+void ATUPlayerController::Axis_Up(APawn* const P, float const InAmount)
+{
+	// WARNING!!! This action should be handled (and overriden) inside the ITPawnActions-implementing class
+}
+
+
+void ATUPlayerController::Default_Axis_Forward_Implementation(APawn* const P, float InAmount)
 {
 	checkf(P, TEXT("When calling %s pawn must be non-NULL pointer"), TEXT(__FUNCTION__));
 	ActionMoveGeneral(P, P->GetActorForwardVector(), InAmount);
 }
 
-void ATUPlayerController::Axis_Right(APawn* const P, float const InAmount)
+void ATUPlayerController::Default_Axis_Right_Implementation(APawn* const P, float InAmount)
 {
 	checkf(P, TEXT("When calling %s pawn must be non-NULL pointer"), TEXT(__FUNCTION__));
 	ActionMoveGeneral(P, P->GetActorRightVector(), InAmount);
 }
 
-void ATUPlayerController::Axis_Up(APawn* const P, float const InAmount)
+void ATUPlayerController::Default_Axis_Up_Implementation(APawn* const P, float InAmount)
 {
 	checkf(P, TEXT("When calling %s pawn must be non-NULL pointer"), TEXT(__FUNCTION__));
 	ActionMoveGeneral(P, P->GetActorUpVector(), InAmount);
@@ -248,24 +321,36 @@ void ATUPlayerController::Axis_Up(APawn* const P, float const InAmount)
 
 void ATUPlayerController::Action_UseChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_Use(P);
+		}
 		Action_Use();
 	}
 }
 
 void ATUPlayerController::Action_UseTwoChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_UseTwo(P);
+		}
 		Action_UseTwo();
 	}
 }
 
 void ATUPlayerController::Action_UseThreeChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_UseThree(P);
+		}
 		Action_UseThree();
 	}
 }
@@ -287,120 +372,175 @@ void ATUPlayerController::Action_UseThree()
 
 void ATUPlayerController::Action_FireChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_Fire(P);
+		}
 		Action_Fire();
 	}
 }
 
 void ATUPlayerController::Action_FireTwoChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_FireTwo(P);
+		}
 		Action_FireTwo();
 	}
 }
 
 void ATUPlayerController::Action_FireThreeChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_FireThree(P);
+		}
 		Action_FireThree();
 	}
 }
 
 void ATUPlayerController::Action_Fire()
 {
-	M_LOG(TEXT("Action %s: skipping (empty)"), TEXT(__FUNCTION__));
+	M_LOG(TEXT("Action %s: Using the StartFire call"), TEXT(__FUNCTION__));
+	StartFire(0);
 }
 
 
 void ATUPlayerController::Action_FireTwo()
 {
-	M_LOG(TEXT("Action %s: skipping (empty)"), TEXT(__FUNCTION__));
+	M_LOG(TEXT("Action %s: Using the StartFire call"), TEXT(__FUNCTION__));
+	StartFire(1);
 }
 
 void ATUPlayerController::Action_FireThree()
 {
-	M_LOG(TEXT("Action %s: skipping (empty)"), TEXT(__FUNCTION__));
+	M_LOG(TEXT("Action %s: Using the StartFire call"), TEXT(__FUNCTION__));
+	StartFire(2);
 }
 
 void ATUPlayerController::Action_SelectZeroChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_SelectZero(P);
+		}
 		Action_SelectZero();
 	}
 }
 
 void ATUPlayerController::Action_SelectOneChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_SelectOne(P);
+		}
 		Action_SelectOne();
 	}
 }
 
 void ATUPlayerController::Action_SelectTwoChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_SelectTwo(P);
+		}
 		Action_SelectTwo();
 	}
 }
 
 void ATUPlayerController::Action_SelectThreeChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_SelectThree(P);
+		}
 		Action_SelectThree();
 	}
 }
 
 void ATUPlayerController::Action_SelectFourChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_SelectFour(P);
+		}
 		Action_SelectFour();
 	}
 }
 
 void ATUPlayerController::Action_SelectFiveChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_SelectFive(P);
+		}
 		Action_SelectFive();
 	}
 }
 
 void ATUPlayerController::Action_SelectSixChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_SelectSix(P);
+		}
 		Action_SelectSix();
 	}
 }
 
 void ATUPlayerController::Action_SelectSevenChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_SelectSeven(P);
+		}
 		Action_SelectSeven();
 	}
 }
 
 void ATUPlayerController::Action_SelectEightChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_SelectEight(P);
+		}
 		Action_SelectEight();
 	}
 }
 
 void ATUPlayerController::Action_SelectNineChecked()
 {
-	if(ShouldProcessGameInputLogged(TEXT(__FUNCTION__)))
+	if(APawn* const P = GetPawnIfShouldInGameContextLogged(TEXT(__FUNCTION__)))
 	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_SelectNine(P);
+		}
 		Action_SelectNine();
 	}
 }
@@ -453,6 +593,66 @@ void ATUPlayerController::Action_SelectEight()
 void ATUPlayerController::Action_SelectNine()
 {
 	ActionSelectGeneral(9);
+}
+
+void ATUPlayerController::Action_OpenGameMenuChecked()
+{
+	if(APawn* P = GetTUPawn())
+	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_OpenGameMenu(P);
+		}
+	}
+	Action_OpenGameMenu();
+}
+
+void ATUPlayerController::Action_CloseGameMenuChecked()
+{
+	if(APawn* P = GetTUPawn())
+	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_CloseGameMenu(P);
+		}
+	}
+	Action_CloseGameMenu();
+}
+
+void ATUPlayerController::Action_DebugOneChecked()
+{
+	if(APawn* P = GetTUPawn())
+	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_DebugOne(P);
+		}
+	}
+	Action_DebugOne();
+}
+
+void ATUPlayerController::Action_DebugTwoChecked()
+{
+	if(APawn* P = GetTUPawn())
+	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_DebugTwo(P);
+		}
+	}
+	Action_DebugTwo();
+}
+
+void ATUPlayerController::Action_DebugThreeChecked()
+{
+	if(APawn* P = GetTUPawn())
+	{
+		if(ITUPawnActions* PawnActions = Cast<ITUPawnActions>(P))
+		{
+			ITUPawnActions::Execute_OnController_Action_DebugThree(P);
+		}
+	}
+	Action_DebugThree();
 }
 
 void ATUPlayerController::Action_OpenGameMenu()
@@ -522,13 +722,23 @@ APawn* ATUPlayerController::GetPawnIfShouldInGameContextLogged(const TCHAR* cons
 	{
 		return false;
 	}
-	M_LOG_ERROR_IF(GetPawn() == nullptr, TEXT("Action %s: Unable to get pawn (GetPawn() returned nullptr)"), InSender);
+	M_LOG_ERROR_IF(GetPawn() == nullptr, TEXT("Pawn is nullptr"));
 	return GetPawn();
 }
 
 bool ATUPlayerController::ShouldProcessGameInput() const
 {
 	return bGameInputAllowed && ! bCinematicMode;
+}
+
+AActor* ATUPlayerController::TraceByLook(bool bInTraceComplex, ECollisionChannel CollisionChannel, ELogFlags InLogFlags) const
+{
+	return GetTUPawn() ? GetTUPawn()->TraceByLook(bInTraceComplex, CollisionChannel, InLogFlags) : nullptr;
+}
+
+AActor* ATUPlayerController::TraceByLookCustom(float Length, bool bTraceComplex, ECollisionChannel CollisionChannel, ELogFlags InLogFlags) const
+{
+	return GetTUPawn() ? GetTUPawn()->TraceByLookCustom(Length, bTraceComplex, CollisionChannel, InLogFlags) : nullptr;
 }
 
 ATUPawn* ATUPlayerController::GetTUPawn() const

@@ -1,6 +1,7 @@
 
 #include "TUPawn.h"
 #include "VisibleActorConfig.h"
+#include "Util/Core/Phys/PhysUtilLib.h"
 #include "Util/Core/LogUtilLib.h"
 
 #include "GameFramework/PlayerController.h"
@@ -13,6 +14,8 @@
 #include "Engine/StaticMesh.h"
 #include "Components/SphereComponent.h"
 
+#include "Engine/World.h"
+#include "CollisionQueryParams.h"
 #include "UObject/ConstructorHelpers.h"
 
 
@@ -189,6 +192,187 @@ void ATUPawn::InitProxSphere(USceneComponent* InAttachTo)
 	{
 		ProxSphere->SetupAttachment(InAttachTo);
 	}
+}
+
+AActor* ATUPawn::TraceByLook(bool bInTraceComplex, ECollisionChannel InCollisionChannel, ELogFlags InLogFlags) const
+{
+	return TraceByLookCustom(DefaultLookTraceLength, bInTraceComplex, InCollisionChannel, InLogFlags);
+}
+
+AActor* ATUPawn::TraceByLookCustom(float InLength, bool bInTraceComplex, ECollisionChannel InCollisionChannel, ELogFlags InLogFlags) const
+{
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("Calling \"%s\" on object \"%s\" of class \"%s\" with Length=%f, TraceComplex=%s, CollisionChannel=%s"), 
+			TEXT(__FUNCTION__), 
+			*GetName(), *GetClass()->GetName(),
+			InLength, (bInTraceComplex ? TEXT("TRUE") : TEXT("false")), *UPhysUtilLib::GetCollisionChannelString(InCollisionChannel)
+			);
+
+	FVector ViewLocation;
+	FRotator ViewRotation;
+
+	if(Controller)
+	{
+		M_LOG_IF_FLAGS(InLogFlags, TEXT("Pawn is possessed with controller \"%s\" of class \"%s\""), *Controller->GetName(), *Controller->GetClass()->GetName());
+		Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+	}
+	else
+	{
+		M_LOG_IF_FLAGS(InLogFlags, TEXT("No controller attached"));
+		GetActorEyesViewPoint(ViewLocation, ViewRotation);
+	}
+
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("View location = %s, View rotation = %s"), *ViewLocation.ToString(), *ViewRotation.ToString());
+
+	FHitResult HitResult;
+	const AActor* const IgnoreActor = this;
+	FCollisionQueryParams QueryParams { FName(TEXT("LookTraceTag")), bInTraceComplex, IgnoreActor };
+	FCollisionResponseParams ResponseParams;
+	const bool bHit = GetWorld()->LineTraceSingleByChannel
+	(
+	 	HitResult,
+		ViewLocation, ViewLocation + ViewRotation.Vector() * InLength,
+		InCollisionChannel,
+		QueryParams,
+		ResponseParams
+	);
+	if( ! bHit )
+	{
+		M_LOG_ERROR_IF_FLAGS(InLogFlags, TEXT("No actor found during the trace"));
+		return nullptr;
+	}
+	AActor* const Actor = HitResult.Actor.Get();
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("Actor \"%s\" of class \"%s\" is found during the trace"), *Actor->GetName(), *Actor->GetClass()->GetName());
+	return Actor;
+}
+
+void ATUPawn::OnController_Axis_LookPitch_Implementation(float InAmount)
+{
+	ITUController::Execute_Default_Axis_LookPitch(GetController(), this, InAmount);
+}
+
+void ATUPawn::OnController_Axis_LookYaw_Implementation(float InAmount)
+{
+	ITUController::Execute_Default_Axis_LookYaw(GetController(), this, InAmount);
+}
+
+void ATUPawn::OnController_Axis_Forward_Implementation(float InAmount)
+{
+	ITUController::Execute_Default_Axis_Forward(GetController(), this, InAmount);
+}
+
+void ATUPawn::OnController_Axis_Right_Implementation(float InAmount)
+{
+	ITUController::Execute_Default_Axis_Right(GetController(), this, InAmount);
+}
+
+void ATUPawn::OnController_Axis_Up_Implementation(float InAmount)
+{
+	ITUController::Execute_Default_Axis_Up(GetController(), this, InAmount);
+}
+
+void ATUPawn::OnController_Action_Use_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_UseTwo_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_UseThree_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_Fire_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_FireTwo_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_FireThree_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_SelectZero_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_SelectOne_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_SelectTwo_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_SelectThree_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_SelectFour_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_SelectFive_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_SelectSix_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_SelectSeven_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_SelectEight_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_SelectNine_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_OpenGameMenu_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_CloseGameMenu_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_DebugOne_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_DebugTwo_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_DebugThree_Implementation()
+{
+	// Nothing is done here yet
 }
 
 TScriptInterface<ITUController> ATUPawn::K2GetTUController() const
