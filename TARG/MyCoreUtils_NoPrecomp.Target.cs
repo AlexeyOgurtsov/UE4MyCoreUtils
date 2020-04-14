@@ -3,10 +3,13 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class MyCoreUtilsEditor_NoPrecompTarget : MyCoreUtilsEditorTarget
+public class MyCoreUtilsTarget : TargetRules
 {
-	public MyCoreUtilsEditor_NoPrecompTarget(TargetInfo Target) : base(Target)
+	public MyCoreUtilsTarget(TargetInfo Target) : base(Target)
 	{
+		Type = TargetType.Game;
+		DefaultBuildSettings = BuildSettingsVersion.Latest;
+
 		bUseUnityBuild = false;
 		bUsePCHFiles = false;
 	}

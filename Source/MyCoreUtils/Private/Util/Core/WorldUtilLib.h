@@ -18,7 +18,7 @@
 UENUM(Meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor="true"))
 enum class ENewWorldFlags : uint8
 {
-	None                             = 0             UMETA(Hidden),
+	None                             = 0             UMETA(DisplayName = "None"),
 	SkipContextCreation              = 1 << 0        UMETA(DisplayName="Skip context creation"),	
 
 	/**
@@ -43,21 +43,21 @@ enum class ENewWorldFlags : uint8
 	*/
 	SkipAddToRoot                    = 1 << 4        UMETA(DisplayName="Skip add to root"),
 	
-	Default                          = None          UMETA(Hidden)
+	Default                          = None          UMETA(DisplayName = "Default")
 };
 ENUM_CLASS_FLAGS(ENewWorldFlags);
 
 UENUM(Meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor = "true"))
 enum class EMyActorSelectionFlags : uint8
 {
-	None                             = 0             UMETA(Hidden),
+	None                             = 0             UMETA(DisplayName="None"),
 };
 ENUM_CLASS_FLAGS(EMyActorSelectionFlags);
 
 UENUM(Meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor = "true"))
 enum class EMySpawnFlags : uint8
 {
-	None                             = 0             UMETA(Hidden),
+	None                             = 0             UMETA(DisplayName = "None"),
 
 	/**
 	* If specified, the spawn actor utility function returns nullptr when fails,
@@ -74,16 +74,16 @@ enum class EMySpawnFlags : uint8
 
 	MaximalLogging                   = FullActorLog  UMETA(DisplayName="Maximal logging"),
 
-	Default                          = None          UMETA(Hidden)
+	Default                          = None          UMETA(DisplayName = "Default"),
 };
 ENUM_CLASS_FLAGS(EMySpawnFlags);
 
 UENUM(Meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor = "true"))
 enum class EWorldStringFlags : uint8
 {
-	None                             = 0             UMETA(Hidden),
+	None                             = 0             UMETA(DisplayName = "None"),
 
-	Default                          = None          UMETA(Hidden)
+	Default                          = None          UMETA(DisplayName = "Default"),
 };
 ENUM_CLASS_FLAGS(EWorldStringFlags);
 

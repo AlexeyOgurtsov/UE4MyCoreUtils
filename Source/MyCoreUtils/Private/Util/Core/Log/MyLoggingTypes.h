@@ -7,7 +7,7 @@
 UENUM(BlueprintType, Meta=(Bitflags, UseEnumValuesAsMaskValuesInEditor="true"))
 enum class ELogFlags : uint8
 {
-	None              = 0          UMETA(Hidden),
+	None              = 0          UMETA(DisplayName="None"),
 	LogEverSuccess    = 1 << 0     UMETA(DisplayName="LogEverSuccess", Description="Should we log even successful operations"),
 	DisableLog        = 1 << 1     UMETA(DisplayName="DisableLog", Description="Should we disabled ever logging of fails")
 };

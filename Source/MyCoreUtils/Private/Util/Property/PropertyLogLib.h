@@ -42,10 +42,24 @@ public:
 	*
 	* @param InField: Field can NOT be nullptr.
 	*/
+	static FString GetFieldString(const FField* InField, EFieldStringFlags InFlags = EFieldStringFlags::Default);
+
+	/**
+	* Returns field string representation.
+	*
+	* @param InField: Field can NOT be nullptr.
+	*/
 	static FString GetFieldString(const UField* InField, EFieldStringFlags InFlags = EFieldStringFlags::Default);
 
 	/**
 	* Returns field string representation. 
+	*
+	* @param InField: Field can be nullptr.
+	*/
+	static FString GetFieldStringSafe(const FField* InField, EFieldStringFlags InFlags = EFieldStringFlags::Default);
+
+	/**
+	* Returns field string representation.
 	*
 	* @param InField: Field can be nullptr.
 	*/
@@ -59,25 +73,25 @@ public:
 	/**
 	* Logs value of the given property.
 	*/
-	static void LogPropertyValue(const UProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags = EPropertyValueStringFlags::None);
+	static void LogPropertyValue(const FProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags = EPropertyValueStringFlags::None);
 
 	/**
 	* Returns property value string representation.
 	*/
-	static FString GetPropertyValueString(const UProperty* InProperty, const void* InValue, EPropertyValueStringFlags InFlags = EPropertyValueStringFlags::None);
+	static FString GetPropertyValueString(const FProperty* InProperty, const void* InValue, EPropertyValueStringFlags InFlags = EPropertyValueStringFlags::None);
 
 	/**
 	* Returns array property value string representation.
 	*/
-	static FString GetArrayPropertyValueString(const UArrayProperty* InProperty, const void* InValue, EPropertyValueStringFlags InFlags = EPropertyValueStringFlags::None);
+	static FString GetArrayPropertyValueString(const FArrayProperty* InProperty, const void* InValue, EPropertyValueStringFlags InFlags = EPropertyValueStringFlags::None);
 	
 	/**
 	* Returns map property value string representation.
 	*/
-	static FString GetMapPropertyValueString(const UMapProperty* InProperty, const void* InValue, EPropertyValueStringFlags InFlags = EPropertyValueStringFlags::None);
+	static FString GetMapPropertyValueString(const FMapProperty* InProperty, const void* InValue, EPropertyValueStringFlags InFlags = EPropertyValueStringFlags::None);
 	
 	/**
 	* Returns set property value string representation.
 	*/
-	static FString GetSetPropertyValueString(const USetProperty* InProperty, const void* InValue, EPropertyValueStringFlags InFlags = EPropertyValueStringFlags::None);
+	static FString GetSetPropertyValueString(const FSetProperty* InProperty, const void* InValue, EPropertyValueStringFlags InFlags = EPropertyValueStringFlags::None);
 };

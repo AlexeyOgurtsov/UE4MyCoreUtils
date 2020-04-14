@@ -3,14 +3,11 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class MyCoreUtilsEditorTarget : TargetRules
+public class MyCoreUtilsTarget : TargetRules
 {
-	public MyCoreUtilsEditorTarget(TargetInfo Target) : base(Target)
+	public MyCoreUtilsTarget(TargetInfo Target) : base(Target)
 	{
-		Type = TargetType.Editor;
+		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.Latest;
-
-		bUseUnityBuild = false;
-		bUsePCHFiles = false;
 	}
 }

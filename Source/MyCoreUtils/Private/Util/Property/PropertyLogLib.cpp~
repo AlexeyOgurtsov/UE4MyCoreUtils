@@ -18,18 +18,18 @@ FString UPropertyLogLib::GetFieldString(const UField* const InField, EFieldStrin
 
 void UPropertyLogLib::LogStructPropertyValues(const UStruct* const InStruct, const void* const InStructValue)
 {
-	for(FPropertyValueIterator Itr { UProperty::StaticClass(), InStruct, InStructValue }; Itr; ++Itr)
+	for(FPropertyValueIterator Itr { FProperty::StaticClass(), InStruct, InStructValue }; Itr; ++Itr)
 	{
 		LogPropertyValue(Itr.Key(), Itr.Value());
 	}
 }
 
-void UPropertyLogLib::LogPropertyValue(const UProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags)
+void UPropertyLogLib::LogPropertyValue(const FProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags)
 {
 	M_LOG(TEXT("{%s} value is {%s}"), *GetFieldString(InProperty), *GetPropertyValueString(InProperty, InValue, InFlags));
 }
 
-FString UPropertyLogLib::GetPropertyValueString(const UProperty* const InProperty, const void* InValue, EPropertyValueStringFlags const InFlags)
+FString UPropertyLogLib::GetPropertyValueString(const FProperty* const InProperty, const void* InValue, EPropertyValueStringFlags const InFlags)
 {
 	if(const UNumericProperty* PropAsNumeric = Cast<const UNumericProperty>(InProperty))
 	{
@@ -59,11 +59,11 @@ FString UPropertyLogLib::GetPropertyValueString(const UProperty* const InPropert
 	{
 		return UStrProperty::GetPropertyValue(InValue);
 	}
-	else if(const UArrayProperty* PropAsArray = Cast<const UArrayProperty>(InProperty))
+	else if(const FArrayProperty* PropAsArray = Cast<const FArrayProperty>(InProperty))
 	{
 		return GetArrayPropertyValueString(PropAsArray, InValue, InFlags);
 	}
-	else if(const UMapProperty* PropAsMap = Cast<const UMapProperty>(InProperty))
+	else if(const FMapProperty* PropAsMap = Cast<const FMapProperty>(InProperty))
 	{
 		return GetMapPropertyValueString(PropAsMap, InValue, InFlags);
 	}
@@ -93,13 +93,13 @@ FString UPropertyLogLib::GetPropertyValueString(const UProperty* const InPropert
 	}
 }
 
-FString UPropertyLogLib::GetArrayPropertyValueString(const UArrayProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags)
+FString UPropertyLogLib::GetArrayPropertyValueString(const FArrayProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags)
 {
 	check(InProperty);
 	check(InValue);
 	
 	FString S;
-	const FScriptArray* const Arr = UArrayProperty::GetPropertyValuePtr(InValue);
+	const FScriptArray* const Arr = FArrayProperty::GetPropertyValuePtr(InValue);
 	if(Arr)
 	{
 		S.Append(FString::Printf(TEXT("Count=%d"), Arr->Num()));
@@ -131,13 +131,13 @@ FString UPropertyLogLib::GetSetPropertyValueString(const USetProperty* const InP
 	return S;
 }
 
-FString UPropertyLogLib::GetMapPropertyValueString(const UMapProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags)
+FString UPropertyLogLib::GetMapPropertyValueString(const FMapProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags)
 {
 	check(InProperty);
 	check(InValue);
 	
 	FString S;
-	const FScriptMap* const Map = UMapProperty::GetPropertyValuePtr(InValue);
+	const FScriptMap* const Map = FMapProperty::GetPropertyValuePtr(InValue);
 	if(Map)
 	{
 		S.Append(FString::Printf(TEXT("Count=%d"), Map->Num()));

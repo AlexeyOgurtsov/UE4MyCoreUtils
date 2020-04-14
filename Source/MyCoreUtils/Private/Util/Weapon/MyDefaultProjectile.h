@@ -1,3 +1,5 @@
+#pragma once
+
 #include "MyProjectileBase.h"
 #include "MyDefaultProjectile.generated.h"
 

@@ -28,7 +28,7 @@ void UPropertyLogLib::LogPropertyChangedEvent(const FPropertyChangedEvent& InEve
 	ULogUtilLib::LogStringC(TEXT("Property"), *GetFieldString(InEvent.Property));
 }
 
-FString UPropertyLogLib::GetFieldString(const UField* const InField, EFieldStringFlags const InFlags)
+FString UPropertyLogLib::GetFieldString(const FField* const InField, EFieldStringFlags const InFlags)
 {
 	FString Result;
 
@@ -38,96 +38,113 @@ FString UPropertyLogLib::GetFieldString(const UField* const InField, EFieldStrin
 		Result.Append(ULogUtilLib::GetNameAndClassSafe(InField->GetOwnerStruct()));	
 		Result.Append(TEXT("}; "));		
 	}
+	
+	return Result;
+}
+
+FString UPropertyLogLib::GetFieldString(const UField* const InField, EFieldStringFlags const InFlags)
+{
+	FString Result;
+
+	if ((InFlags & EFieldStringFlags::ExcludeOwner) == EFieldStringFlags::None)
+	{
+		Result.Append(TEXT("OwnerStruct={"));
+		Result.Append(ULogUtilLib::GetNameAndClassSafe(InField->GetOwnerStruct()));
+		Result.Append(TEXT("}; "));
+	}
 
 	Result.Append(ULogUtilLib::GetNameAndClassSafe(InField));
-	
+
 	return Result;
 }
 
 void UPropertyLogLib::LogStructPropertyValues(const UStruct* const InStruct, const void* const InStructValue)
 {
-	for(FPropertyValueIterator Itr { UProperty::StaticClass(), InStruct, InStructValue }; Itr; ++Itr)
+	for(FPropertyValueIterator Itr { FProperty::StaticClass(), InStruct, InStructValue }; Itr; ++Itr)
 	{
 		LogPropertyValue(Itr.Key(), Itr.Value());
 	}
 }
 
-void UPropertyLogLib::LogPropertyValue(const UProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags)
+void UPropertyLogLib::LogPropertyValue(const FProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags)
 {
 	M_LOG(TEXT("{%s} value is {%s}"), *GetFieldString(InProperty), *GetPropertyValueString(InProperty, InValue, InFlags));
 }
 
-FString UPropertyLogLib::GetPropertyValueString(const UProperty* const InProperty, const void* InValue, EPropertyValueStringFlags const InFlags)
+FString UPropertyLogLib::GetPropertyValueString(const FProperty* const InProperty, const void* InValue, EPropertyValueStringFlags const InFlags)
 {
-	if(const UNumericProperty* PropAsNumeric = Cast<const UNumericProperty>(InProperty))
+	/*
+	if(const FNumericProperty* PropAsNumeric = Cast<const FNumericProperty>(InProperty))
 	{
 		return PropAsNumeric->GetNumericPropertyValueToString(InValue);
 	}
-	else if(const UBoolProperty* PropAsBool = Cast<const UBoolProperty>(InProperty))
+	else if(const FBoolProperty* PropAsBool = Cast<const FBoolProperty>(InProperty))
 	{
 		return PropAsBool->GetPropertyValue(&InValue) ? FString(TEXT("TRUE")) : FString(TEXT("false"));
 	}
-	else if(const UObjectPropertyBase* PropAsObj = Cast<const UObjectPropertyBase>(InProperty))
+	else if(const FObjectPropertyBase* PropAsObj = Cast<const FObjectPropertyBase>(InProperty))
 	{
 		return ULogUtilLib::GetNameAndClassSafe(PropAsObj->GetObjectPropertyValue(InValue));
 	}
-	else if(const UClassProperty* PropAsClass = Cast<const UClassProperty>(InProperty))
+	else if(const FClassProperty* PropAsClass = Cast<const FClassProperty>(InProperty))
 	{
 		return PropAsClass->MetaClass ? PropAsClass->MetaClass->GetName() : FString(TEXT("nullptr"));
 	}
-	else if(const UInterfaceProperty* PropAsInterface = Cast<const UInterfaceProperty>(InProperty))
+	else if(const FInterfaceProperty* PropAsInterface = Cast<const FInterfaceProperty>(InProperty))
 	{
-		return ULogUtilLib::GetNameAndClassSafe(UInterfaceProperty::GetPropertyValue(InValue).GetObject());
+		return ULogUtilLib::GetNameAndClassSafe(FInterfaceProperty::GetPropertyValue(InValue).GetObject());
 	}
-	else if(const UNameProperty* PropAsName = Cast<const UNameProperty>(InProperty))
+	else if(const FNameProperty* PropAsName = Cast<const FNameProperty>(InProperty))
 	{
-		return UNameProperty::GetPropertyValue(InValue).ToString();
+		return FNameProperty::GetPropertyValue(InValue).ToString();
 	}
-	else if(const UStrProperty* PropAsString = Cast<const UStrProperty>(InProperty))
+	else if(const FStrProperty* PropAsString = Cast<const FStrProperty>(InProperty))
 	{
-		return UStrProperty::GetPropertyValue(InValue);
+		return FStrProperty::GetPropertyValue(InValue);
 	}
-	else if(const UArrayProperty* PropAsArray = Cast<const UArrayProperty>(InProperty))
+	else if(const FArrayProperty* PropAsArray = Cast<const FArrayProperty>(InProperty))
 	{
 		return GetArrayPropertyValueString(PropAsArray, InValue, InFlags);
 	}
-	else if(const UMapProperty* PropAsMap = Cast<const UMapProperty>(InProperty))
+	else if(const FMapProperty* PropAsMap = Cast<const FMapProperty>(InProperty))
 	{
 		return GetMapPropertyValueString(PropAsMap, InValue, InFlags);
 	}
-	else if(const USetProperty* PropAsSet = Cast<const USetProperty>(InProperty))
+	else if(const FSetProperty* PropAsSet = Cast<const FSetProperty>(InProperty))
 	{
 		return GetSetPropertyValueString(PropAsSet, InValue, InFlags);
 	}
-	else if(const UStructProperty* PropAsStruct = Cast<UStructProperty>(InProperty))
+	else if(const FStructProperty* PropAsStruct = Cast<FStructProperty>(InProperty))
 	{
 		return FString(TEXT("{STRUCT}"));
 	}
-	else if(const UDelegateProperty* PropAsDelegate = Cast<const UDelegateProperty>(InProperty))
+	else if(const FDelegateProperty* PropAsDelegate = Cast<const FDelegateProperty>(InProperty))
 	{
 		return PropAsDelegate->SignatureFunction ? FString(TEXT("SET")) : FString(TEXT("nullptr"));
 	}
-	else if(const UMulticastDelegateProperty* PropAsMultiDelegate = Cast<const UMulticastDelegateProperty>(InProperty))
+	else if(const FMulticastDelegateProperty* PropAsMultiDelegate = Cast<const FMulticastDelegateProperty>(InProperty))
 	{
 		return PropAsMultiDelegate->SignatureFunction ? FString(TEXT("SET")) : FString(TEXT("nullptr"));
 	}
-	else if(const UTextProperty* PropAsText = Cast<const UTextProperty>(InProperty))
+	else if(const FTextProperty* PropAsText = Cast<const FTextProperty>(InProperty))
 	{
-		return UTextProperty::GetPropertyValue(InValue).ToString();
+		return FTextProperty::GetPropertyValue(InValue).ToString();
 	}
 	else
 	{
 		return FString(TEXT("{UNKNOWN_PROP_TYPE}"));
 	}
+	*/
+	return FString(TEXT("NotYetImpl_until4.25"));
 }
 
-FString UPropertyLogLib::GetArrayPropertyValueString(const UArrayProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags)
+FString UPropertyLogLib::GetArrayPropertyValueString(const FArrayProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags)
 {
 	check(InProperty);
 	check(InValue);
 	
 	FString S;
-	const FScriptArray* const Arr = UArrayProperty::GetPropertyValuePtr(InValue);
+	const FScriptArray* const Arr = FArrayProperty::GetPropertyValuePtr(InValue);
 	if(Arr)
 	{
 		S.Append(FString::Printf(TEXT("Count=%d"), Arr->Num()));
@@ -140,13 +157,13 @@ FString UPropertyLogLib::GetArrayPropertyValueString(const UArrayProperty* const
 	return S;
 }
 
-FString UPropertyLogLib::GetSetPropertyValueString(const USetProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags)
+FString UPropertyLogLib::GetSetPropertyValueString(const FSetProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags)
 {
 	check(InProperty);
 	check(InValue);
 	
 	FString S;
-	const FScriptSet* const Set = USetProperty::GetPropertyValuePtr(InValue);
+	const FScriptSet* const Set = FSetProperty::GetPropertyValuePtr(InValue);
 	if(Set)
 	{
 		S.Append(FString::Printf(TEXT("Count=%d"), Set->Num()));
@@ -159,13 +176,13 @@ FString UPropertyLogLib::GetSetPropertyValueString(const USetProperty* const InP
 	return S;
 }
 
-FString UPropertyLogLib::GetMapPropertyValueString(const UMapProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags)
+FString UPropertyLogLib::GetMapPropertyValueString(const FMapProperty* const InProperty, const void* const InValue, EPropertyValueStringFlags const InFlags)
 {
 	check(InProperty);
 	check(InValue);
 	
 	FString S;
-	const FScriptMap* const Map = UMapProperty::GetPropertyValuePtr(InValue);
+	const FScriptMap* const Map = FMapProperty::GetPropertyValuePtr(InValue);
 	if(Map)
 	{
 		S.Append(FString::Printf(TEXT("Count=%d"), Map->Num()));
@@ -176,6 +193,15 @@ FString UPropertyLogLib::GetMapPropertyValueString(const UMapProperty* const InP
 	}
 
 	return S;
+}
+
+FString UPropertyLogLib::GetFieldStringSafe(const FField* const InField, EFieldStringFlags const InFlags)
+{
+	if (InField == nullptr)
+	{
+		return FString(TEXT("{nullptr}"));
+	}
+	return GetFieldString(InField, InFlags);
 }
 
 FString UPropertyLogLib::GetFieldStringSafe(const UField* const InField, EFieldStringFlags const InFlags)

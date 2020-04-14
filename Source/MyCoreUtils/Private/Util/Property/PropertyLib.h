@@ -13,10 +13,10 @@ public:
 	* Returns value of container UObject if it's a UObject-containing property (script interface property, object property base).
 	* Otherwise returns nullptr.
 	*/
-	static const UObject* GetPropertyValueAsObject(const UProperty* InProperty, const void* InValue);
+	static const UObject* GetPropertyValueAsObject(const FProperty* InProperty, const void* InValue);
 
 	/**
 	* @see: GetPropertyValueAsObject(..., const void* InValue)
 	*/
-	static UObject* GetPropertyValueAsObject(const UProperty* InProperty, void* InValue);
+	static UObject* GetPropertyValueAsObject(const FProperty* InProperty, void* InValue);
 };
