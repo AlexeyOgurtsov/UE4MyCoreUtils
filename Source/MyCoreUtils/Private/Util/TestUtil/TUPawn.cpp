@@ -1,8 +1,12 @@
 
 #include "TUPawn.h"
+#include "Util/Weapon/QuickWeaponComponent/QuickWeaponTypesLib.h"
+
 #include "VisibleActorConfig.h"
 #include "Util/Core/Phys/PhysUtilLib.h"
 #include "Util/Core/LogUtilLib.h"
+
+
 
 #include "GameFramework/PlayerController.h"
 #include "I/ITUController.h"
@@ -32,6 +36,31 @@ ATUPawn::ATUPawn()
 
 	InitProxSphere(RootSceneComponent);
 	InitCameraAndSpringArm(RootSceneComponent);
+
+	InitWeaponComponent();
+}
+
+void ATUPawn::InitWeaponComponent()
+{
+	M_LOGFUNC_IF(bLogBigEvents);
+	WeaponComponent = CreateOptionalDefaultSubobject<UQuickWeaponComponent>(TEXT("WeaponComponent"));
+	if(WeaponComponent)
+	{
+		UQuickWeaponTypesLib::InitializePrimaryWeapon(WeaponComponent);
+	}
+
+}
+
+void ATUPawn::InitQuickWeaponSocketForComponent(FName InSocketName, FName InComponentName)
+{
+	if(WeaponComponent == nullptr)
+	{
+		return;
+	}
+	if(Mesh)
+	{
+		WeaponComponent->SocketsToAttach.Add(FWeaponComponentSocketRef(FWeaponComponentConfigRef(InSocketName), InSocketName, InComponentName));
+	}
 }
 
 void ATUPawn::PossessedBy(AController* InNewController)
@@ -134,6 +163,7 @@ void ATUPawn::MyBeginPlay_Implementation()
 {
 	M_LOGFUNC_IF(bLogBigEvents);
 	LogThisIf(bLogBigEvents);
+	WeaponComponent->ReAttachToSockets();
 }
 
 void ATUPawn::BeginPlayFinished()
@@ -169,7 +199,7 @@ void ATUPawn::InitMesh(USceneComponent* InAttachTo)
 	M_LOG_ERROR_IF( ! MeshFinder.Succeeded(), TEXT("Default mesh (\"%s\") NOT found"), VisibleActorConfig::Default::MESH_ASSET_PATH);
 
 	{
-		Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+		Mesh = CreateOptionalDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 		if(MeshFinder.Succeeded())
 		{
 			M_LOG(TEXT("Default mesh (\"%s\") found, setting it up"), VisibleActorConfig::Default::MESH_ASSET_PATH);
@@ -272,7 +302,6 @@ void ATUPawn::OnController_Axis_Up_Implementation(float InAmount)
 
 void ATUPawn::OnController_Action_Use_Implementation()
 {
-	// Nothing is done here yet
 }
 
 void ATUPawn::OnController_Action_UseTwo_Implementation()
@@ -285,19 +314,38 @@ void ATUPawn::OnController_Action_UseThree_Implementation()
 	// Nothing is done here yet
 }
 
+void ATUPawn::PawnStartFire(uint8 FireModeNum)
+{
+	Super::PawnStartFire(FireModeNum);
+	FireWeaponByIndex_IfCan(FireModeNum);
+}
+
+bool ATUPawn::FireWeaponByIndex_IfCan(int32 InWeaponIndex)
+{
+	if(WeaponComponent == nullptr)
+	{
+		M_LOG_ERROR(TEXT("Unable to fire: weapon component is nullptr"));
+		return false;
+	}
+
+	bool bSucceeded = IWeaponInventory::Execute_FireByIndex(WeaponComponent, InWeaponIndex);
+	M_LOG_ERROR_IF(bSucceeded, TEXT("Firing failed (index = %d)"), InWeaponIndex);
+	return bSucceeded; 
+}
+
 void ATUPawn::OnController_Action_Fire_Implementation()
 {
-	// Nothing is done here yet
+	FireWeaponByIndex_IfCan(0);
 }
 
 void ATUPawn::OnController_Action_FireTwo_Implementation()
 {
-	// Nothing is done here yet
+	FireWeaponByIndex_IfCan(1);
 }
 
 void ATUPawn::OnController_Action_FireThree_Implementation()
 {
-	// Nothing is done here yet
+	FireWeaponByIndex_IfCan(2);
 }
 
 void ATUPawn::OnController_Action_SelectZero_Implementation()

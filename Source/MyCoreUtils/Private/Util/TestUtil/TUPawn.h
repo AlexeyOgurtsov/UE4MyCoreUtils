@@ -8,13 +8,18 @@
 #include "Util/Core/Log/MyLoggingTypes.h"
 #include "Engine/EngineTypes.h"
 #include "I/ITUPawnActions.h"
+#include "Util/Weapon/I/IWeaponInventoryHolder.h"
+#include "Util/Weapon/QuickWeaponComponent/QuickWeaponComponent.h"
 #include "TUPawn.generated.h"
 
 class UCameraComponent;
 class USpringArmComponent;
 class USceneComponent;
 class UStaticMeshComponent;
+class USkeletalMeshComponent;
 class USphereComponent;
+
+class UQuickWeaponComponent;
 
 class ITUController;
 
@@ -22,6 +27,7 @@ UCLASS()
 class ATUPawn 
 : public APawn
 , public ITUPawnActions
+, public IWeaponInventoryHolder
 {
 	GENERATED_BODY()
 
@@ -106,6 +112,28 @@ public:
 	virtual void OnController_Action_DebugThree_Implementation() override;
 	// ~ITUPawnActions End
 
+	// ~Weapon Begin
+	virtual TScriptInterface<IWeaponInventory> GetWeapons_Implementation() const override { return WeaponComponent; }
+
+	/** GetWeaponComponent*/
+	UFUNCTION(BlueprintPure, Category=Weapon)
+	UQuickWeaponComponent* GetWeaponComponent() const { return WeaponComponent; }
+
+	/** To be called when the given mesh component has a socket from which to fire*/
+	UFUNCTION(BlueprintCallable, Category=Weapon)
+	void InitQuickWeaponSocketForComponent(FName InSocketName, FName InComponentName);
+
+	/**
+	* Fires weapon by index.
+	*
+	* @returns: true if fired successfully.
+	*/
+	UFUNCTION(BlueprintCallable, Category=Weapon)
+	bool FireWeaponByIndex_IfCan(int32 InWeaponIndex);
+
+	virtual void PawnStartFire(uint8 FireModeNum) override;
+	// ~Weapon End
+
 	// ~Controller Begin
 	UFUNCTION(BlueprintPure, Category = Controller, Meta=(DisplayName="GetTUController"))
 	TScriptInterface<ITUController> K2GetTUController() const;
@@ -154,7 +182,7 @@ public:
 	*/
 	virtual void BeginPlay() override final;
 	// ~AActor End
-
+	
 protected:
 	// ~Framework Begin
 	/**
@@ -194,5 +222,12 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Collision, Meta=(AllowPrivateAccess = true))
 	USphereComponent* ProxSphere = nullptr;
 	void InitProxSphere(USceneComponent* InAttachTo);
+
+
+	/** WeaponComponent*/
+	void InitWeaponComponent();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Meta=(AllowPrivateAccess=true))
+	UQuickWeaponComponent* WeaponComponent = nullptr;
 	// ~Components End
 };

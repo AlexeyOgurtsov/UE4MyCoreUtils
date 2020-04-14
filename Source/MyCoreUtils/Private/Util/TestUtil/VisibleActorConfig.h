@@ -8,7 +8,7 @@ namespace VisibleActorConfig
 	namespace Default
 	{
 		// ~Mesh Begin
-		constexpr const TCHAR* MESH_ASSET_PATH = TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'");
+		constexpr const TCHAR* MESH_ASSET_PATH = TEXT("StaticMesh'/Game/PlayerPawn/MyPawnCube.MyPawnCube'");
 		constexpr float MESH_BOUNDING_CUBE_SIDE = 100.0F;
 		const FVector MESH_PIVOT_POINT_ACTOR_SPACE_LOCATION { MESH_BOUNDING_CUBE_SIDE/2.0F, MESH_BOUNDING_CUBE_SIDE/2.0F, 0.0F };
 		const FVector MESH_REAL_CENTER_ACTOR_SPACE_LOCATION { 0, 0, MESH_BOUNDING_CUBE_SIDE/2.0F };
