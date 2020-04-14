@@ -1,4 +1,5 @@
 C:
+start /B SetTarg.bat
 set location=C:\U4L\LB
 set projectname=MyCoreUtils
 set projectdirname=MyCoreUtils

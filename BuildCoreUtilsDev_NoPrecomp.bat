@@ -1,5 +1,6 @@
 C:
-start /B SetTarg.bat
+start /B MyCleanCoreUtils.bat
+start /B SetTarg_NoPrecomp.bat
 set location=C:\U4L\LB
 set projectname=MyCoreUtils
 set projectdirname=MyCoreUtils
