@@ -9,5 +9,6 @@ public class MyCoreUtilsTarget : TargetRules
 	{
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.Latest;
+		ExtraModuleNames.AddRange( new string[] { "MyCoreUtils" } );
 	}
 }

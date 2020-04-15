@@ -27,6 +27,7 @@ ATUPawn::ATUPawn()
 {
 	M_LOGFUNC_IF(bLogBigEvents);
 	LogThisIf(bLogBigEvents);
+	bUseControllerRotationYaw = true;
 
 	InitMesh(nullptr);
 	RootComponent = Mesh;

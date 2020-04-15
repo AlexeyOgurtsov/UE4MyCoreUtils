@@ -9,6 +9,7 @@ public class MyCoreUtilsEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.Latest;
+		ExtraModuleNames.AddRange( new string[] { "MyCoreUtils" } );
 
 		bUseUnityBuild = false;
 		bUsePCHFiles = false;

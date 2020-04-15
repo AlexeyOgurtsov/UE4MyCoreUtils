@@ -34,6 +34,8 @@ using namespace ProjectileConfig;
 
 ATUProjectileActor::ATUProjectileActor()
 {
+	ConfigProps.Audio.HitSound.Sound = UAudioUtilLib::LoadInConstructor(TEXT("HitSound"), TEXT("SoundCue'/Game/StarterContent/Audio/Explosion_Cue.Explosion_Cue'"));
+
 	OnActorHit.AddDynamic(this, &ATUProjectileActor::ActorHit);
 
 	InitMesh(nullptr);
@@ -116,6 +118,10 @@ void ATUProjectileActor::InitAudio(USceneComponent* InParentComponent)
 	{
 		FlySound->SetupAttachment(InParentComponent);
 	}
+
+	const TCHAR* RESOURCE_NAME = TEXT("FlySound");
+	const TCHAR* const AUDIO_PATH = TEXT("SoundWave'/Game/StarterContent/Audio/Smoke01.Smoke01'");
+	UAudioUtilLib::LoadInConstructor(FlySound, RESOURCE_NAME, AUDIO_PATH);
 }
 
 void ATUProjectileActor::InitProjectileMovementComponent(USceneComponent* InUpdatedComponent)

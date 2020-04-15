@@ -9,8 +9,6 @@ public class MyCoreUtilsTarget : TargetRules
 	{
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.Latest;
-
-		bUseUnityBuild = false;
-		bUsePCHFiles = false;
+		ExtraModuleNames.AddRange( new string[] { "MyCoreUtils" } );
 	}
 }

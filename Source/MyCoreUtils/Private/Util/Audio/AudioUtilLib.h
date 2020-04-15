@@ -5,6 +5,7 @@
 #include "AudioUtilLib.generated.h"
 
 class UAudioComponent;
+class USoundBase;
 
 UCLASS()
 class UAudioUtilLib : public UBlueprintFunctionLibrary
@@ -12,6 +13,13 @@ class UAudioUtilLib : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 	
 public:
+	static USoundBase* LoadInConstructorChecked(const TCHAR* ResourceName, const TCHAR* ResourcePath);
+	static USoundBase* LoadInConstructor(const TCHAR* ResourceName, const TCHAR* ResourcePath);
+
+	static USoundBase* LoadInConstructorChecked(UAudioComponent* AudioComponent, const TCHAR* ResourceName, const TCHAR* ResourcePath);
+	static USoundBase* LoadInConstructor(UAudioComponent* AudioComponent, const TCHAR* ResourceName, const TCHAR* ResourcePath);
+	
+
 	/** PlayMySound
 	 * Honors nullptr value for sound (no playing at that case)*/
 	UFUNCTION(BlueprintCallable, Category=Audio, Meta=(WorldContext=WorldContextObject))
