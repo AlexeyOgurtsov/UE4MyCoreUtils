@@ -10,6 +10,7 @@
 #include "I/ITUPawnActions.h"
 #include "Util/Weapon/I/IWeaponInventoryHolder.h"
 #include "Util/Weapon/QuickWeaponComponent/QuickWeaponComponent.h"
+#include "UObject/ScriptInterface.h"
 #include "TUPawn.generated.h"
 
 class UCameraComponent;
@@ -18,10 +19,12 @@ class USceneComponent;
 class UStaticMeshComponent;
 class USkeletalMeshComponent;
 class USphereComponent;
-
 class UQuickWeaponComponent;
-
 class ITUController;
+class IActorSelector;
+
+const FName TUPAWN_DEFAULT_WEAPON_COMPONENT_NAME = TEXT("WeaponComponent");
+const FName TUPAWN_DEFAULT_ACTOR_SELECTOR_COMPONENT_NAME = TEXT("ActorSelectorComponent");
 
 UCLASS()
 class ATUPawn 
@@ -110,6 +113,8 @@ public:
 	virtual void OnController_Action_DebugOne_Implementation() override;
 	virtual void OnController_Action_DebugTwo_Implementation() override;
 	virtual void OnController_Action_DebugThree_Implementation() override;
+	virtual void OnController_Action_ActorSelectNext_Implementation() override;
+	virtual void OnController_Action_ActorSelectPrevious_Implementation() override;
 	// ~ITUPawnActions End
 
 	// ~Weapon Begin
@@ -133,6 +138,12 @@ public:
 
 	virtual void PawnStartFire(uint8 FireModeNum) override;
 	// ~Weapon End
+
+	// ~Actor selection Begin
+	UFUNCTION(BlueprintPure, Category=Selection)
+	TScriptInterface<IActorSelector> GetActorSelector() const { return ActorSelector; }
+	// @TODO: Selector helpers (damage selected etc.)
+	// ~Actor selection End
 
 	// ~Controller Begin
 	UFUNCTION(BlueprintPure, Category = Controller, Meta=(DisplayName="GetTUController"))
@@ -223,11 +234,14 @@ private:
 	USphereComponent* ProxSphere = nullptr;
 	void InitProxSphere(USceneComponent* InAttachTo);
 
-
 	/** WeaponComponent*/
 	void InitWeaponComponent();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Meta=(AllowPrivateAccess=true))
 	UQuickWeaponComponent* WeaponComponent = nullptr;
+
+	void InitActorSelector();	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TScriptInterface<IActorSelector> ActorSelector;
 	// ~Components End
 };

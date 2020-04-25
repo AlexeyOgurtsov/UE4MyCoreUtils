@@ -1,12 +1,11 @@
 
 #include "TUPawn.h"
 #include "Util/Weapon/QuickWeaponComponent/QuickWeaponTypesLib.h"
+#include "Util/Selection/ActorSelectionComponent.h"
 
 #include "VisibleActorConfig.h"
 #include "Util/Core/Phys/PhysUtilLib.h"
 #include "Util/Core/LogUtilLib.h"
-
-
 
 #include "GameFramework/PlayerController.h"
 #include "I/ITUController.h"
@@ -39,17 +38,24 @@ ATUPawn::ATUPawn()
 	InitCameraAndSpringArm(RootSceneComponent);
 
 	InitWeaponComponent();
+	InitActorSelector();
 }
 
 void ATUPawn::InitWeaponComponent()
 {
 	M_LOGFUNC_IF(bLogBigEvents);
-	WeaponComponent = CreateOptionalDefaultSubobject<UQuickWeaponComponent>(TEXT("WeaponComponent"));
+	WeaponComponent = CreateOptionalDefaultSubobject<UQuickWeaponComponent>(TUPAWN_DEFAULT_WEAPON_COMPONENT_NAME);
 	if(WeaponComponent)
 	{
 		UQuickWeaponTypesLib::InitializePrimaryWeapon(WeaponComponent);
 	}
 
+}
+
+void ATUPawn::InitActorSelector()
+{
+	M_LOGFUNC_IF(bLogBigEvents);
+	ActorSelector = CreateDefaultSubobject<UActorSelectionComponent>(TUPAWN_DEFAULT_ACTOR_SELECTOR_COMPONENT_NAME);
 }
 
 void ATUPawn::InitQuickWeaponSocketForComponent(FName InSocketName, FName InComponentName)
@@ -420,6 +426,16 @@ void ATUPawn::OnController_Action_DebugTwo_Implementation()
 }
 
 void ATUPawn::OnController_Action_DebugThree_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_ActorSelectNext_Implementation()
+{
+	// Nothing is done here yet
+}
+
+void ATUPawn::OnController_Action_ActorSelectPrevious_Implementation()
 {
 	// Nothing is done here yet
 }

@@ -125,4 +125,20 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Actions)
 	void OnController_Action_DebugThree();
 	virtual void OnController_Action_DebugThree_Implementation() {}
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Actions)
+	void OnController_Action_ActorSelectNext();
+	virtual void OnController_Action_ActorSelectNext_Implementation() {}
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Actions)
+	void OnController_Action_ActorSelectPrevious();
+	virtual void OnController_Action_ActorSelectPrevious_Implementation() {}
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Actions)
+	void OnController_Action_SelectNextInventory();
+	virtual void OnController_Action_SelectNextInventory_Implementation() {}
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Actions)
+	void OnController_Action_SelectPreviousInventory();
+	virtual void OnController_Action_SelectPreviousInventory_Implementation() {}
 };

@@ -4,6 +4,10 @@
 #include "Kismet\GameplayStatics.h"
 
 /**
+* TODO Scheme:
+* 1. Create a special container type - array that makes events;
+* 2. Refactor the component to use that special array;
+*
 * TODO Debug:
 * 1. Consider change TArray to TSet
 * 2. Consider to use weak references to actors
@@ -51,12 +55,6 @@ void UActorSelectionComponent::TickComponent(float DeltaSeconds, enum ELevelTick
 	}
 }
 
-bool UActorSelectionComponent::IsSelected() const
-{
-	check(SelectedIndex < Actors.Num());
-	return SelectedIndex >= 0;
-}
-
 void UActorSelectionComponent::UpdateActorList()
 {
 	AActor* const PreviousSelectedActor = GetSelectedActor();
@@ -82,62 +80,6 @@ void UActorSelectionComponent::AddWorldActorsByClass(UClass* const FilterClass)
 	UGameplayStatics::GetAllActorsOfClass(this, FilterClass, ActorsOfClass);
 	Actors.Append(ActorsOfClass);
 }
-	
-AActor* UActorSelectionComponent::GetSelectedActor() const
-{
-	return IsSelected() ? (Actors[SelectedIndex]) : nullptr;
-}
-
-AActor* UActorSelectionComponent::GetSelectedActorChecked() const
-{
-	AActor* Selected = GetSelectedActor();
-	checkf(Selected, TEXT("Actor must be selected when calling %s"), TEXT(__FUNCTION__));
-	return Selected;
-}
-
-APawn* UActorSelectionComponent::GetSelectedPawn() const
-{
-	return GetSelectedActor<APawn>();
-}
-
-APawn* UActorSelectionComponent::GetSelectedPawnChecked() const
-{
-	return GetSelectedActorChecked<APawn>();
-}
-
-AActor* UActorSelectionComponent::SelectFirstByClass(UClass* const Class)
-{
-	const int32 FoundIndex = Actors.IndexOfByPredicate([Class](AActor* const A){ return A->GetClass() == Class; });
-	if(FoundIndex < 0)
-	{
-		return nullptr;
-	}
-	SetSelectionIndex(FoundIndex);
-	return GetSelectedActor();
-};
-
-AActor* UActorSelectionComponent::SelectFirst(AActor* const Actor)
-{
-	const int32 FoundIndex = Actors.Find(Actor);
-	if(FoundIndex < 0)
-	{
-		return nullptr;
-	}
-	SetSelectionIndex(FoundIndex);
-	return GetSelectedActor();
-}
-
-AActor* UActorSelectionComponent::SelectFirstByName(FName const ObjectName)
-{
-	const int32 FoundIndex = Actors.IndexOfByPredicate([ObjectName](AActor* const A){ return A->GetFName() == ObjectName; });
-	if(FoundIndex < 0)
-	{
-		return nullptr;
-	}
-	SetSelectionIndex(FoundIndex);
-	return GetSelectedActor();
-}
-
 
 void UActorSelectionComponent::SetSelectionIndex(int32 const NewIndex)
 {
@@ -156,37 +98,9 @@ void UActorSelectionComponent::FixIndex(AActor* const PreviousSelectedActor)
 
 void UActorSelectionComponent::ClampIndexIfShould()
 {
-	if(SelectedIndex < Actors.Num())
+	if (SelectedIndex < Actors.Num())
 	{
 		return;
 	}
 	SelectedIndex = (Actors.Num() - 1);
-}
-
-void UActorSelectionComponent::SelectNext()
-{
-	M_LOG(TEXT("%s: Selecting previous"), *LogPrefix);
-	if( ! IsSelected() )
-	{
-		return;
-	}
-	if( SelectedIndex >= Actors.Num() - 1 )
-	{
-		return;
-	}
-	SetSelectionIndex(SelectedIndex + 1);
-}
-
-void UActorSelectionComponent::SelectPrevious()
-{
-	M_LOG(TEXT("%s: Selecting next"), *LogPrefix);
-	if( ! IsSelected() )
-	{
-		return;
-	}
-	if( SelectedIndex < 1 )
-	{
-		return;
-	}
-	SetSelectionIndex(SelectedIndex - 1);
 }

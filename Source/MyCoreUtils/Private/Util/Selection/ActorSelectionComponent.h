@@ -1,10 +1,13 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
+#include "Util/Selection/IActorSelector.h"
 #include "ActorSelectionComponent.generated.h"
 
 UCLASS(ClassGroup=(Selection), Meta=(BlueprintSpawnableComponent))
-class UActorSelectionComponent : public UActorComponent
+class UActorSelectionComponent
+:	public UActorComponent
+,	public IActorSelector
 {
 	GENERATED_BODY()
 	
@@ -44,76 +47,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category=Selection)
 	void RemoveManualActor(AActor* InActor) { ManualActors.Remove(InActor); }
 
-	const TArray<AActor*>& GetActors() const { return Actors; }
-	int32 GetSelectedIndex() const { return SelectedIndex; }
-
-	/**
-	* @return Returns actor that is selected right now. 
-	* Or returns nullptr if no actor is selected.
-	*/
-	UFUNCTION(BlueprintCallable, Category=Selection, Meta=(DisplayName="GetSelectedActor"))
-	AActor* K2_GetSelectedActor() const
-	{
-		return GetSelectedActor();
-	}
-
-	/**
-	* @return Returns actor that is selected right now. 
-	* Checks (with checkf, that index is selected).
-	*/
-	UFUNCTION(BlueprintCallable, Category=Selection, Meta=(DisplayName="GetSelectedActor"))
-	AActor* K2_GetSelectedActorChecked() const
-	{
-		return GetSelectedActorChecked();
-	}
-	
-	AActor* GetSelectedActor() const;
-	AActor* GetSelectedActorChecked() const;
-
-	APawn* GetSelectedPawn() const;
-	APawn* GetSelectedPawnChecked() const;
-
-	template<class T>
-	T* GetSelectedActor() const
-	{
-		return Cast<T>(GetSelectedActor());
-	}
-
-	template<class T>
-	T* GetSelectedActorChecked() const
-	{
-		return Cast<T>(GetSelectedActorChecked());
-	}
-
-	UFUNCTION(Category=Selection)
-	bool IsSelected() const;
-
-	UFUNCTION(BlueprintCallable, Category=Selection)
-	void UpdateActorList();
-
-	UFUNCTION(BlueprintCallable, Category=Selection)
-	void SetSelectionIndex(int32 NewIndex);
-
-	UFUNCTION(BlueprintCallable, Category=Selection)
-	void ResetSelection()
-	{
-		SetSelectionIndex(-1);
-	}
-
-	UFUNCTION(BlueprintCallable, Category=Selection)
-	void SelectNext();
-
-	UFUNCTION(BlueprintCallable, Category=Selection)
-	void SelectPrevious();
-
-	UFUNCTION(BlueprintCallable, Category=Selection)
-	AActor* SelectFirstByClass(UClass* Class);
-
-	UFUNCTION(BlueprintCallable, Category=Selection)
-	AActor* SelectFirstByName(FName ObjectName);
-
-	UFUNCTION(BlueprintCallable, Category=Selection)
-	AActor* SelectFirst(AActor* const Actor);
+	// ~IActorSelector Begin
+	virtual const TArray<AActor*>& GetActors() const override { return Actors; }
+	virtual int32 GetSelectedIndex() const override { return SelectedIndex; }	
+	virtual void UpdateActorList() override;
+	virtual void SetSelectionIndex(int32 NewIndex) override;	
+	// ~IActorSelector End
 
 protected:
 	void AddWorldActorsByClass(UClass* FilterClass);
