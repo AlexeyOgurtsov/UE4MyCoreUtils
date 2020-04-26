@@ -1,4 +1,5 @@
 #include "ActorSelectionComponent.h"
+#include "Util\Selection\ActorSelectionLib.h"
 #include "Util\Core\LogUtilLib.h"
 #include "GameFramework\Actor.h"
 #include "Kismet\GameplayStatics.h"
@@ -73,12 +74,8 @@ void UActorSelectionComponent::UpdateActorList()
 
 void UActorSelectionComponent::FillActorList()
 {
-	const TSet<UClass*> RealFilterClasses = (FilterClasses.Num() == 0) ? TSet<UClass*>{AActor::StaticClass()} : FilterClasses;
-	for (UClass* FilterClass : RealFilterClasses)
-	{
-		AddWorldActorsByClass(FilterClass);
-	}
-
+	const TSet<AActor*> NewActors = UActorSelectionLib::SelectAtActor(GetAvatar(), SelectionProps);
+	Actors.Append(NewActors.Array());
 	Actors.Append(ManualActors);
 }
 
@@ -118,4 +115,19 @@ void UActorSelectionComponent::ClampIndexIfShould()
 void UActorSelectionComponent::LogState() const
 {	
 	M_LOG(TEXT("%s: Actor \"%s\" of class \"%s\" (index=%d) selected ( NumActorsToSelect=%d )"), *LogPrefix, *GetSelectedActorName(), *GetSelectedActorClassName(), GetSelectedIndex(), GetActors().Num());
+}
+
+AActor* UActorSelectionComponent::GetAvatar() const
+{
+	AController* const OwnerController = Cast<AController>(GetOwner());
+	if (OwnerController)
+	{
+		APawn* const OwnerPawn = OwnerController->GetPawn();
+		if (OwnerPawn)
+		{
+			return OwnerPawn;
+		}
+	}
+	
+	return GetOwner();
 }

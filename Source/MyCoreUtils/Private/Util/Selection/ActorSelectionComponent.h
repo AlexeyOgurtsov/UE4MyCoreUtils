@@ -2,6 +2,7 @@
 
 #include "Components/ActorComponent.h"
 #include "Util/Selection/IActorSelector.h"
+#include "Util/Selection/ActorSelectionTypes.h"
 #include "ActorSelectionComponent.generated.h"
 
 UCLASS(ClassGroup=(Selection), Meta=(BlueprintSpawnableComponent))
@@ -11,6 +12,7 @@ class UActorSelectionComponent
 {
 	GENERATED_BODY()
 	
+	// @TODO: Remove
 	UPROPERTY(EditAnywhere, category=Selection)
 	TSet<UClass*> FilterClasses;
 
@@ -22,6 +24,10 @@ class UActorSelectionComponent
 
 	UPROPERTY(EditAnywhere, category = Selection)
 	uint32 bShouldLog = true;
+
+public:
+	UPROPERTY(EditAnywhere, Category = Selection, Meta = (ShowOnlyInnerProperties = true))
+	FActorSelectionProps SelectionProps;
 
 public:
 	/**
@@ -73,4 +79,6 @@ protected:
 
 	void FixIndex(AActor* PreviousSelectedActor);
 	void ClampIndexIfShould();
+
+	AActor* GetAvatar() const;
 };

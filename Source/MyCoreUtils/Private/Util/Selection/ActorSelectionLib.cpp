@@ -79,12 +79,12 @@ bool UActorSelectionLib::ShouldActorBeSelected(const AActor* Actor, const FActor
 	for (const FActorSelectionRule& Rule : SelectionRules.Rules)
 	{
 		// @TODO: filter by interface support
-		if ( ! Rule.AllowedClasses.Contains(Actor->GetClass()) )
+		if ( Rule.AllowedClasses.Num() > 0 && ! Rule.AllowedClasses.Contains(Actor->GetClass()) )
 		{
 			return false;
 		}
 
-		if ( Rule.AllowedTags.Intersect(TSet<FName>(Actor->Tags)).Num() == 0 )
+		if ( Rule.AllowedTags.Num() > 0 && ( Rule.AllowedTags.Intersect(TSet<FName>(Actor->Tags)).Num() == 0 ) )
 		{
 			return false;
 		}

@@ -43,30 +43,74 @@ FString IActorSelector::GetSelectedActorClassName() const
 	return IsActorSelected() ? GetSelectedActor()->GetClass()->GetName() : FString(TEXT("nullptr"));
 }
 
+int32 IActorSelector::GetFirstIndex() const
+{
+	if (GetActors().Num() > 0)
+	{
+		return 0;
+	}
+	else
+	{
+		return -1;
+	}
+}
+
+int32 IActorSelector::GetLastIndex() const
+{
+	if (GetActors().Num() > 0)
+	{
+		return GetActors().Num() - 1;
+	}
+	else
+	{
+		return -1;
+	}
+}
+
+int32 IActorSelector::GetNextIndexToSelect() const
+{
+	checkf( GetSelectedIndex() < GetActors().Num(), TEXT("Selected index must be in range when calling \"%s\""), TEXT(__FUNCTION__) );
+	if ( !IsActorSelected() )
+	{		
+		return GetFirstIndex();
+	}
+	else if (GetSelectedIndex() == GetActors().Num() - 1)
+	{
+		// the last item is selected here => Keep the same index 
+		return GetSelectedIndex();
+	}
+	else
+	{
+		return GetSelectedIndex() + 1;
+	}
+}
+
+int32 IActorSelector::GetPreviousIndexToSelect() const
+{
+	checkf(GetSelectedIndex() < GetActors().Num(), TEXT("Selected index must be in range when calling \"%s\""), TEXT(__FUNCTION__));
+	if ( !IsActorSelected() )
+	{
+		// the first item is selected here => Keep the same index 
+		return GetFirstIndex();
+	}
+	if (GetSelectedIndex() == 0)
+	{
+		return GetSelectedIndex();
+	}
+	else
+	{
+		return GetSelectedIndex() - 1;
+	}	
+}
+
 void IActorSelector::SelectNext()
 {
-	if (!IsActorSelected())
-	{
-		return;
-	}
-	if (GetSelectedIndex() >= GetActors().Num() - 1)
-	{
-		return;
-	}
-	SetSelectionIndex(GetSelectedIndex() + 1);
+	SetSelectionIndex(GetNextIndexToSelect());
 }
 
 void IActorSelector::SelectPrevious()
-{
-	if (!IsActorSelected())
-	{
-		return;
-	}
-	if (GetSelectedIndex() < 1)
-	{
-		return;
-	}
-	SetSelectionIndex(GetSelectedIndex() - 1);
+{	
+	SetSelectionIndex(GetPreviousIndexToSelect());
 }
 
 

@@ -2,6 +2,7 @@
 
 #include "ActorSelectionTypes.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Util/Selection/ActorSelectionTypes.h"
 #include "ActorSelectionLib.generated.h"
 
 UCLASS(BlueprintType)

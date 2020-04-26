@@ -59,6 +59,11 @@ public:
 	UClass* GetSelectedActorClass() const;
 	FString GetSelectedActorClassName() const;
 
+	int32 GetFirstIndex() const;
+	int32 GetLastIndex() const;
+	int32 GetNextIndexToSelect() const;
+	int32 GetPreviousIndexToSelect() const;
+
 	void SelectNext();
 	void SelectPrevious();
 	AActor* SelectFirstByClass(UClass* Class);

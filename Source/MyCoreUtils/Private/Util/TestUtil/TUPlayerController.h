@@ -6,9 +6,11 @@
 #include "TUTypes.h"
 #include "Engine/EngineTypes.h"
 #include "UObject/ScriptInterface.h"
+#include <Util\Selection\ActorSelectionTypes.h>
 #include "TUPlayerController.generated.h"
 
 class IActorSelector;
+class UActorSelectionComponent;
 class UActorSelectorUIComponent;
 
 const FName TUCONTROLLER_DEFAULT_ACTOR_SELECTOR_COMPONENT_NAME = TEXT("ControllerActorSelectorComponent");
@@ -142,6 +144,27 @@ public:
 	// ~Actor selection Begin		
 	UFUNCTION(BlueprintPure, Category=Selection)
 	TScriptInterface<IActorSelector> GetActorSelector() const { return ActorSelector; }
+
+	UFUNCTION(BlueprintPure, Category = Selection)
+	UActorSelectionComponent* GetActorSelectionComponent() const;
+
+	UFUNCTION(BlueprintPure, Category = Selection)
+	bool IsActorSelected() const;
+
+	UFUNCTION(BlueprintPure, Category = Selection)
+	AActor* GetSelectedActor() const;
+
+	UFUNCTION(BlueprintCallable, Category = Selection)
+	void AddSelectableActorClass(const UClass* InActorClass);
+
+	UFUNCTION(BlueprintCallable, Category = Selection)
+	void AddSelectableActorClassWithTags(const UClass* InActorClass, const TArray<FName>& InTags);
+
+	UFUNCTION(BlueprintCallable, Category = Selection)
+	void AddSelectableActorTags(const TArray<FName>& InTags);
+
+	UFUNCTION(BlueprintCallable, Category = Selection)
+	void AddActorSelectionRule(const FActorSelectionRule& InRule);
 	// ~Actor selection End
 	
 protected:

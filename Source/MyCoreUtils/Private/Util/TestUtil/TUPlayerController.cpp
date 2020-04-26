@@ -983,6 +983,70 @@ ATUPawn* ATUPlayerController::GetMyTUPawnChecked() const
 	return P;
 }
 
+UActorSelectionComponent* ATUPlayerController::GetActorSelectionComponent() const
+{
+	return Cast<UActorSelectionComponent>(GetActorSelector().GetObject());
+}
+
+bool ATUPlayerController::IsActorSelected() const
+{
+	if (TScriptInterface<IActorSelector> Selector = GetActorSelector())
+	{
+		return Selector->IsActorSelected();
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+AActor* ATUPlayerController::GetSelectedActor() const
+{
+	if (TScriptInterface<IActorSelector> Selector = GetActorSelector())
+	{
+		return Selector->GetSelectedActor();
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+
+void ATUPlayerController::AddActorSelectionRule(const FActorSelectionRule& InRule)
+{
+	if (UActorSelectionComponent* SelectionComp = GetActorSelectionComponent())
+	{
+		SelectionComp->SelectionProps.Rule.Rules.Add(InRule);
+	}
+	else
+	{
+		M_LOG_ERROR(TEXT("No actor selector component or it's NOT instance of the \"%s\" class"), TEXT("UActorSelectionComponent"));
+	}
+}
+
+void ATUPlayerController::AddSelectableActorClass(const UClass* InActorClass)
+{
+	checkf(InActorClass, TEXT("Actor class should never be passed as nullptr when calling \"%s\""), TEXT(__FUNCTION__));
+	FActorSelectionRule Rule;
+	Rule.AllowedClasses.Add(InActorClass);
+	AddActorSelectionRule(Rule);
+}
+
+void ATUPlayerController::AddSelectableActorClassWithTags(const UClass* InActorClass, const TArray<FName>& InTags)
+{
+	checkf(InActorClass, TEXT("Actor class should never be passed as nullptr when calling \"%s\""), TEXT(__FUNCTION__));
+	FActorSelectionRule Rule;
+	Rule.AllowedClasses.Add(InActorClass);
+	Rule.AllowedTags.Append(InTags);
+	AddActorSelectionRule(Rule);
+}
+
+void ATUPlayerController::AddSelectableActorTags(const TArray<FName> & InTags)
+{
+	AddSelectableActorClassWithTags(AActor::StaticClass(), InTags);
+}
+
 void ATUPlayerController::LogThisIf(bool const bInShouldLog)
 {
 	if(bInShouldLog)

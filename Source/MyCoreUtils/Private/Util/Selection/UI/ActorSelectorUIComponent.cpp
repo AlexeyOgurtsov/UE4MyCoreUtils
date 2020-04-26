@@ -50,7 +50,7 @@ void UActorSelectorUIComponent::UpdateUI()
 
 FActorSelectorWidgetItem UActorSelectorUIComponent::ActorToItem(const AActor* InActor) const
 {
-	return FActorSelectorWidgetItem(InActor->GetName(), InActor);
+	return FActorSelectorWidgetItem(FText::FromString(InActor->GetName()), InActor);
 }
 
 bool UActorSelectorUIComponent::InitWidget()
