@@ -39,5 +39,5 @@ public:
 private:
 	static void FilterOutBySelectionRules(TSet<AActor*>& OutActors, const FActorSelectionRules& Rules);	
 
-	static void OverlapResultArrayToActorSet(TSet<AActor*>& OutOverlappedActor, const TArray<FOverlapResult>& Overlaps);
+	static void OverlapResultArrayToActorSet(const TArray<FOverlapResult>& Overlaps, TSet<AActor*>& OutOverlappedActor);
 };

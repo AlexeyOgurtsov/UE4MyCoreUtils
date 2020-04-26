@@ -3,6 +3,7 @@
 
 #include "GameFramework\Actor.h"
 #include "Engine\World.h"
+#include "Algo\Transform.h"
 
 TSet<AActor*> UActorSelectionLib::SelectAtActor
 (
@@ -38,21 +39,20 @@ bool UActorSelectionLib::OverlapMultiByChannel(TSet<AActor*>& OutOverlappedActor
 	const bool bAtLeastOneOverlapped = WorldContextObject->GetWorld()->OverlapMultiByChannel(Overlaps, Point, FQuat::Identity, Query.Channel, Query.GetShape(), Query.GetQueryParams(), Query.GetResponseParams());
 	if (bAtLeastOneOverlapped)
 	{
-		OverlapResultArrayToActorSet(OutOverlappedActors, Overlaps);
+		OverlapResultArrayToActorSet(Overlaps, OutOverlappedActors);
 		return true;
 	}	
 	return false;	
 }
 
-void UActorSelectionLib::OverlapResultArrayToActorSet(TSet<AActor*>& OutOverlappedActor, const TArray<FOverlapResult>& Overlaps)
+void UActorSelectionLib::OverlapResultArrayToActorSet(const TArray<FOverlapResult>& Overlaps, TSet<AActor*>& OutOverlappedActors)
 {
-	for (const FOverlapResult& Overlap : Overlaps)
-	{
-		if (AActor* Actor = Overlap.GetActor())
-		{
-			OutOverlappedActor.Add(Actor);
-		}
-	}
+	Algo::TransformIf
+	(
+		Overlaps, OutOverlappedActors, 
+		[](const FOverlapResult& Overlap) { return Overlap.GetActor() != nullptr; },
+		[](const FOverlapResult& Overlap) { return Overlap.GetActor(); }		
+	);	
 }
 
 void UActorSelectionLib::FilterOutBySelectionRules(TSet<AActor*>& OutActors, const FActorSelectionRules& Rules)
@@ -89,6 +89,7 @@ bool UActorSelectionLib::ShouldActorBeSelected(const AActor* Actor, const FActor
 			return false;
 		}
 	}
+	// @TODO: Custom filter function support
 	return true; 
 }
 
