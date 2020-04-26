@@ -57,23 +57,31 @@ void UActorSelectionComponent::TickComponent(float DeltaSeconds, enum ELevelTick
 
 void UActorSelectionComponent::UpdateActorList()
 {
+	M_LOG(TEXT("%s: %s"), *LogPrefix, TEXT(__FUNCTION__));
+
 	AActor* const PreviousSelectedActor = GetSelectedActor();
 
 	Actors.Empty();
 
-	const TArray<UClass*> RealFilterClasses = (FilterClasses.Num() == 0) ? TArray<UClass*>{AActor::StaticClass()} : FilterClasses;
-	for(int32 FilterClassIndex = 0; FilterClassIndex < RealFilterClasses.Num(); FilterClassIndex++)
+	FillActorList();
+	Actors.Remove(nullptr);
+
+	FixIndex(PreviousSelectedActor);
+
+	LogState();
+}
+
+void UActorSelectionComponent::FillActorList()
+{
+	const TSet<UClass*> RealFilterClasses = (FilterClasses.Num() == 0) ? TSet<UClass*>{AActor::StaticClass()} : FilterClasses;
+	for (UClass* FilterClass : RealFilterClasses)
 	{
-		UClass* FilterClass = RealFilterClasses[FilterClassIndex];
 		AddWorldActorsByClass(FilterClass);
 	}
 
 	Actors.Append(ManualActors);
-
-	Actors.Remove(nullptr);
-
-	FixIndex(PreviousSelectedActor);
 }
+
 void UActorSelectionComponent::AddWorldActorsByClass(UClass* const FilterClass)
 {
 	TArray<AActor*> ActorsOfClass;
@@ -83,8 +91,10 @@ void UActorSelectionComponent::AddWorldActorsByClass(UClass* const FilterClass)
 
 void UActorSelectionComponent::SetSelectionIndex(int32 const NewIndex)
 {
+	M_LOG_IF(bShouldLog, TEXT("%s: Setting up selection index: NewIndex=%d (OldIndex=%d)"), *LogPrefix, NewIndex, GetSelectedIndex());
 	SelectedIndex = NewIndex;
 	ClampIndexIfShould();
+	LogState();
 }
 
 void UActorSelectionComponent::FixIndex(AActor* const PreviousSelectedActor)
@@ -103,4 +113,9 @@ void UActorSelectionComponent::ClampIndexIfShould()
 		return;
 	}
 	SelectedIndex = (Actors.Num() - 1);
+}
+
+void UActorSelectionComponent::LogState() const
+{	
+	M_LOG(TEXT("%s: Actor \"%s\" of class \"%s\" (index=%d) selected ( NumActorsToSelect=%d )"), *LogPrefix, *GetSelectedActorName(), *GetSelectedActorClassName(), GetSelectedIndex(), GetActors().Num());
 }

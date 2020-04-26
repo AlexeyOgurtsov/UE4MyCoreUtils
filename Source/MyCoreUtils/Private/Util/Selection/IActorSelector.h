@@ -55,6 +55,10 @@ public:
 		return Cast<T>(GetSelectedActorChecked());
 	}
 
+	FString GetSelectedActorName() const;
+	UClass* GetSelectedActorClass() const;
+	FString GetSelectedActorClassName() const;
+
 	void SelectNext();
 	void SelectPrevious();
 	AActor* SelectFirstByClass(UClass* Class);

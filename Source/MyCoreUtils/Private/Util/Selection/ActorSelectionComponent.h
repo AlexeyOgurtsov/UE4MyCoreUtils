@@ -12,13 +12,16 @@ class UActorSelectionComponent
 	GENERATED_BODY()
 	
 	UPROPERTY(EditAnywhere, category=Selection)
-	TArray<UClass*> FilterClasses;
+	TSet<UClass*> FilterClasses;
 
 	UPROPERTY(EditAnywhere, category=Selection)
 	uint32 bUpdateActorListOnBeginPlay = true;
 
 	UPROPERTY(EditAnywhere, category=Selection)
 	uint32 bUpdateActorListOnTick = false;
+
+	UPROPERTY(EditAnywhere, category = Selection)
+	uint32 bShouldLog = true;
 
 public:
 	/**
@@ -54,7 +57,10 @@ public:
 	virtual void SetSelectionIndex(int32 NewIndex) override;	
 	// ~IActorSelector End
 
+	void LogState() const;
+
 protected:
+	void FillActorList();
 	void AddWorldActorsByClass(UClass* FilterClass);
 
 	UPROPERTY(BlueprintReadOnly, Category = Selection)

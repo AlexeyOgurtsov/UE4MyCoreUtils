@@ -28,6 +28,21 @@ APawn* IActorSelector::GetSelectedPawnChecked() const
 	return GetSelectedActorChecked<APawn>();
 }
 
+FString IActorSelector::GetSelectedActorName() const
+{
+	return IsActorSelected() ? *GetSelectedActor()->GetName() : FString(TEXT("nullptr"));
+}
+
+UClass* IActorSelector::GetSelectedActorClass() const
+{
+	return IsActorSelected() ? GetSelectedActor()->GetClass() : nullptr;
+}
+
+FString IActorSelector::GetSelectedActorClassName() const
+{
+	return IsActorSelected() ? GetSelectedActor()->GetClass()->GetName() : FString(TEXT("nullptr"));
+}
+
 void IActorSelector::SelectNext()
 {
 	if (!IsActorSelected())

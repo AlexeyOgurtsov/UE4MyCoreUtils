@@ -9,8 +9,10 @@
 #include "TUPlayerController.generated.h"
 
 class IActorSelector;
+class UActorSelectorUIComponent;
 
 const FName TUCONTROLLER_DEFAULT_ACTOR_SELECTOR_COMPONENT_NAME = TEXT("ControllerActorSelectorComponent");
+const FName TUCONTROLLER_SELECTOR_UI_COMPONENT_NAME = TEXT("ControllerActorSelectorUI");
 
 // ~Types begin
 UENUM(BlueprintType, Meta=(Bitflags, UseEnumValuesAsMaskValuesInEditor="true"))
@@ -315,5 +317,9 @@ private:
 	void InitActorSelector();
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TScriptInterface<IActorSelector> ActorSelector;
+
+	void InitActorSelectorUI();
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	UActorSelectorUIComponent* ActorSelectorUI = nullptr;
 	// ~Actor selection End
 };

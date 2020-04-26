@@ -2,6 +2,7 @@
 #include "TUPawn.h"
 
 #include "Util/Selection/ActorSelectionComponent.h"
+#include "Util/Selection/UI/ActorSelectorUIComponent.h"
 
 #include "Util/Core/LogUtilLib.h"
 
@@ -28,7 +29,16 @@ ATUPlayerController::ATUPlayerController()
 	M_LOGFUNC();
 	LogThis();
 
-	InitActorSelector();
+	if (IsLocalPlayerController())
+	{
+		InitActorSelector();
+		InitActorSelectorUI();
+	}
+}
+
+void ATUPlayerController::InitActorSelectorUI()
+{	
+	ActorSelectorUI = CreateOptionalDefaultSubobject<UActorSelectorUIComponent>(TUCONTROLLER_SELECTOR_UI_COMPONENT_NAME);		
 }
 
 void ATUPlayerController::PostInitProperties()
@@ -78,6 +88,11 @@ void ATUPlayerController::BeginPlay()
 	M_LOGFUNC_IF(TUConfig.bLogBigEvents);
 	LogThisIf(TUConfig.bLogBigEvents);
 	Super::BeginPlay();
+	if (ActorSelectorUI)
+	{
+		M_LOG(TEXT("Initializing actor selector UI at controller's BeginPlay"));
+		ActorSelectorUI->InitAtControllerBeginPlay(ActorSelector);
+	}
 }
 
 void ATUPlayerController::EndPlay(EEndPlayReason::Type InReason)
@@ -704,12 +719,34 @@ void ATUPlayerController::Action_SelectPreviousActorChecked()
 
 void ATUPlayerController::Action_SelectNextActor()
 {
-	// @TODO
+	if (TScriptInterface<IActorSelector> Selector = GetActorSelector())
+	{
+		Selector->SelectNext();
+		if (ActorSelectorUI)
+		{
+			ActorSelectorUI->UpdateUI();
+		}
+	}
+	else
+	{
+		M_LOG_ERROR(TEXT("Actor selector is nullptr"));
+	}
 }
 
 void ATUPlayerController::Action_SelectPreviousActor()
 {
-	// @TODO
+	if (TScriptInterface<IActorSelector> Selector = GetActorSelector())
+	{
+		Selector->SelectPrevious();
+		if (ActorSelectorUI)
+		{
+			ActorSelectorUI->UpdateUI();
+		}
+	}
+	else
+	{
+		M_LOG_ERROR(TEXT("Actor selector is nullptr"));
+	}
 }
 
 void ATUPlayerController::Action_SelectNextInventoryChecked()
@@ -738,26 +775,12 @@ void ATUPlayerController::Action_SelectPreviousInventoryChecked()
 
 void ATUPlayerController::Action_SelectNextInventory()
 {
-	if (TScriptInterface<IActorSelector> Selector = GetActorSelector())
-	{
-		Selector->SelectNext();
-	}
-	else
-	{
-		M_LOG_ERROR(TEXT("Actor selector is nullptr"));
-	}
+	// @TODO
 }
 
 void ATUPlayerController::Action_SelectPreviousInventory()
 {
-	if (TScriptInterface<IActorSelector> Selector = GetActorSelector())
-	{
-		Selector->SelectPrevious();
-	}
-	else
-	{
-		M_LOG_ERROR(TEXT("Actor selector is nullptr"));
-	}
+	// @TODO
 }
 
 void ATUPlayerController::Action_SelectActorZeroChecked()
@@ -876,6 +899,10 @@ void ATUPlayerController::ActionSelectActorGeneral(int32 InIndex)
 	if (TScriptInterface<IActorSelector> Selector = GetActorSelector())
 	{
 		Selector->SetSelectionIndex(InIndex);
+		if (ActorSelectorUI)
+		{
+			ActorSelectorUI->UpdateUI();
+		}
 	}
 	else
 	{
