@@ -57,14 +57,10 @@ void UActorSelectionLib::OverlapResultArrayToActorSet(const TArray<FOverlapResul
 
 void UActorSelectionLib::FilterOutBySelectionRules(TSet<AActor*>& OutActors, const FActorSelectionRules& Rules)
 {
-	for (TSet<AActor*>::TIterator Itr = OutActors.CreateIterator(); Itr; )
+	for (TSet<AActor*>::TIterator Itr = OutActors.CreateIterator(); Itr; ++Itr)
 	{
-		if (ShouldActorBeSelected(*Itr, Rules))
-		{
-			++Itr;
-		}
-		else
-		{
+		if ( ! ShouldActorBeSelected(*Itr, Rules) )
+		{		
 			Itr.RemoveCurrent();
 		}
 	}
