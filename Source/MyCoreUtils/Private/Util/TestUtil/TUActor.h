@@ -20,7 +20,7 @@ public:
 
 	virtual void BeginPlay() override;
 	virtual void EndPlay(EEndPlayReason::Type InReason) override;
-
+	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void PreRegisterAllComponents() override;
 	virtual void PostRegisterAllComponents() override;
@@ -69,7 +69,8 @@ public:
 	// ~Log End
 
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config", Meta=(AllowPrivateAccess = true))
-	FTUConfig TUConfig;
+	void RenderBoundsIfShould();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config", Meta=(AllowPrivateAccess = true))
+	FTUConfig TUConfig;	
 };

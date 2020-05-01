@@ -133,12 +133,20 @@ private:
 
 	void InitProxSphere(USceneComponent* InAttachTo);
 
+	// ~Destruction Begin
+	UFUNCTION(BlueprintCallable, Category = Destruction)
+	void SetShouldPreventDestructionOnHit(bool bInValue = true) { bPreventDestructionOnHit = bInValue; }
+
+	UFUNCTION(BlueprintPure, Category = Destruction)
+	bool ShouldPreventDestructionOnHit() const { return bPreventDestructionOnHit; }
+	// ~Destruction End
+
 	// ~ Movement Begin
 	/** ProjectileMovementComponent*/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Meta=(AllowPrivateAccess=true), Category=Movement)
 	UProjectileMovementComponent* ProjectileMovementComponent = nullptr;
 
-	/** ActorHit*/
+	/** ActorHit*/	
 	UFUNCTION(Category=Collision)
 	void ActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
 	
@@ -176,6 +184,11 @@ private:
 	UFUNCTION(BlueprintCallable, Category=Damage)
 	void MakeDamage(AActor* ActorToDamage, const FHitResult& InHitInfo);
 	// ~ Damage End
+
+	// ~ Destruction Begin 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Destruction, Meta=(AllowPrivateAccess=true))
+	bool bPreventDestructionOnHit = false;
+	// ~ Destruction End
 };
 
 // ~ RightHere_ATUProjectileActor Begin

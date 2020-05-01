@@ -14,9 +14,33 @@ enum class ETUFlags : uint8
 ENUM_CLASS_FLAGS(ETUFlags);
 
 USTRUCT(BlueprintType)
+struct FTURenderDebugBoundsProps
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug)
+	bool bShouldRender = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug)
+	bool bConsiderOnlyCollidingComponents = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug)
+	FColor Color = FColor::Green;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug)
+	uint8 DepthPriority = 0.0F;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug)
+	float Thickness = 3.0F;
+};
+
+USTRUCT(BlueprintType)
 struct FTUConfig
 {
 	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug)
+	FTURenderDebugBoundsProps RenderDebugBounds;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(Bitmask, BitmaskEnum=ETUFlags), Category = Flags)
 	uint8 Flags = static_cast<uint8>(ETUFlags::None);
