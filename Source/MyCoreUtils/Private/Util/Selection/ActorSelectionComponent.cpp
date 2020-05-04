@@ -1,7 +1,7 @@
 #include "ActorSelectionComponent.h"
 #include "Util\Selection\ActorSelectionLib.h"
 #include "Util\Core\LogUtilLib.h"
-#include "GameFramework\Actor.h"
+#include "GameFramework\Pawn.h"
 #include "Kismet\GameplayStatics.h"
 
 /**

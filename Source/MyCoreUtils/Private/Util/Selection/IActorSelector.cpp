@@ -1,5 +1,7 @@
 #include "IActorSelector.h"
 
+#include "GameFramework\Actor.h"
+
 bool IActorSelector::IsActorSelected() const
 {
 	check(GetSelectedIndex() < GetActors().Num());
