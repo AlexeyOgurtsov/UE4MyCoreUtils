@@ -37,4 +37,10 @@ public:
 
 	UFUNCTION(BlueprintPure, Category="Log|Net")
 	static FString GetDormancyString(ENetDormancy Dormancy);
+
+	UFUNCTION(BlueprintPure, Category = "Log|Net")
+	static FString GetOwnerString(const AActor* Actor);
+
+	UFUNCTION(BlueprintCallable, Category = "Log|Net")
+	static void AppendOwnerToLogString(FString& S, const AActor* Actor);	
 };

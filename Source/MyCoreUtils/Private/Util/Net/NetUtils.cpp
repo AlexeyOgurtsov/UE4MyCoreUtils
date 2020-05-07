@@ -86,6 +86,11 @@ FString UNetUtils::GetLogPrefix(const AActor* const Actor, ENetLogFlags const Lo
 		}
 	}
 
+	if ((LogFlags & ENetLogFlags::Owner) != ENetLogFlags::None)
+	{
+		AppendOwnerToLogString(ResultString, Actor);
+	}
+
 	return ResultString;
 }
 
@@ -125,4 +130,30 @@ FString UNetUtils::GetDormancyString(ENetDormancy const Dormancy)
 		break;
 	}
 	return FString(TEXT("Unknown"));
+}
+
+FString UNetUtils::GetOwnerString(const AActor* const Actor)
+{
+	if (Actor == nullptr)
+	{
+		return TEXT("{Actor is nullptr}");
+	}
+	else
+	{
+		return ULogUtilLib::GetNameAndClassSafe(Actor->GetOwner());
+	}
+}
+
+void UNetUtils::AppendOwnerToLogString(FString& S, const AActor* const Actor)
+{
+	S.Append
+	(
+		FString::Format
+		(
+			TEXT(";Owner={0}"), 
+			{
+				GetOwnerString(Actor) 
+			}
+		)
+	);
 }

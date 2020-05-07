@@ -20,6 +20,9 @@ enum class ENetLogFlags : uint8
 
 	/** Dormancy*/
 	, LogHasAuthority = 1 << 3 UMETA(DisplayName="LogHasAuthority")
+
+	/** Owner*/
+	, Owner = 1 << 4 UMETA(DisplayName = "Owner")
 	
 	/** Default*/
 	, Default = LocalRole | RemoteRole | LogHasAuthority UMETA(DisplayName="Default")
