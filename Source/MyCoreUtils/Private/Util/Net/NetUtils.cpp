@@ -32,6 +32,16 @@ void UNetUtils::NetLogIf(bool const bShouldLog, const AActor* const Actor, const
 	M_LOG_IF(bShouldLog, TEXT("%s"), *NetLogFormat(Actor, Format, Args, LogFlags));
 }
 
+void UNetUtils::NetPrefixedLog(const AActor* const Actor, const TCHAR* Prefix, const TCHAR* Format, const TArray<FStringFormatArg>& Args, ENetLogFlags const LogFlags)
+{
+	M_LOG(TEXT("%s"), *NetPrefixedLogFormat(Actor, Prefix, Format, Args, LogFlags));
+}
+
+void UNetUtils::NetPrefixedLogIf(bool const bShouldLog, const AActor* const Actor, const TCHAR* Prefix, const TCHAR* Format, const TArray<FStringFormatArg>& Args, ENetLogFlags const LogFlags)
+{
+	M_LOG_IF(bShouldLog, TEXT("%s"), *NetPrefixedLogFormat(Actor, Prefix, Format, Args, LogFlags));
+}
+
 void UNetUtils::NetLogError(const AActor* const Actor, const TCHAR* Format, const TArray<FStringFormatArg>& Args, ENetLogFlags const LogFlags)
 {
 	M_LOG_ERROR(TEXT("%s"), *NetLogFormat(Actor, Format, Args, LogFlags));
@@ -40,6 +50,16 @@ void UNetUtils::NetLogError(const AActor* const Actor, const TCHAR* Format, cons
 void UNetUtils::NetLogErrorIf(bool const bShouldLog, const AActor* const Actor, const TCHAR* Format, const TArray<FStringFormatArg>& Args, ENetLogFlags const LogFlags)
 {
 	M_LOG_ERROR_IF(bShouldLog, TEXT("%s"), *NetLogFormat(Actor, Format, Args, LogFlags));
+}
+
+void UNetUtils::NetPrefixedLogError(const AActor* const Actor, const TCHAR* Prefix, const TCHAR* Format, const TArray<FStringFormatArg>& Args, ENetLogFlags const LogFlags)
+{
+	M_LOG_ERROR(TEXT("%s"), *NetPrefixedLogFormat(Actor, Prefix, Format, Args, LogFlags));
+}
+
+void UNetUtils::NetPrefixedLogErrorIf(bool const bShouldLog, const AActor* const Actor, const TCHAR* Prefix, const TCHAR* Format, const TArray<FStringFormatArg>& Args, ENetLogFlags const LogFlags)
+{
+	M_LOG_ERROR_IF(bShouldLog, TEXT("%s"), *NetPrefixedLogFormat(Actor, Prefix, Format, Args, LogFlags));
 }
 
 void UNetUtils::NetLogWarn(const AActor* const Actor, const TCHAR* Format, const TArray<FStringFormatArg>& Args, ENetLogFlags const LogFlags)
@@ -52,6 +72,16 @@ void UNetUtils::NetLogWarnIf(const bool bShouldLog, const AActor* const Actor, c
 	M_LOG_WARN_IF(bShouldLog, TEXT("%s"), *NetLogFormat(Actor, Format, Args, LogFlags));
 }
 
+void UNetUtils::NetPrefixedLogWarn(const AActor* const Actor, const TCHAR* Prefix, const TCHAR* Format, const TArray<FStringFormatArg>& Args, ENetLogFlags const LogFlags)
+{
+	M_LOG_WARN(TEXT("%s"), *NetPrefixedLogFormat(Actor, Prefix, Format, Args, LogFlags));
+}
+
+void UNetUtils::NetPrefixedLogWarnIf(const bool bShouldLog, const AActor* const Actor, const TCHAR* Prefix, const TCHAR* Format, const TArray<FStringFormatArg>& Args, ENetLogFlags const LogFlags)
+{
+	M_LOG_WARN_IF(bShouldLog, TEXT("%s"), *NetPrefixedLogFormat(Actor, Prefix, Format, Args, LogFlags));
+}
+
 FString UNetUtils::NetLogFormat(const AActor* const Actor, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, ENetLogFlags const LogFlags)
 {
 	return FString::Format
@@ -62,6 +92,11 @@ FString UNetUtils::NetLogFormat(const AActor* const Actor, const TCHAR* const Fo
 			FStringFormatArg(FString::Format(Format, Args))
 		}
 	);
+}
+
+FString UNetUtils::NetPrefixedLogFormat(const AActor* Actor, const TCHAR* Prefix, const TCHAR* Format, const TArray<FStringFormatArg>& Args, ENetLogFlags LogFlags)
+{
+	return FString(Prefix) + FString(TEXT(": ")) + NetLogFormat(Actor, Format, Args, LogFlags);
 }
 
 FString UNetUtils::GetLogPrefix(const AActor* const Actor, ENetLogFlags const LogFlags)
