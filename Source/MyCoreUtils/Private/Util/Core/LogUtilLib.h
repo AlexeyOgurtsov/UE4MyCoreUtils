@@ -12,6 +12,26 @@
 * 1. Should take UObject-derived classes also!
 */
 
+inline const TCHAR* StringDeref(const FString& S) 
+{
+       	return *S;
+}
+
+inline const TCHAR* TextStringDeref(const FText& S) 
+{
+       	return *S.ToString();
+}
+
+inline const TCHAR* NameStringDeref(const FName& S) 
+{
+       	return *S.ToString();
+}
+
+//const TCHAR* Int32ToStringDeref(const int32 S)
+//{
+//      	return *S;
+//}
+
 UENUM(BlueprintType, Meta=(Bitflags, UseEnumValuesAsMaskValuesInEditor="true"))
 enum class EMyLogObjectFlags : uint8
 {
@@ -138,7 +158,7 @@ public:
 	static void K2LogNameSet(const TSet<FName>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
 
 	template<class T>
-	static void LogArray(const TArray<T>& Array, TFunction<TCHAR*(const T&)> ToStringFunc, ELogRangeFlags Flags = ELogRangeFlags::Default)	
+	static void LogArray(const TArray<T>& Array, TFunction<const TCHAR*(const T&)> ToStringFunc, ELogRangeFlags Flags = ELogRangeFlags::Default)	
 	{
 		int32 Index = 0;
 		for(const T& Elem : Array)
@@ -149,7 +169,7 @@ public:
 	}
 
 	template<class T>
-	static void LogSet(const TSet<T>& Cont, TFunction<TCHAR*(const T&)> ToStringFunc, ELogRangeFlags Flags = ELogRangeFlags::Default)	
+	static void LogSet(const TSet<T>& Cont, TFunction<const TCHAR*(const T&)> ToStringFunc, ELogRangeFlags Flags = ELogRangeFlags::Default)	
 	{
 		int32 Index = 0;
 		for(TSet<T>::TConstIterator Itr = Cont.CreateConstIterator(); Itr; ++Itr)
@@ -163,8 +183,8 @@ public:
 	static void LogMap
 	(
 		const TMap<K, V>& Cont, 
-		TFunction<TCHAR*(const K&)> KeyToStringFunc, 
-		TFunction<TCHAR*(const V&)> ValToStringFunc, 
+		TFunction<const TCHAR*(const K&)> KeyToStringFunc, 
+		TFunction<const TCHAR*(const V&)> ValToStringFunc, 
 		ELogRangeFlags Flags = ELogRangeFlags::Default
 	)	
 	{

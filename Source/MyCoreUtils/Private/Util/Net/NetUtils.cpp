@@ -25,18 +25,18 @@ void UNetUtils::LogNetVars(const AActor* const Actor)
 	
 	ULogUtilLib::LogInt32C(TEXT("NetTag"), Actor->NetTag);
 
-	ULogUtilLib::LogYesNoC(TEXT("bAlwaysRelevant"), Actor->bAlwaysRelevant);
-	ULogUtilLib::LogYesNoC(TEXT("bOnlyRelevantToOwner"), Actor->bOnlyRelevantToOwner);
-	ULogUtilLib::LogYesNoC(TEXT("bNetUseOwnerRelevancy"), Actor->bNetUseOwnerRelevancy);
-	ULogUtilLib::LogYesNoC(TEXT("bRelevantForNetworkReplays"), Actor->bRelevantForNetworkReplays);
+	ULogUtilLib::LogYesNoC(GET_MEMBER_NAME_STRING_CHECKED(AActor, bAlwaysRelevant), Actor->bAlwaysRelevant);
+	ULogUtilLib::LogYesNoC(GET_MEMBER_NAME_STRING_CHECKED(AActor, bOnlyRelevantToOwner), Actor->bOnlyRelevantToOwner);
+	ULogUtilLib::LogYesNoC(GET_MEMBER_NAME_STRING_CHECKED(AActor, bNetUseOwnerRelevancy), Actor->bNetUseOwnerRelevancy);
+	ULogUtilLib::LogYesNoC(GET_MEMBER_NAME_STRING_CHECKED(AActor, bRelevantForNetworkReplays), Actor->bRelevantForNetworkReplays);
 
-	ULogUtilLib::LogFloatC(TEXT("NetCullDistanceSquared"), Actor->NetCullDistanceSquared);
+	ULogUtilLib::LogFloatC(GET_MEMBER_NAME_STRING_CHECKED(AActor, NetCullDistanceSquared), Actor->NetCullDistanceSquared);
 
-	ULogUtilLib::LogYesNoC(TEXT("IsReplicatingMovement"), Actor->IsReplicatingMovement());
-	ULogUtilLib::LogYesNoC(TEXT("NeedsLoadForClient"), Actor->NeedsLoadForClient());
-	ULogUtilLib::LogFloatC(TEXT("NetUpdateFrequency"), Actor->NetUpdateFrequency);
-	ULogUtilLib::LogFloatC(TEXT("MinNetUpdateFrequency"), Actor->MinNetUpdateFrequency);
-	ULogUtilLib::LogNameC(TEXT("NetDriverName"), Actor->GetNetDriverName());
+	ULogUtilLib::LogYesNoC(GET_FUNCTION_NAME_STRING_CHECKED(AActor, IsReplicatingMovement), Actor->IsReplicatingMovement());
+	ULogUtilLib::LogYesNoC(GET_FUNCTION_NAME_STRING_CHECKED(AActor, NeedsLoadForClient), Actor->NeedsLoadForClient());
+	ULogUtilLib::LogFloatC(GET_MEMBER_NAME_STRING_CHECKED(AActor, NetUpdateFrequency), Actor->NetUpdateFrequency);
+	ULogUtilLib::LogFloatC(GET_MEMBER_NAME_STRING_CHECKED(AActor, MinNetUpdateFrequency), Actor->MinNetUpdateFrequency);
+	ULogUtilLib::LogNameC(GET_FUNCTION_NAME_STRING_CHECKED(AActor, GetNetDriverName), Actor->GetNetDriverName());
 
 	if(const AController* Controller = Cast<AController>(Actor))
 	{

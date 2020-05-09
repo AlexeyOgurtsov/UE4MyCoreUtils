@@ -15,29 +15,32 @@ ULogUtilLib::ULogUtilLib()
 {
 }
 
+template<class T>
+using FuncTypeToCString = TFunction<const TCHAR*(const T&)>;
+
 void ULogUtilLib::K2LogStringArray(const TArray<FString>& InContainer, ELogRangeFlags Flags)
 {
-	LogArray(InContainer, [](const FString& S){ return *S; }, Flags);
+	LogArray(InContainer, static_cast<FuncTypeToCString<FString>>(StringDeref), Flags);
 }
 
 void ULogUtilLib::K2LogTextArray(const TArray<FText>& InContainer, ELogRangeFlags Flags)
 {
-	LogArray(InContainer, [](const FText& S){ return *S.ToString(); }, Flags);
+	LogArray(InContainer, static_cast<FuncTypeToCString<FText>>(TextStringDeref), Flags);
 }
 
 void ULogUtilLib::K2LogNameArray(const TArray<FName>& InContainer, ELogRangeFlags Flags)
 {
-	LogArray(InContainer, [](const FName& S){ return *S.ToString(); }, Flags);
+	LogArray(InContainer, static_cast<FuncTypeToCString<FName>>(NameStringDeref), Flags);
 }
 
 void ULogUtilLib::K2LogStringSet(const TSet<FString>& InContainer, ELogRangeFlags Flags)
 {
-	LogSet(InContainer, [](const FString& S){ return *S; }, Flags);
+	LogSet(InContainer, static_cast<FuncTypeToCString<FString>>(StringDeref), Flags);
 }
 
 void ULogUtilLib::K2LogNameSet(const TSet<FName>& InContainer, ELogRangeFlags Flags)
 {
-	LogSet(InContainer, [](const FName& S){ return *S.ToString(); }, Flags);
+	LogSet(InContainer, static_cast<FuncTypeToCString<FName>>(NameStringDeref), Flags);
 }
 
 FString ULogUtilLib::GetNameAndClass(const UObject* const InObject)
