@@ -20,25 +20,25 @@ class UNetUtils : public UBlueprintFunctionLibrary
 
 public:
 	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=LogComponentNetVars))
-	void LogComponentNetVars(const UActorComponent* Component);
+	static void LogComponentNetVars(const UActorComponent* Component);
 
 	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=LogNetVars))
-	void LogNetVars(const AActor* Actor);
+	static void LogNetVars(const AActor* Actor);
 
 	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=LogNetVars_ControllerPart))
-	void LogNetVars_ControllerPart(const AController* Controller);
+	static void LogNetVars_ControllerPart(const AController* Controller);
 
 	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=LogNetVars_AIControllerPart))
-	void LogNetVars_AIControllerPart(const AAIController* const AIController);
+	static void LogNetVars_AIControllerPart(const AAIController* const AIController);
 
 	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=LogNetVars_PlayerControllerPart))
-	void LogNetVars_PlayerControllerPart(const APlayerController* PC);
+	static void LogNetVars_PlayerControllerPart(const APlayerController* PC);
 
 	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=LogNetVars_PawnPart))
-	void LogNetVars_PawnPart(const APawn* Actor);
+	static void LogNetVars_PawnPart(const APawn* Actor);
 
 	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=LogNetVars_CharacterPart))
-	void LogNetVars_CharacterPart(const ACharacter* Actor);
+	static void LogNetVars_CharacterPart(const ACharacter* Actor);
 
 	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=NetLogf))
 	static void K2_NetLogf(const AActor* Actor, const FString& Format, const TArray<FString>& Args, ENetLogFlags LogFlags = ENetLogFlags::Default);
