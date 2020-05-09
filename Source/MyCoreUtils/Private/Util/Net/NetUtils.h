@@ -6,12 +6,40 @@
 #include "Misc/StringFormatArg.h"
 #include "NetUtils.generated.h"
 
+class UActorComponent;
+class APawn;
+class ACharacter;
+class AController;
+class APlayerController;
+class AAIController;
+
 UCLASS(BlueprintType)
 class UNetUtils : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=LogComponentNetVars))
+	void LogComponentNetVars(const UActorComponent* Component);
+
+	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=LogNetVars))
+	void LogNetVars(const AActor* Actor);
+
+	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=LogNetVars_ControllerPart))
+	void LogNetVars_ControllerPart(const AController* Controller);
+
+	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=LogNetVars_AIControllerPart))
+	void LogNetVars_AIControllerPart(const AAIController* const AIController);
+
+	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=LogNetVars_PlayerControllerPart))
+	void LogNetVars_PlayerControllerPart(const APlayerController* PC);
+
+	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=LogNetVars_PawnPart))
+	void LogNetVars_PawnPart(const APawn* Actor);
+
+	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=LogNetVars_CharacterPart))
+	void LogNetVars_CharacterPart(const ACharacter* Actor);
+
 	UFUNCTION(BlueprintCallable, Category="Log|Net", Meta=(DisplayName=NetLogf))
 	static void K2_NetLogf(const AActor* Actor, const FString& Format, const TArray<FString>& Args, ENetLogFlags LogFlags = ENetLogFlags::Default);
 
@@ -48,6 +76,18 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Log|Net")
 	static FString GetOwnerString(const AActor* Actor);
 
+	UFUNCTION(BlueprintPure, Category = "Log|Net")
+	static FString GetInstigatorString(const AActor* Actor);
+
+	UFUNCTION(BlueprintPure, Category = "Log|Net")
+	static FString GetIsReplicatedString(const AActor* Actor);
+
 	UFUNCTION(BlueprintCallable, Category = "Log|Net")
 	static void AppendOwnerToLogString(FString& S, const AActor* Actor);	
+
+	UFUNCTION(BlueprintCallable, Category = "Log|Net")
+	static void AppendInstigatorToLogString(FString& S, const AActor* Actor);	
+
+	UFUNCTION(BlueprintCallable, Category = "Log|Net")
+	static void AppendIsReplicatedToLogString(FString& S, const AActor* Actor);	
 };

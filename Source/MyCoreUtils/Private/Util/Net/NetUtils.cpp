@@ -1,7 +1,92 @@
 #include "NetUtils.h"
-#include "GameFramework\Actor.h"
+#include "Components\PrimitiveComponent.h"
+#include "GameFramework\Character.h"
+#include "GameFramework\PlayerController.h"
+#include "AIController.h"
 #include "Algo\Transform.h"
 #include "Util\Core\LogUtilLib.h"
+
+
+void UNetUtils::LogComponentNetVars(const UActorComponent* const Component)
+{
+	checkf(Component, TEXT("When calling \"%s\" passed actor must be valid NON-null poitner"), TEXT(__FUNCTION__));
+
+	M_LOGFUNC();
+
+	// @TODO
+}
+
+void UNetUtils::LogNetVars(const AActor* const Actor)
+{
+	checkf(Actor, TEXT("When calling \"%s\" passed actor must be valid NON-null poitner"), TEXT(__FUNCTION__));
+
+	M_LOGFUNC();
+	NetPrefixedLog(Actor, TEXT(__FUNCTION__), TEXT(""), {}, ENetLogFlags::All);
+	
+	ULogUtilLib::LogInt32C(TEXT("NetTag"), Actor->NetTag);
+
+	ULogUtilLib::LogYesNoC(TEXT("bAlwaysRelevant"), Actor->bAlwaysRelevant);
+	ULogUtilLib::LogYesNoC(TEXT("bOnlyRelevantToOwner"), Actor->bOnlyRelevantToOwner);
+	ULogUtilLib::LogYesNoC(TEXT("bNetUseOwnerRelevancy"), Actor->bNetUseOwnerRelevancy);
+	ULogUtilLib::LogYesNoC(TEXT("bRelevantForNetworkReplays"), Actor->bRelevantForNetworkReplays);
+
+	ULogUtilLib::LogFloatC(TEXT("NetCullDistanceSquared"), Actor->NetCullDistanceSquared);
+
+	ULogUtilLib::LogYesNoC(TEXT("IsReplicatingMovement"), Actor->IsReplicatingMovement());
+	ULogUtilLib::LogYesNoC(TEXT("NeedsLoadForClient"), Actor->NeedsLoadForClient());
+	ULogUtilLib::LogFloatC(TEXT("NetUpdateFrequency"), Actor->NetUpdateFrequency);
+	ULogUtilLib::LogFloatC(TEXT("MinNetUpdateFrequency"), Actor->MinNetUpdateFrequency);
+	ULogUtilLib::LogNameC(TEXT("NetDriverName"), Actor->GetNetDriverName());
+
+	if(const AController* Controller = Cast<AController>(Actor))
+	{
+		LogNetVars_ControllerPart(Controller);
+	}
+	else if(const APawn* Pawn = Cast<APawn>(Actor))
+	{
+		LogNetVars_PawnPart(Pawn);
+	}
+	// @TODO: Physics body etc.
+}
+
+void UNetUtils::LogNetVars_ControllerPart(const AController* const Controller)
+{
+	// @TODO
+	if(const APlayerController* PC = Cast<APlayerController>(Controller))
+	{
+		LogNetVars_PlayerControllerPart(PC);
+	}
+	else if(const AAIController* AIController = Cast<AAIController>(Controller))
+	{
+		LogNetVars_AIControllerPart(AIController);
+	}
+}
+
+void UNetUtils::LogNetVars_PlayerControllerPart(const APlayerController* const PC)
+{
+	// @TODO
+	//ULogUtilLib::LogNameC(TEXT("bReplicateInstigator"), PC->bReplicateInstigator);
+}
+
+void UNetUtils::LogNetVars_AIControllerPart(const AAIController* const AIController)
+{
+	// @TODO
+	//ULogUtilLib::LogNameC(TEXT("bReplicateInstigator"), PC->bReplicateInstigator);
+}
+
+void UNetUtils::LogNetVars_PawnPart(const APawn* const Pawn)
+{
+	// @TODO
+	if(const ACharacter* Character = Cast<ACharacter>(Pawn))
+	{
+		LogNetVars_CharacterPart(Character);
+	}
+}
+
+void UNetUtils::LogNetVars_CharacterPart(const ACharacter* const Actor)
+{
+	// @TODO
+}
 
 void UNetUtils::K2_NetLogf(const AActor* const Actor, const FString& Format, const TArray<FString>& Args, ENetLogFlags const LogFlags)
 {
@@ -126,6 +211,16 @@ FString UNetUtils::GetLogPrefix(const AActor* const Actor, ENetLogFlags const Lo
 		AppendOwnerToLogString(ResultString, Actor);
 	}
 
+	if ((LogFlags & ENetLogFlags::Instigator) != ENetLogFlags::None)
+	{
+		AppendInstigatorToLogString(ResultString, Actor);
+	}
+
+	if ((LogFlags & ENetLogFlags::LogIsReplicated) != ENetLogFlags::None)
+	{
+		AppendIsReplicatedToLogString(ResultString, Actor);
+	}
+
 	return ResultString;
 }
 
@@ -188,6 +283,58 @@ void UNetUtils::AppendOwnerToLogString(FString& S, const AActor* const Actor)
 			TEXT(";Owner={0}"), 
 			{
 				GetOwnerString(Actor) 
+			}
+		)
+	);
+}
+
+FString UNetUtils::GetInstigatorString(const AActor* const Actor)
+{
+	if (Actor == nullptr)
+	{
+		return TEXT("{Actor is nullptr}");
+	}
+	else
+	{
+		return ULogUtilLib::GetNameAndClassSafe(Actor->GetInstigator());
+	}
+}
+
+FString UNetUtils::GetIsReplicatedString(const AActor* const Actor)
+{
+	if (Actor == nullptr)
+	{
+		return TEXT("{Actor is nullptr}");
+	}
+	else
+	{
+		return Actor->GetIsReplicated() ? FString(TEXT("YES")) : FString(TEXT("no"));
+	}
+}
+
+void UNetUtils::AppendInstigatorToLogString(FString& S, const AActor* const Actor)	
+{
+	S.Append
+	(
+		FString::Format
+		(
+			TEXT(";Instigator={0}"), 
+			{
+				GetInstigatorString(Actor) 
+			}
+		)
+	);
+}
+
+void UNetUtils::AppendIsReplicatedToLogString(FString& S, const AActor* const Actor)	
+{
+	S.Append
+	(
+		FString::Format
+		(
+			TEXT(";IsReplicated={0}"), 
+			{
+				GetIsReplicatedString(Actor) 
 			}
 		)
 	);

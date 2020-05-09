@@ -4,6 +4,7 @@
 #include "Log/MyLoggingTypes.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "UObject\TextProperty.h"
+#include "GenericPlatform/GenericPlatformMisc.h"
 #include "LogUtilLib.generated.h"
 
 /**
@@ -48,6 +49,11 @@ enum class ELogRangeFlags : uint8
 	* If possible, all elements of the range and summary is to be logged on the same line
 	*/
 	OneLine                    = 1 << 3       UMETA(DisplayName="One line"),
+
+	/**
+	* Log number of elements
+	*/
+	LogCount                   = 1 << 4       UMETA(DisplayName="Log Count"),
 
 	Default                    = LogSummary | LogIndex            UMETA(DisplayName="Default")
 };
@@ -115,6 +121,61 @@ public:
 	static FString GetKeyedNameAndClass(const FString& InKey, const UObject* InObject);
 	static FString GetKeyedNameAndClassC(const TCHAR* InKey, const UObject* InObject);
 
+	// ~Container logging Begin
+	UFUNCTION(BlueprintCallable, Category = Log, Meta=(DisplayName="LogStringArray"))
+	void K2LogStringArray(const TArray<FString>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
+
+	UFUNCTION(BlueprintCallable, Category = Log, Meta=(DisplayName="LogTextArray"))
+	void K2LogTextArray(const TArray<FText>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
+
+	UFUNCTION(BlueprintCallable, Category = Log, Meta=(DisplayName="LogNameArray"))
+	void K2LogNameArray(const TArray<FName>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
+
+	UFUNCTION(BlueprintCallable, Category = Log, Meta=(DisplayName="LogStringSet"))
+	void K2LogStringSet(const TSet<FString>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
+
+	UFUNCTION(BlueprintCallable, Category = Log, Meta=(DisplayName="LogNameSet"))
+	void K2LogNameSet(const TSet<FName>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
+
+	template<class T>
+	void LogArray(const TArray<T>& Array, TFunction<TCHAR*(const T&)> ToStringFunc, ELogRangeFlags Flags = ELogRangeFlags::Default)	
+	{
+		int32 Index = 0;
+		for(const T& Elem : Array)
+		{
+			M_LOG(TEXT("%s"), ToStringFunc(Elem));
+			Index++;
+		}
+	}
+
+	template<class T>
+	void LogSet(const TSet<T>& Cont, TFunction<TCHAR*(const T&)> ToStringFunc, ELogRangeFlags Flags = ELogRangeFlags::Default)	
+	{
+		int32 Index = 0;
+		for(TSet<T>::TConstIterator Itr = Cont.CreateConstIterator(); Itr; ++Itr)
+		{
+			M_LOG(TEXT("%s"), ToStringFunc(*Itr));
+			Index++;
+		}
+	}
+
+	template<class K, class V>
+	void LogMap
+	(
+		const TMap<K, V>& Cont, 
+		TFunction<TCHAR*(const K&)> KeyToStringFunc, 
+		TFunction<TCHAR*(const V&)> ValToStringFunc, 
+		ELogRangeFlags Flags = ELogRangeFlags::Default
+	)	
+	{
+		int32 Index = 0;
+		for(TMap<K, V>::TConstIterator Itr = Cont.CreateConstIterator(); Itr; ++Itr)
+		{
+			M_LOG(TEXT("[\"%s\"]: \"%s\""), KeyToStringFunc(Itr.GetKey()), ValToStringFunc(Itr.GetValue()));
+			Index++;
+		}
+	}
+	// ~Container logging End
 
 	// ~Range logging Begin
 	/**

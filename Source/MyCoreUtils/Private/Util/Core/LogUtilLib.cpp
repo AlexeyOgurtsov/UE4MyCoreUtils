@@ -15,6 +15,31 @@ ULogUtilLib::ULogUtilLib()
 {
 }
 
+void ULogUtilLib::K2LogStringArray(const TArray<FString>& InContainer, ELogRangeFlags Flags)
+{
+	LogArray(InContainer, [](const FString& S){ return *S; }, Flags);
+}
+
+void ULogUtilLib::K2LogTextArray(const TArray<FText>& InContainer, ELogRangeFlags Flags)
+{
+	LogArray(InContainer, [](const FText& S){ return *S.ToString(); }, Flags);
+}
+
+void ULogUtilLib::K2LogNameArray(const TArray<FName>& InContainer, ELogRangeFlags Flags)
+{
+	LogArray(InContainer, [](const FName& S){ return *S.ToString(); }, Flags);
+}
+
+void ULogUtilLib::K2LogStringSet(const TSet<FString>& InContainer, ELogRangeFlags Flags)
+{
+	LogSet(InContainer, [](const FString& S){ return *S; }, Flags);
+}
+
+void ULogUtilLib::K2LogNameSet(const TSet<FName>& InContainer, ELogRangeFlags Flags)
+{
+	LogSet(InContainer, [](const FName& S){ return *S.ToString(); }, Flags);
+}
+
 FString ULogUtilLib::GetNameAndClass(const UObject* const InObject)
 {
 	checkf(InObject, TEXT("nullptr is invalid when using  %s, use Safe version instead"), __FUNCTION__);
