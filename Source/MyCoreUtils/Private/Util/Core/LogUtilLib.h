@@ -123,22 +123,22 @@ public:
 
 	// ~Container logging Begin
 	UFUNCTION(BlueprintCallable, Category = Log, Meta=(DisplayName="LogStringArray"))
-	void K2LogStringArray(const TArray<FString>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
+	static void K2LogStringArray(const TArray<FString>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
 
 	UFUNCTION(BlueprintCallable, Category = Log, Meta=(DisplayName="LogTextArray"))
-	void K2LogTextArray(const TArray<FText>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
+	static void K2LogTextArray(const TArray<FText>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
 
 	UFUNCTION(BlueprintCallable, Category = Log, Meta=(DisplayName="LogNameArray"))
-	void K2LogNameArray(const TArray<FName>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
+	static void K2LogNameArray(const TArray<FName>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
 
 	UFUNCTION(BlueprintCallable, Category = Log, Meta=(DisplayName="LogStringSet"))
-	void K2LogStringSet(const TSet<FString>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
+	static void K2LogStringSet(const TSet<FString>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
 
 	UFUNCTION(BlueprintCallable, Category = Log, Meta=(DisplayName="LogNameSet"))
-	void K2LogNameSet(const TSet<FName>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
+	static void K2LogNameSet(const TSet<FName>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
 
 	template<class T>
-	void LogArray(const TArray<T>& Array, TFunction<TCHAR*(const T&)> ToStringFunc, ELogRangeFlags Flags = ELogRangeFlags::Default)	
+	static void LogArray(const TArray<T>& Array, TFunction<TCHAR*(const T&)> ToStringFunc, ELogRangeFlags Flags = ELogRangeFlags::Default)	
 	{
 		int32 Index = 0;
 		for(const T& Elem : Array)
@@ -149,7 +149,7 @@ public:
 	}
 
 	template<class T>
-	void LogSet(const TSet<T>& Cont, TFunction<TCHAR*(const T&)> ToStringFunc, ELogRangeFlags Flags = ELogRangeFlags::Default)	
+	static void LogSet(const TSet<T>& Cont, TFunction<TCHAR*(const T&)> ToStringFunc, ELogRangeFlags Flags = ELogRangeFlags::Default)	
 	{
 		int32 Index = 0;
 		for(TSet<T>::TConstIterator Itr = Cont.CreateConstIterator(); Itr; ++Itr)
@@ -160,7 +160,7 @@ public:
 	}
 
 	template<class K, class V>
-	void LogMap
+	static void LogMap
 	(
 		const TMap<K, V>& Cont, 
 		TFunction<TCHAR*(const K&)> KeyToStringFunc, 
