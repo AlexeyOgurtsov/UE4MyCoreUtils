@@ -27,11 +27,6 @@ inline const TCHAR* NameStringDeref(const FName& S)
        	return *S.ToString();
 }
 
-//const TCHAR* Int32ToStringDeref(const int32 S)
-//{
-//      	return *S;
-//}
-
 UENUM(BlueprintType, Meta=(Bitflags, UseEnumValuesAsMaskValuesInEditor="true"))
 enum class EMyLogObjectFlags : uint8
 {
@@ -157,6 +152,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Log, Meta=(DisplayName="LogNameSet"))
 	static void K2LogNameSet(const TSet<FName>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
 
+	UFUNCTION(BlueprintCallable, Category = Log, Meta = (DisplayName = "LogStringMap"))
+	static void K2LogStringMap(const TMap<FString, FString>& InContainer, ELogRangeFlags Flags = ELogRangeFlags::Default);
+
 	template<class T>
 	static void LogArray(const TArray<T>& Array, TFunction<const TCHAR*(const T&)> ToStringFunc, ELogRangeFlags Flags = ELogRangeFlags::Default)	
 	{
@@ -191,7 +189,7 @@ public:
 		int32 Index = 0;
 		for(TMap<K, V>::TConstIterator Itr = Cont.CreateConstIterator(); Itr; ++Itr)
 		{
-			M_LOG(TEXT("[\"%s\"]: \"%s\""), KeyToStringFunc(Itr.GetKey()), ValToStringFunc(Itr.GetValue()));
+			M_LOG(TEXT("[\"%s\"]: \"%s\""), KeyToStringFunc(Itr.Key()), ValToStringFunc(Itr.Value()));
 			Index++;
 		}
 	}

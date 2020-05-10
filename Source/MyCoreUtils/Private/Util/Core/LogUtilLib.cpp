@@ -43,6 +43,17 @@ void ULogUtilLib::K2LogNameSet(const TSet<FName>& InContainer, ELogRangeFlags Fl
 	LogSet(InContainer, static_cast<FuncTypeToCString<FName>>(NameStringDeref), Flags);
 }
 
+void ULogUtilLib::K2LogStringMap(const TMap<FString, FString>& InContainer, ELogRangeFlags Flags)
+{
+	LogMap
+	(
+		InContainer,
+		static_cast<FuncTypeToCString<FString>>(StringDeref),
+		static_cast<FuncTypeToCString<FString>>(StringDeref),
+		Flags
+	);
+}
+
 FString ULogUtilLib::GetNameAndClass(const UObject* const InObject)
 {
 	checkf(InObject, TEXT("nullptr is invalid when using  %s, use Safe version instead"), __FUNCTION__);

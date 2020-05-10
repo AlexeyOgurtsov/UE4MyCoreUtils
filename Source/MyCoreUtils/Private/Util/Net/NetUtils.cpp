@@ -12,8 +12,8 @@ void UNetUtils::LogComponentNetVars(const UActorComponent* const Component)
 	checkf(Component, TEXT("When calling \"%s\" passed actor must be valid NON-null poitner"), TEXT(__FUNCTION__));
 
 	M_LOGFUNC();
-
-	// @TODO
+	
+	NetPrefixedLog(Component, TEXT(__FUNCTION__), TEXT(""), {}, ENetLogFlags::All);
 }
 
 void UNetUtils::LogNetVars(const AActor* const Actor)
@@ -167,11 +167,71 @@ void UNetUtils::NetPrefixedLogWarnIf(const bool bShouldLog, const AActor* const 
 	M_LOG_WARN_IF(bShouldLog, TEXT("%s"), *NetPrefixedLogFormat(Actor, Prefix, Format, Args, LogFlags));
 }
 
+void UNetUtils::NetLog(const UActorComponent* Comp, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, ENetLogFlags LogFlags)
+{
+	M_LOG(TEXT("%s"), *NetLogFormat(Comp, Format, Args, LogFlags));
+}
+
+void UNetUtils::NetLogIf(const bool bShouldLog, const UActorComponent* const Comp, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, ENetLogFlags LogFlags)
+{
+	M_LOG_IF(bShouldLog, TEXT("%s"), *NetLogFormat(Comp, Format, Args, LogFlags));
+}
+
+void UNetUtils::NetPrefixedLog(const UActorComponent* const Comp, const TCHAR* Prefix, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, const ENetLogFlags LogFlags)
+{
+	M_LOG(TEXT("%s"), *NetPrefixedLogFormat(Comp, Prefix, Format, Args, LogFlags));
+}
+
+void UNetUtils::NetPrefixedLogIf(const bool bShouldLog, const UActorComponent* const Comp, const TCHAR* const Prefix, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, const ENetLogFlags LogFlags)
+{
+	M_LOG_IF(bShouldLog, TEXT("%s"), *NetPrefixedLogFormat(Comp, Prefix, Format, Args, LogFlags));
+}
+
+void UNetUtils::NetLogError(const UActorComponent* const Comp, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, const ENetLogFlags LogFlags)
+{
+	M_LOG_ERROR(TEXT("%s"), *NetLogFormat(Comp, Format, Args, LogFlags));
+}
+
+void UNetUtils::NetLogErrorIf(const bool bShouldLog, const UActorComponent* const Comp, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, const ENetLogFlags LogFlags)
+{
+	M_LOG_ERROR_IF(bShouldLog, TEXT("%s"), *NetLogFormat(Comp, Format, Args, LogFlags));
+}
+
+void UNetUtils::NetPrefixedLogError(const UActorComponent* const Comp, const TCHAR* const Prefix, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, const ENetLogFlags LogFlags)
+{
+	M_LOG_ERROR(TEXT("%s"), *NetPrefixedLogFormat(Comp, Prefix, Format, Args, LogFlags));
+}
+
+void UNetUtils::NetPrefixedLogErrorIf(const bool bShouldLog, const UActorComponent* const Comp, const TCHAR* const Prefix, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, const ENetLogFlags LogFlags)
+{
+	M_LOG_ERROR_IF(bShouldLog, TEXT("%s"), *NetPrefixedLogFormat(Comp, Prefix, Format, Args, LogFlags));
+}
+
+void UNetUtils::NetLogWarn(const UActorComponent* const Comp, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, const ENetLogFlags LogFlags)
+{
+	M_LOG_WARN(TEXT("%s"), *NetLogFormat(Comp, Format, Args, LogFlags));
+}
+
+void UNetUtils::NetLogWarnIf(const bool bShouldLog, const UActorComponent* const Comp, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, const ENetLogFlags LogFlags)
+{
+	M_LOG_WARN_IF(bShouldLog, TEXT("%s"), *NetLogFormat(Comp, Format, Args, LogFlags));
+}
+
+void UNetUtils::NetPrefixedLogWarn(const UActorComponent* const Comp, const TCHAR* const Prefix, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, const ENetLogFlags LogFlags)
+{
+	M_LOG_WARN(TEXT("%s"), *NetPrefixedLogFormat(Comp, Prefix, Format, Args, LogFlags));
+}
+
+void UNetUtils::NetPrefixedLogWarnIf(const bool bShouldLog, const UActorComponent* const Comp, const TCHAR* const Prefix, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, const ENetLogFlags LogFlags)
+{
+	M_LOG_WARN_IF(bShouldLog, TEXT("%s"), *NetPrefixedLogFormat(Comp, Prefix, Format, Args, LogFlags));
+}
+
 FString UNetUtils::NetLogFormat(const AActor* const Actor, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, ENetLogFlags const LogFlags)
 {
 	return FString::Format
 	(
-		TEXT("{0}: {1}"), 
+		TEXT("{0}: {1}"),
 		{
 			FStringFormatArg(GetLogPrefix(Actor, LogFlags)),
 			FStringFormatArg(FString::Format(Format, Args))
@@ -179,13 +239,45 @@ FString UNetUtils::NetLogFormat(const AActor* const Actor, const TCHAR* const Fo
 	);
 }
 
-FString UNetUtils::NetPrefixedLogFormat(const AActor* Actor, const TCHAR* Prefix, const TCHAR* Format, const TArray<FStringFormatArg>& Args, ENetLogFlags LogFlags)
+FString UNetUtils::NetPrefixedLogFormat(const AActor* const Actor, const TCHAR* const Prefix, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, const ENetLogFlags LogFlags)
 {
 	return FString(Prefix) + FString(TEXT(": ")) + NetLogFormat(Actor, Format, Args, LogFlags);
 }
 
+FString UNetUtils::NetLogFormat(const UActorComponent* const Comp, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, const ENetLogFlags LogFlags)
+{
+	FString ComponentPrefix = TEXT(""); 
+	if( Comp )
+	{
+		if((LogFlags & ENetLogFlags::LogIsReplicated) != ENetLogFlags::None)
+		{
+			AppendComponentIsReplicatedToLogString(ComponentPrefix, Comp);
+		}
+
+		if((LogFlags & ENetLogFlags::LogNetMode) != ENetLogFlags::None)
+		{
+			AppendNetModeToLogString(ComponentPrefix, Comp->GetNetMode());
+		}
+	}
+	else
+	{
+		ComponentPrefix = TEXT("NULL COMP");
+	}
+	return NetPrefixedLogFormat(Comp ? Comp->GetOwner() : nullptr, *ComponentPrefix, Format, Args, LogFlags);
+}
+
+FString UNetUtils::NetPrefixedLogFormat(const UActorComponent* const Comp, const TCHAR* const Prefix, const TCHAR* const Format, const TArray<FStringFormatArg>& Args, const ENetLogFlags LogFlags)
+{
+	return FString(Prefix) + FString(TEXT(": ")) + NetLogFormat(Comp, Format, Args, LogFlags);
+}
+
 FString UNetUtils::GetLogPrefix(const AActor* const Actor, ENetLogFlags const LogFlags)
 {
+	if (Actor == nullptr)
+	{
+		return FString(TEXT("nullptr"));
+	}
+
 	FString ResultString;
 
 	if((LogFlags & ENetLogFlags::LocalRole) != ENetLogFlags::None)
@@ -211,6 +303,11 @@ FString UNetUtils::GetLogPrefix(const AActor* const Actor, ENetLogFlags const Lo
 		AppendOwnerToLogString(ResultString, Actor);
 	}
 
+	if ((LogFlags & ENetLogFlags::LogNetOwner) != ENetLogFlags::None)
+	{
+		AppendNetOwnerToLogString(ResultString, Actor);
+	}
+
 	if ((LogFlags & ENetLogFlags::Instigator) != ENetLogFlags::None)
 	{
 		AppendInstigatorToLogString(ResultString, Actor);
@@ -221,7 +318,34 @@ FString UNetUtils::GetLogPrefix(const AActor* const Actor, ENetLogFlags const Lo
 		AppendIsReplicatedToLogString(ResultString, Actor);
 	}
 
+	if ((LogFlags & ENetLogFlags::LogNetMode) != ENetLogFlags::None)
+	{
+		AppendNetModeToLogString(ResultString, Actor->GetNetMode());
+	}
+
 	return ResultString;
+}
+
+FString UNetUtils::GetNetModeString(ENetMode const NetMode)
+{
+	switch(NetMode)
+	{
+	case NM_Standalone:
+		return FString(TEXT("NMStandalone"));
+
+	case NM_DedicatedServer:
+		return FString(TEXT("NMDedicServ"));
+
+	case NM_ListenServer:
+		return FString(TEXT("NMListenServ"));
+
+	case NM_Client:
+		return FString(TEXT("NMClient"));
+
+	default:
+		break;
+	}
+	return FString(TEXT("Unknown"));
 }
 
 FString UNetUtils::GetRoleString(ENetRole const Role)
@@ -274,6 +398,23 @@ FString UNetUtils::GetOwnerString(const AActor* const Actor)
 	}
 }
 
+FString UNetUtils::GetNetOwnerString(const AActor* const Actor) 
+{
+	if (Actor == nullptr)
+	{
+		return TEXT("{Actor is nullptr}");
+	}
+	else
+	{
+		return ULogUtilLib::GetNameAndClassSafe(Actor->GetNetOwner());
+	}
+}
+
+void UNetUtils::AppendNetModeToLogString(FString& S, ENetMode const NM)
+{
+	S.Append(GetNetModeString(NM));
+}
+
 void UNetUtils::AppendOwnerToLogString(FString& S, const AActor* const Actor)
 {
 	S.Append
@@ -283,6 +424,20 @@ void UNetUtils::AppendOwnerToLogString(FString& S, const AActor* const Actor)
 			TEXT(";Owner={0}"), 
 			{
 				GetOwnerString(Actor) 
+			}
+		)
+	);
+}
+
+void UNetUtils::AppendNetOwnerToLogString(FString& S, const AActor* const Actor)
+{
+	S.Append
+	(
+		FString::Format
+		(
+			TEXT(";NetOwner={0}"),
+			{
+				GetNetOwnerString(Actor)
 			}
 		)
 	);
@@ -312,6 +467,18 @@ FString UNetUtils::GetIsReplicatedString(const AActor* const Actor)
 	}
 }
 
+FString UNetUtils::GetComponentIsReplicatedString(const UActorComponent* Comp)
+{
+	if (Comp == nullptr)
+	{
+		return TEXT("{Actor is nullptr}");
+	}
+	else
+	{
+		return Comp->GetIsReplicated() ? FString(TEXT("YES")) : FString(TEXT("no"));
+	}
+}
+
 void UNetUtils::AppendInstigatorToLogString(FString& S, const AActor* const Actor)	
 {
 	S.Append
@@ -335,6 +502,20 @@ void UNetUtils::AppendIsReplicatedToLogString(FString& S, const AActor* const Ac
 			TEXT(";IsReplicated={0}"), 
 			{
 				GetIsReplicatedString(Actor) 
+			}
+		)
+	);
+}
+
+void UNetUtils::AppendComponentIsReplicatedToLogString(FString& S, const UActorComponent* const Comp)
+{
+	S.Append
+	(
+		FString::Format
+		(
+			TEXT(";IsReplicated={0}"), 
+			{
+				GetComponentIsReplicatedString(Comp) 
 			}
 		)
 	);

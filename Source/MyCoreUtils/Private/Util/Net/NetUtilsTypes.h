@@ -30,14 +30,22 @@ enum class ENetLogFlags : uint8
 	/** LogIsReplicated*/
 	, LogIsReplicated = 1 << 6 UMETA(DisplayName = "Log Is Replicated")
 
+	/** LogNetMode*/
+	, LogNetMode = 1 << 7 UMETA(DisplayName = "Log Net Mode")
+
+	/** LogNetOwner*/
+	, LogNetOwner = Owner UMETA(DisplayName = "Log Net Owner")
+
 	/** Default*/
 	, All = LocalRole | RemoteRole 
 		| Dormancy 
 		| LogHasAuthority | Owner | Instigator
-	      	| LogIsReplicated 
+	    | LogIsReplicated 
+		| LogNetMode
+		| LogNetOwner
 		UMETA(DisplayName="All")
 	
 	/** Default*/
-	, Default = LocalRole | RemoteRole | LogHasAuthority UMETA(DisplayName="Default")
+	, Default = LocalRole | RemoteRole | LogHasAuthority | LogNetMode | LogNetOwner UMETA(DisplayName="Default")
 };
 ENUM_CLASS_FLAGS(ENetLogFlags);
