@@ -1,0 +1,27 @@
+Item viewing widgets.
+
+Requirements:
+- Unlimited slot count support;
+- Each slot:
+	a. can contain a single item or be empty;
+- Move from slot to slot with dragging;
+- Multiple selection of items;
+- Swapping between slots;
+- Slot state support: coloring etc.
+- Drag outside: for example, for removing from inventory
+- Sorting by custom criteria
+
+Coloring:
+1. Selected item changes its color
+2. Color filter is done on the selected slot for the second type of the selection.
+3. 
+
+
+------------------------------------------------
+TODO:
+2. Create widget UObject:
+1. Helper function: Assign Basic item to set of widget (inside).
+3. Widget:
+	3.1. Click events
+4. Widget selection state
+5. Widget selection props (how to color selected widgets?)
