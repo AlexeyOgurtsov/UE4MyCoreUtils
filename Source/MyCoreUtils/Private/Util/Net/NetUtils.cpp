@@ -1,10 +1,11 @@
 #include "NetUtils.h"
-#include "Components\PrimitiveComponent.h"
-#include "GameFramework\Character.h"
-#include "GameFramework\PlayerController.h"
+#include "Components/PrimitiveComponent.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/PlayerController.h"
 #include "AIController.h"
-#include "Algo\Transform.h"
-#include "Util\Core\LogUtilLib.h"
+#include "Algo/Transform.h"
+#include "Engine/World.h"
+#include "Util/Core/LogUtilLib.h"
 
 
 void UNetUtils::LogComponentNetVars(const UActorComponent* const Component)
@@ -231,8 +232,10 @@ FString UNetUtils::NetLogFormat(const AActor* const Actor, const TCHAR* const Fo
 {
 	return FString::Format
 	(
-		TEXT("{0}: {1}"),
+		TEXT("T={0};obTm={1}; {2}: {3}"),
 		{
+			FStringFormatArg(Actor && Actor->GetWorld() ? *FString::SanitizeFloat(Actor->GetWorld()->GetTimeSeconds()) : FString(TEXT("{NULL ACT}"))),
+			FStringFormatArg(Actor && Actor->GetWorld() ? *FString::SanitizeFloat(Actor->GetGameTimeSinceCreation()) : FString(TEXT("{NULL ACT}"))),
 			FStringFormatArg(GetLogPrefix(Actor, LogFlags)),
 			FStringFormatArg(FString::Format(Format, Args))
 		}
