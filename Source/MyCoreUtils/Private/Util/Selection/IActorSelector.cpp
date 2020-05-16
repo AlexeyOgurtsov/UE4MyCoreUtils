@@ -1,6 +1,6 @@
 #include "IActorSelector.h"
 
-#include "GameFramework\Actor.h"
+#include "GameFramework\Pawn.h"
 
 bool IActorSelector::IsActorSelected() const
 {
